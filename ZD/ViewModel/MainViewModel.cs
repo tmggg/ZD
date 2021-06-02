@@ -569,6 +569,7 @@ namespace SgS.ViewModel
             _starttag = 0;
             _endtag = 0;
             _select = false;
+            zoneSelPoint.Clear();
         }
 
         private void SetRow(object[] obj)
@@ -621,9 +622,9 @@ namespace SgS.ViewModel
                     AllData[i].Value = ((Data)obj[1]).Value;
                     AllData[i].BigCleanValue = ((Data)obj[1]).BigCleanValue;
                     AllData[i].LittleCleanValue = ((Data)obj[1]).LittleCleanValue;
-                    AllData[i].TagValue = ((Data)obj[0]).TagValue;
-                    AllData[i].EnableTag = ((Data)obj[0]).EnableTag;
-                    AllData[i].TagIndex = ((Data)obj[0]).TagIndex;
+                    AllData[i].TagValue = ((Data)obj[1]).TagValue;
+                    AllData[i].EnableTag = ((Data)obj[1]).EnableTag;
+                    AllData[i].TagIndex = ((Data)obj[1]).TagIndex;
                     AllData[i].Color = ((Data)obj[1]).Color;
                     AllData[i].Color = new SolidColorBrush(Color.FromRgb(3, 195, 175));
                 }
@@ -632,6 +633,8 @@ namespace SgS.ViewModel
                 Growl.InfoGlobal("样品方法取消成功！");
             else
                 Growl.InfoGlobal("样品方法应用成功！");
+            _select = false;
+            zoneSelPoint.Clear();
             //throw new NotImplementedException();
         }
 
@@ -678,9 +681,9 @@ namespace SgS.ViewModel
                     AllData[tag].Value = ((Data)obj[1]).Value;
                     AllData[tag].BigCleanValue = ((Data)obj[1]).BigCleanValue;
                     AllData[tag].LittleCleanValue = ((Data)obj[1]).LittleCleanValue;
-                    AllData[i].TagValue = ((Data)obj[0]).TagValue;
-                    AllData[i].EnableTag = ((Data)obj[0]).EnableTag;
-                    AllData[i].TagIndex = ((Data)obj[0]).TagIndex;
+                    AllData[i].TagValue = ((Data)obj[1]).TagValue;
+                    AllData[i].EnableTag = ((Data)obj[1]).EnableTag;
+                    AllData[i].TagIndex = ((Data)obj[1]).TagIndex;
                     AllData[tag].Color = ((Data)obj[1]).Color;
                     AllData[tag].Color = new SolidColorBrush(Color.FromRgb(3, 195, 175));
                     iscancel = false;
@@ -690,6 +693,8 @@ namespace SgS.ViewModel
                 Growl.InfoGlobal("样品方法取消成功！");
             else
                 Growl.InfoGlobal("样品方法应用成功！");
+            _select = false;
+            zoneSelPoint.Clear();
         }
 
 

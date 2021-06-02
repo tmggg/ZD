@@ -8,7 +8,6 @@
              xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
              xmlns:local="clr-namespace:SgS.View"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             x:Name="MainContent"
              d:DesignHeight="680"
              d:DesignWidth="1180"
              DataContext="{Binding Source={StaticResource Locator}, Path=Main}"
@@ -2261,7 +2260,7 @@
                                                     <hc:EventToCommand.CommandParameter>
                                                         <MultiBinding Converter="{StaticResource MultiConverter}">
                                                             <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=Window}" />
-                                                            <Binding ElementName="N2" />
+                                                            <Binding ElementName="N3" />
                                                         </MultiBinding>
                                                     </hc:EventToCommand.CommandParameter>
                                                 </hc:EventToCommand>
@@ -2343,7 +2342,7 @@
                                                     <hc:EventToCommand.CommandParameter>
                                                         <MultiBinding Converter="{StaticResource MultiConverter}">
                                                             <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=Window}" />
-                                                            <Binding ElementName="N3" />
+                                                            <Binding ElementName="N4" />
                                                         </MultiBinding>
                                                     </hc:EventToCommand.CommandParameter>
                                                 </hc:EventToCommand>

@@ -140,8 +140,8 @@ namespace KeyPad
                     }
                     Result += button.Content.ToString();
                     break;
-            }   
-        }    
+            }
+        }
 
         #region INotifyPropertyChanged members
 
