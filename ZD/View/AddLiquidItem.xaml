@@ -1,0 +1,149 @@
+﻿<Window x:Class="SgS.View.AddLiquidItem"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:SgS.View"
+        xmlns:hc="https://handyorg.github.io/handycontrol"
+        mc:Ignorable="d"
+        Title="AddLiquidItem" Height="300" Width="300"
+        WindowStartupLocation="CenterScreen"
+        Style="{StaticResource ShadowWindow}">
+    <Border Background="#293547" Padding="5" CornerRadius="5"
+            BorderBrush="White" BorderThickness="2"
+            MouseLeftButtonDown="Border_MouseLeftButtonDown">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+            <Grid.Resources>
+                <Style TargetType="TextBlock">
+                    <Setter Property="FontSize"
+                            Value="14" />
+                    <Setter Property="FontWeight"
+                            Value="Bold" />
+                    <Setter Property="Foreground"
+                            Value="White" />
+                    <Setter Property="HorizontalAlignment"
+                            Value="Center" />
+                    <Setter Property="VerticalAlignment"
+                            Value="Center" />
+                </Style>
+                <Style TargetType="TextBox"
+                       BasedOn="{StaticResource TextBoxExtend}">
+                    <Setter Property="Background"
+                            Value="Transparent" />
+                    <Setter Property="Foreground"
+                            Value="White" />
+                    <Setter Property="BorderBrush"
+                            Value="{StaticResource GridLineBrush}" />
+                    <Setter Property="Width"
+                            Value="120" />
+                    <Setter Property="Height"
+                            Value="30" />
+                </Style>
+                <Style TargetType="hc:NumericUpDown"
+                       BasedOn="{StaticResource NumericUpDownExtend}">
+                    <Setter Property="Width"
+                            Value="120"></Setter>
+                    <Setter Property="Height"
+                            Value="30" />
+                    <Setter Property="BorderBrush"
+                            Value="{StaticResource GridLineBrush}"></Setter>
+                    <Setter Property="Foreground"
+                            Value="White"></Setter>
+                    <Setter Property="Minimum"
+                            Value="0" />
+                    <Setter Property="Background"
+                            Value="Transparent"></Setter>
+                </Style>
+            </Grid.Resources>
+            <TextBlock Text="添加溶剂"
+                       FontSize="20"
+                       Grid.ColumnSpan="2" />
+            <TextBlock Text="溶剂类型：" Grid.Row="1"/>
+            <TextBlock Text="Z1 阈值："
+                       Grid.Row="2" />
+            <TextBlock Text="Z2 阈值："
+                       Grid.Row="3" />
+            <TextBox x:Name="LiquidType"  Grid.Column="1" Grid.Row="1"/>
+            <hc:NumericUpDown x:Name="Z1_Value"  Grid.Column="1"
+                              Maximum="50000000"
+                              Minimum="0"
+                              Increment="1000"
+                               Grid.Row="2" />
+            <hc:NumericUpDown x:Name="Z2_Value"  Grid.Column="1"
+                              Maximum="50000000"
+                              Minimum="0"
+                              Increment="1000"
+                              Grid.Row="3" />
+            <Button Width="60"
+                    Height="30"
+                    Content="添加"
+                    Grid.Row="4"
+                    Click="Button_Click"
+                    Background="#304258"
+                    IsHitTestVisible="{Binding StartEnable}"
+                    Command="{Binding ActionCommand}"
+                    Margin="5 0 5 0">
+                <Button.Style>
+                    <Style TargetType="Button"
+                           BasedOn="{StaticResource ButtonPrimary}">
+                        <Setter Property="Background"
+                                Value="Transparent"></Setter>
+                        <Style.Triggers>
+                            <EventTrigger RoutedEvent="MouseEnter">
+                                <EventTrigger.Actions>
+                                    <BeginStoryboard Storyboard="{StaticResource StartColorAnnimation}"></BeginStoryboard>
+                                </EventTrigger.Actions>
+                            </EventTrigger>
+                            <EventTrigger RoutedEvent="MouseLeave">
+                                <EventTrigger.Actions>
+                                    <BeginStoryboard Storyboard="{StaticResource StartColorAnnimationBack}"></BeginStoryboard>
+                                </EventTrigger.Actions>
+                            </EventTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+            </Button>
+            <Button Content="取消"
+                    Width="60"
+                    Height="30"
+                    Grid.Column="1"
+                    Grid.Row="4"
+                    Background="#304258"
+                    Click="Button_Click_1"
+                    IsHitTestVisible="{Binding StopEnable}"
+                    Command="{Binding ActionCommand}"
+                    Margin="5 0 5 0">
+                <Button.Style>
+                    <Style TargetType="Button"
+                           BasedOn="{StaticResource ButtonPrimary}">
+                        <Setter Property="Background"
+                                Value="Transparent"></Setter>
+                        <Style.Triggers>
+                            <EventTrigger RoutedEvent="MouseEnter">
+                                <EventTrigger.Actions>
+                                    <BeginStoryboard Storyboard="{StaticResource StopColorAnnimation}"></BeginStoryboard>
+                                </EventTrigger.Actions>
+                            </EventTrigger>
+                            <EventTrigger RoutedEvent="MouseLeave">
+                                <EventTrigger.Actions>
+                                    <BeginStoryboard Storyboard="{StaticResource StopColorAnnimationBack}"></BeginStoryboard>
+                                </EventTrigger.Actions>
+                            </EventTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+            </Button>
+        </Grid>
+    </Border>
+</Window>

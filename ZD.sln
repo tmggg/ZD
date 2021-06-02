@@ -1,0 +1,50 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30621.155
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodesysNetVars", "EasyNetVars-master\CodesysNetVars.csproj", "{7029C1A7-0216-4C79-B577-FF298F14DE65}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZD", "ZD\ZD.csproj", "{4E22028C-DA4E-4BB0-B07B-D8478C2DEAA6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KeyPad", "KeyPad\KeyPad.csproj", "{3ADBFF38-915C-4115-9CDD-81C0CAD9733A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Debug|x86 = Debug|x86
+		Release|Any CPU = Release|Any CPU
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{7029C1A7-0216-4C79-B577-FF298F14DE65}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7029C1A7-0216-4C79-B577-FF298F14DE65}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7029C1A7-0216-4C79-B577-FF298F14DE65}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{7029C1A7-0216-4C79-B577-FF298F14DE65}.Debug|x86.Build.0 = Debug|Any CPU
+		{7029C1A7-0216-4C79-B577-FF298F14DE65}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7029C1A7-0216-4C79-B577-FF298F14DE65}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7029C1A7-0216-4C79-B577-FF298F14DE65}.Release|x86.ActiveCfg = Release|Any CPU
+		{7029C1A7-0216-4C79-B577-FF298F14DE65}.Release|x86.Build.0 = Release|Any CPU
+		{4E22028C-DA4E-4BB0-B07B-D8478C2DEAA6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4E22028C-DA4E-4BB0-B07B-D8478C2DEAA6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4E22028C-DA4E-4BB0-B07B-D8478C2DEAA6}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{4E22028C-DA4E-4BB0-B07B-D8478C2DEAA6}.Debug|x86.Build.0 = Debug|Any CPU
+		{4E22028C-DA4E-4BB0-B07B-D8478C2DEAA6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4E22028C-DA4E-4BB0-B07B-D8478C2DEAA6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4E22028C-DA4E-4BB0-B07B-D8478C2DEAA6}.Release|x86.ActiveCfg = Release|Any CPU
+		{4E22028C-DA4E-4BB0-B07B-D8478C2DEAA6}.Release|x86.Build.0 = Release|Any CPU
+		{3ADBFF38-915C-4115-9CDD-81C0CAD9733A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3ADBFF38-915C-4115-9CDD-81C0CAD9733A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3ADBFF38-915C-4115-9CDD-81C0CAD9733A}.Debug|x86.ActiveCfg = Debug|x86
+		{3ADBFF38-915C-4115-9CDD-81C0CAD9733A}.Debug|x86.Build.0 = Debug|x86
+		{3ADBFF38-915C-4115-9CDD-81C0CAD9733A}.Release|Any CPU.ActiveCfg = Release|x86
+		{3ADBFF38-915C-4115-9CDD-81C0CAD9733A}.Release|x86.ActiveCfg = Release|x86
+		{3ADBFF38-915C-4115-9CDD-81C0CAD9733A}.Release|x86.Build.0 = Release|x86
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {28071806-E945-4D7A-8681-73C0255B9625}
+	EndGlobalSection
+EndGlobal

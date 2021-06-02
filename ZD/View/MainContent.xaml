@@ -1,0 +1,2500 @@
+﻿<UserControl x:Class="SgS.View.MainContent"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:b="clr-namespace:SgS.Behavior"
+             xmlns:cv="clr-namespace:SgS.Coverter"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:hc="https://handyorg.github.io/handycontrol"
+             xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+             xmlns:local="clr-namespace:SgS.View"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             d:DesignHeight="680"
+             d:DesignWidth="1180"
+             DataContext="{Binding Source={StaticResource Locator}, Path=Main}"
+             mc:Ignorable="d">
+    <UserControl.Resources>
+        <Style x:Key="ExtendTabControl" TargetType="{x:Type hc:TabControl}">
+            <Setter Property="Padding" Value="0" />
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}" />
+            <Setter Property="HorizontalContentAlignment" Value="Center" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type hc:TabControl}">
+                        <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}">
+                            <Grid x:Name="templateRoot"
+                                  ClipToBounds="True"
+                                  KeyboardNavigation.TabNavigation="Local"
+                                  SnapsToDevicePixels="True">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition x:Name="ColumnDefinition0" />
+                                    <ColumnDefinition x:Name="ColumnDefinition1" Width="0" />
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="*" />
+                                </Grid.RowDefinitions>
+                                <Border Background="{TemplateBinding Background}"
+                                        BorderBrush="{DynamicResource BorderBrush}"
+                                        BorderThickness="0,0,0,1">
+                                    <hc:TabPanel x:Name="PART_HeaderPanel"
+                                                 MinHeight="{TemplateBinding TabItemHeight}"
+                                                 Margin="0,0,-1,-1"
+                                                 HorizontalAlignment="Left"
+                                                 Panel.ZIndex="1"
+                                                 Background="{DynamicResource SecondaryTextBrush}"
+                                                 IsItemsHost="True"
+                                                 IsTabFillEnabled="{TemplateBinding IsTabFillEnabled}"
+                                                 KeyboardNavigation.TabIndex="1"
+                                                 TabItemHeight="{TemplateBinding TabItemHeight}"
+                                                 TabItemWidth="{TemplateBinding TabItemWidth}" />
+                                </Border>
+                                <Border x:Name="contentPanel"
+                                        Grid.Row="1"
+                                        Grid.Column="0"
+                                        Background="{DynamicResource SecondaryRegionBrush}"
+                                        KeyboardNavigation.DirectionalNavigation="Contained"
+                                        KeyboardNavigation.TabIndex="2"
+                                        KeyboardNavigation.TabNavigation="Local">
+                                    <ContentPresenter x:Name="PART_SelectedContentHost"
+                                                      Margin="{TemplateBinding Padding}"
+                                                      Content="{TemplateBinding SelectedContent}"
+                                                      ContentSource="SelectedContent"
+                                                      ContentStringFormat="{TemplateBinding SelectedContentStringFormat}"
+                                                      ContentTemplate="{TemplateBinding SelectedContentTemplate}"
+                                                      SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                                </Border>
+                                <Border Grid.Row="0"
+                                        Grid.Column="0"
+                                        Margin="0,-1,0,0"
+                                        HorizontalAlignment="Right"
+                                        Background="{DynamicResource RegionBrush}"
+                                        BorderBrush="{DynamicResource BorderBrush}"
+                                        BorderThickness="1,0,0,1"
+                                        Visibility="{Binding Visibility, ElementName=PART_OverflowButton}">
+                                    <hc:ContextMenuToggleButton x:Name="PART_OverflowButton"
+                                                                hc:IconElement.Geometry="M512,801.6896L5.12,282.0096 63.2832,222.4128 512,682.3936 960.7168,222.3104 1018.88,281.9072 512,801.6896z"
+                                                                hc:IconSwitchElement.GeometrySelected="M50.000001,0L100,51.262779 94.262627,57.141584 50.000001,11.767713 5.7373757,57.151686 0,51.27288z"
+                                                                Menu="{x:Null}"
+                                                                Visibility="Collapsed">
+                                        <hc:ContextMenuToggleButton.Style>
+                                            <Style TargetType="{x:Type ToggleButton}">
+                                                <Setter Property="Background" Value="Transparent" />
+                                                <Setter Property="BorderBrush" Value="Transparent" />
+                                                <Setter Property="Foreground" Value="{DynamicResource PrimaryTextBrush}" />
+                                                <Setter Property="Template">
+                                                    <Setter.Value>
+                                                        <ControlTemplate TargetType="{x:Type ToggleButton}">
+                                                            <Border Background="{TemplateBinding Background}"
+                                                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                                                    BorderThickness="{TemplateBinding BorderThickness}">
+                                                                <ContentControl Margin="{TemplateBinding Padding}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}">
+                                                                    <Path x:Name="PathIcon"
+                                                                          Width="{TemplateBinding hc:IconElement.Width}"
+                                                                          Height="{TemplateBinding hc:IconElement.Height}"
+                                                                          HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                                                          VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                                                          Data="{TemplateBinding hc:IconElement.Geometry}"
+                                                                          Fill="{TemplateBinding Foreground}"
+                                                                          SnapsToDevicePixels="True"
+                                                                          Stretch="Uniform" />
+                                                                </ContentControl>
+                                                            </Border>
+                                                            <ControlTemplate.Triggers>
+                                                                <Trigger Property="IsChecked" Value="True">
+                                                                    <Setter TargetName="PathIcon" Property="Data" Value="{Binding (hc:IconSwitchElement.GeometrySelected), RelativeSource={RelativeSource TemplatedParent}}" />
+                                                                </Trigger>
+                                                            </ControlTemplate.Triggers>
+                                                        </ControlTemplate>
+                                                    </Setter.Value>
+                                                </Setter>
+                                                <Style.BasedOn>
+                                                    <Style TargetType="{x:Type ToggleButton}">
+                                                        <Setter Property="Foreground" Value="{DynamicResource TextIconBrush}" />
+                                                        <Setter Property="Width" Value="30" />
+                                                        <Setter Property="Height" Value="30" />
+                                                        <Setter Property="Padding" Value="8" />
+                                                        <Setter Property="hc:IconElement.Geometry" Value="{x:Null}" />
+                                                        <Setter Property="hc:IconSwitchElement.GeometrySelected" Value="{x:Null}" />
+                                                        <Setter Property="hc:BorderElement.CornerRadius" Value="4" />
+                                                        <Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}" />
+                                                        <Setter Property="BorderThickness" Value="0" />
+                                                        <Setter Property="Template">
+                                                            <Setter.Value>
+                                                                <ControlTemplate TargetType="{x:Type ToggleButton}">
+                                                                    <hc:SimplePanel>
+                                                                        <Border Background="{TemplateBinding Background}" CornerRadius="{Binding (hc:BorderElement.CornerRadius), RelativeSource={RelativeSource TemplatedParent}}" />
+                                                                        <Border BorderBrush="{TemplateBinding BorderBrush}"
+                                                                                BorderThickness="{TemplateBinding BorderThickness}"
+                                                                                CornerRadius="{Binding (hc:BorderElement.CornerRadius), RelativeSource={RelativeSource TemplatedParent}}">
+                                                                            <ContentControl Margin="{TemplateBinding Padding}"
+                                                                                            HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                                                                            VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                                                                            SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}">
+                                                                                <Path x:Name="PathIcon"
+                                                                                      Width="{TemplateBinding hc:IconElement.Width}"
+                                                                                      Height="{TemplateBinding hc:IconElement.Height}"
+                                                                                      Data="{TemplateBinding hc:IconElement.Geometry}"
+                                                                                      Fill="{TemplateBinding Foreground}"
+                                                                                      SnapsToDevicePixels="True"
+                                                                                      Stretch="Uniform" />
+                                                                            </ContentControl>
+                                                                        </Border>
+                                                                        <Border x:Name="BorderChecked"
+                                                                                BorderBrush="{TemplateBinding BorderBrush}"
+                                                                                BorderThickness="4"
+                                                                                CornerRadius="{Binding (hc:BorderElement.CornerRadius), RelativeSource={RelativeSource TemplatedParent}}"
+                                                                                Visibility="Collapsed" />
+                                                                    </hc:SimplePanel>
+                                                                    <ControlTemplate.Triggers>
+                                                                        <Trigger Property="IsChecked" Value="True">
+                                                                            <Setter TargetName="PathIcon" Property="Data" Value="{Binding (hc:IconSwitchElement.GeometrySelected), RelativeSource={RelativeSource TemplatedParent}}" />
+                                                                        </Trigger>
+                                                                    </ControlTemplate.Triggers>
+                                                                </ControlTemplate>
+                                                            </Setter.Value>
+                                                        </Setter>
+                                                        <Style.BasedOn>
+                                                            <Style TargetType="{x:Type Control}">
+                                                                <Setter Property="Foreground" Value="{DynamicResource PrimaryTextBrush}" />
+                                                                <Setter Property="FontSize" Value="12" />
+                                                                <Setter Property="FocusVisualStyle">
+                                                                    <Setter.Value>
+                                                                        <Style>
+                                                                            <Setter Property="Control.Template">
+                                                                                <Setter.Value>
+                                                                                    <ControlTemplate>
+                                                                                        <Rectangle RadiusX="4" RadiusY="4">
+                                                                                            <Rectangle.Style>
+                                                                                                <Style TargetType="{x:Type Rectangle}">
+                                                                                                    <Setter Property="Margin" Value="-2" />
+                                                                                                    <Setter Property="Opacity" Value="0.6" />
+                                                                                                    <Setter Property="SnapsToDevicePixels" Value="True" />
+                                                                                                    <Setter Property="Stroke" Value="{DynamicResource SecondaryBorderBrush}" />
+                                                                                                    <Setter Property="StrokeThickness" Value="2" />
+                                                                                                    <Setter Property="StrokeDashArray" Value="1 1" />
+                                                                                                </Style>
+                                                                                            </Rectangle.Style>
+                                                                                        </Rectangle>
+                                                                                    </ControlTemplate>
+                                                                                </Setter.Value>
+                                                                            </Setter>
+                                                                        </Style>
+                                                                    </Setter.Value>
+                                                                </Setter>
+                                                            </Style>
+                                                        </Style.BasedOn>
+                                                        <Style.Triggers>
+                                                            <Trigger Property="IsMouseOver" Value="True">
+                                                                <Setter Property="Opacity" Value="0.9" />
+                                                            </Trigger>
+                                                            <Trigger Property="IsPressed" Value="True">
+                                                                <Setter Property="Opacity" Value="0.6" />
+                                                            </Trigger>
+                                                            <Trigger Property="IsEnabled" Value="False">
+                                                                <Setter Property="Opacity" Value="0.4" />
+                                                            </Trigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </Style.BasedOn>
+                                            </Style>
+                                        </hc:ContextMenuToggleButton.Style>
+                                    </hc:ContextMenuToggleButton>
+                                </Border>
+                            </Grid>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <MultiTrigger>
+                    <MultiTrigger.Conditions>
+                        <Condition Property="IsScrollable" Value="True" />
+                        <Condition Property="IsTabFillEnabled" Value="False" />
+                    </MultiTrigger.Conditions>
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="{x:Type hc:TabControl}">
+                                <Border Background="{TemplateBinding Background}"
+                                        BorderBrush="{StaticResource GridLineBrush}"
+                                        BorderThickness="2">
+                                    <Grid x:Name="templateRoot"
+                                          ClipToBounds="True"
+                                          KeyboardNavigation.TabNavigation="Local"
+                                          SnapsToDevicePixels="True">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto" />
+                                            <ColumnDefinition />
+                                            <ColumnDefinition Width="Auto" />
+                                        </Grid.ColumnDefinitions>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto" />
+                                            <RowDefinition Height="*" />
+                                        </Grid.RowDefinitions>
+                                        <Border Grid.Row="0"
+                                                Grid.Column="0"
+                                                HorizontalAlignment="Left"
+                                                VerticalAlignment="Top"
+                                                Panel.ZIndex="2"
+                                                Background="Transparent">
+                                            <Border.CacheMode>
+                                                <BitmapCache SnapsToDevicePixels="True" />
+                                            </Border.CacheMode>
+                                            <Border.Visibility>
+                                                <TemplateBinding Property="ShowScrollButton">
+                                                    <TemplateBinding.Converter>
+                                                        <BooleanToVisibilityConverter />
+                                                    </TemplateBinding.Converter>
+                                                </TemplateBinding>
+                                            </Border.Visibility>
+                                            <StackPanel Orientation="Horizontal">
+                                                <RepeatButton x:Name="PART_ScrollButtonLeft"
+                                                              Padding="8"
+                                                              hc:IconElement.Geometry="M394.24,512L683.52,248.32C693.76,238.08 693.76,222.72 683.52,212.48 673.28,202.24 657.92,202.24 647.68,212.48L340.48,491.52C335.36,496.64 332.8,504.32 332.8,512 332.8,519.68 335.36,527.36 340.48,532.48L647.68,811.52C657.92,821.76 673.28,821.76 683.52,811.52 693.76,801.28 693.76,785.92 683.52,775.68L394.24,512z"
+                                                              Background="{DynamicResource SecondaryRegionBrush}"
+                                                              Focusable="False"
+                                                              Foreground="{DynamicResource PrimaryTextBrush}"
+                                                              Visibility="Collapsed">
+                                                    <RepeatButton.Style>
+                                                        <Style TargetType="{x:Type RepeatButton}">
+                                                            <Setter Property="Background" Value="Transparent" />
+                                                            <Setter Property="BorderBrush" Value="Transparent" />
+                                                            <Setter Property="hc:BorderElement.CornerRadius" Value="0" />
+                                                            <Setter Property="Template">
+                                                                <Setter.Value>
+                                                                    <ControlTemplate TargetType="{x:Type RepeatButton}">
+                                                                        <Border Background="{TemplateBinding Background}"
+                                                                                BorderBrush="{TemplateBinding BorderBrush}"
+                                                                                BorderThickness="{TemplateBinding BorderThickness}"
+                                                                                CornerRadius="{Binding (hc:BorderElement.CornerRadius), RelativeSource={RelativeSource TemplatedParent}}">
+                                                                            <ContentControl Margin="{TemplateBinding Padding}"
+                                                                                            HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                                                                            VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                                                                            SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}">
+                                                                                <Path Width="{TemplateBinding hc:IconElement.Width}"
+                                                                                      Height="{TemplateBinding hc:IconElement.Height}"
+                                                                                      Data="{TemplateBinding hc:IconElement.Geometry}"
+                                                                                      Fill="{TemplateBinding Foreground}"
+                                                                                      SnapsToDevicePixels="True"
+                                                                                      Stretch="Uniform" />
+                                                                            </ContentControl>
+                                                                        </Border>
+                                                                    </ControlTemplate>
+                                                                </Setter.Value>
+                                                            </Setter>
+                                                            <Style.BasedOn>
+                                                                <Style TargetType="{x:Type RepeatButton}">
+                                                                    <Setter Property="Background" Value="{DynamicResource RegionBrush}" />
+                                                                    <Setter Property="hc:BorderElement.CornerRadius" Value="4" />
+                                                                    <Setter Property="Template">
+                                                                        <Setter.Value>
+                                                                            <ControlTemplate TargetType="{x:Type RepeatButton}">
+                                                                                <hc:SimplePanel>
+                                                                                    <Border Background="{TemplateBinding Background}" CornerRadius="{Binding (hc:BorderElement.CornerRadius), RelativeSource={RelativeSource TemplatedParent}}" />
+                                                                                    <Border BorderBrush="{TemplateBinding BorderBrush}"
+                                                                                            BorderThickness="{TemplateBinding BorderThickness}"
+                                                                                            CornerRadius="{Binding (hc:BorderElement.CornerRadius), RelativeSource={RelativeSource TemplatedParent}}">
+                                                                                        <StackPanel Margin="{TemplateBinding Padding}"
+                                                                                                    HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                                                                                    VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                                                                                    Orientation="Horizontal">
+                                                                                            <Path x:Name="PathMain"
+                                                                                                  Width="{TemplateBinding hc:IconElement.Width}"
+                                                                                                  Height="{TemplateBinding hc:IconElement.Height}"
+                                                                                                  Data="{TemplateBinding hc:IconElement.Geometry}"
+                                                                                                  Fill="{TemplateBinding Foreground}"
+                                                                                                  SnapsToDevicePixels="True"
+                                                                                                  Stretch="Uniform" />
+                                                                                            <ContentPresenter x:Name="ContentPresenterMain"
+                                                                                                              Margin="6,0,0,0"
+                                                                                                              VerticalAlignment="Center"
+                                                                                                              Content="{TemplateBinding Content}"
+                                                                                                              ContentStringFormat="{TemplateBinding ContentStringFormat}"
+                                                                                                              ContentTemplate="{TemplateBinding ContentTemplate}"
+                                                                                                              SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                                                                                        </StackPanel>
+                                                                                    </Border>
+                                                                                </hc:SimplePanel>
+                                                                                <ControlTemplate.Triggers>
+                                                                                    <Trigger Property="Content" Value="{x:Null}">
+                                                                                        <Setter TargetName="ContentPresenterMain" Property="Visibility" Value="Collapsed" />
+                                                                                    </Trigger>
+                                                                                    <Trigger Property="hc:IconElement.Geometry" Value="{x:Null}">
+                                                                                        <Setter TargetName="PathMain" Property="Visibility" Value="Collapsed" />
+                                                                                        <Setter TargetName="ContentPresenterMain" Property="Margin" Value="0" />
+                                                                                    </Trigger>
+                                                                                </ControlTemplate.Triggers>
+                                                                            </ControlTemplate>
+                                                                        </Setter.Value>
+                                                                    </Setter>
+                                                                    <Style.BasedOn>
+                                                                        <Style TargetType="{x:Type ButtonBase}">
+                                                                            <Setter Property="Height" Value="30" />
+                                                                            <Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}" />
+                                                                            <Setter Property="Padding" Value="10,6" />
+                                                                            <Setter Property="Foreground" Value="{DynamicResource TextIconBrush}" />
+                                                                            <Setter Property="BorderThickness" Value="0" />
+                                                                            <Setter Property="HorizontalAlignment" Value="Center" />
+                                                                            <Setter Property="VerticalAlignment" Value="Center" />
+                                                                            <Setter Property="HorizontalContentAlignment" Value="Center" />
+                                                                            <Setter Property="VerticalContentAlignment" Value="Center" />
+                                                                            <Style.BasedOn>
+                                                                                <Style TargetType="{x:Type Control}">
+                                                                                    <Setter Property="Foreground" Value="{DynamicResource PrimaryTextBrush}" />
+                                                                                    <Setter Property="FontSize" Value="12" />
+                                                                                    <Setter Property="FocusVisualStyle">
+                                                                                        <Setter.Value>
+                                                                                            <Style>
+                                                                                                <Setter Property="Control.Template">
+                                                                                                    <Setter.Value>
+                                                                                                        <ControlTemplate>
+                                                                                                            <Rectangle RadiusX="4" RadiusY="4">
+                                                                                                                <Rectangle.Style>
+                                                                                                                    <Style TargetType="{x:Type Rectangle}">
+                                                                                                                        <Setter Property="Margin" Value="-2" />
+                                                                                                                        <Setter Property="Opacity" Value="0.6" />
+                                                                                                                        <Setter Property="SnapsToDevicePixels" Value="True" />
+                                                                                                                        <Setter Property="Stroke" Value="{DynamicResource SecondaryBorderBrush}" />
+                                                                                                                        <Setter Property="StrokeThickness" Value="2" />
+                                                                                                                        <Setter Property="StrokeDashArray" Value="1 1" />
+                                                                                                                    </Style>
+                                                                                                                </Rectangle.Style>
+                                                                                                            </Rectangle>
+                                                                                                        </ControlTemplate>
+                                                                                                    </Setter.Value>
+                                                                                                </Setter>
+                                                                                            </Style>
+                                                                                        </Setter.Value>
+                                                                                    </Setter>
+                                                                                </Style>
+                                                                            </Style.BasedOn>
+                                                                        </Style>
+                                                                    </Style.BasedOn>
+                                                                    <Style.Triggers>
+                                                                        <Trigger Property="IsMouseOver" Value="True">
+                                                                            <Setter Property="Opacity" Value="0.9" />
+                                                                        </Trigger>
+                                                                        <Trigger Property="IsPressed" Value="True">
+                                                                            <Setter Property="Opacity" Value="0.6" />
+                                                                        </Trigger>
+                                                                        <Trigger Property="IsEnabled" Value="False">
+                                                                            <Setter Property="Opacity" Value="0.4" />
+                                                                        </Trigger>
+                                                                    </Style.Triggers>
+                                                                </Style>
+                                                            </Style.BasedOn>
+                                                        </Style>
+                                                    </RepeatButton.Style>
+                                                </RepeatButton>
+                                                <RepeatButton HorizontalAlignment="Stretch"
+                                                              VerticalContentAlignment="Stretch"
+                                                              hc:BorderElement.CornerRadius="0"
+                                                              Background="{StaticResource GridBgBrush}"
+                                                              BorderBrush="{StaticResource GridLineBrush}"
+                                                              BorderThickness="0,0,2,0"
+                                                              Command="{Binding AddTabItemCommand}"
+                                                              CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=hc:TabControl}}"
+                                                              FontSize="20">
+                                                    <RepeatButton.Content>
+                                                        <Path Width="12"
+                                                              Height="12"
+                                                              Data="M512.17594 1023.648121c-29.52585 0-58.347943-6.397801-58.347943-37.395145V564.030115H37.459123c-23.76783 0-37.459123-22.392303-37.459123-51.182406 0-26.614851 10.076536-51.790197 35.187904-51.790198h425.005904V43.888913c0-28.054356 20.888819-43.888913 51.854176-43.888913 28.790103 0 51.182406 12.795602 51.182406 37.395145v416.49683h430.156133c28.790103 0 30.261598 34.516135 30.261598 58.283965s-7.933273 51.182406-36.723376 51.182406H563.326357v422.926619c0.735747 24.40761-21.592578 37.363156-51.150417 37.363156z"
+                                                              Fill="White"
+                                                              SnapsToDevicePixels="True"
+                                                              Stretch="Uniform" />
+                                                    </RepeatButton.Content>
+                                                    <hc:Poptip.Instance>
+                                                        <hc:Poptip Content="添加方法"
+                                                                   FontSize="12"
+                                                                   PlacementType="TopRight" />
+                                                    </hc:Poptip.Instance>
+                                                </RepeatButton>
+                                            </StackPanel>
+                                        </Border>
+                                        <hc:ScrollViewer x:Name="PART_OverflowScrollviewer"
+                                                         Grid.Row="0"
+                                                         Grid.Column="1"
+                                                         CanMouseWheel="True"
+                                                         HorizontalScrollBarVisibility="Hidden"
+                                                         IsDeferredScrollingEnabled="True"
+                                                         IsInertiaEnabled="True"
+                                                         Orientation="Horizontal">
+                                            <Border x:Name="PART_HeaderBorder" Background="{StaticResource GaryBrush}">
+                                                <hc:TabPanel x:Name="PART_HeaderPanel"
+                                                             MinHeight="{TemplateBinding TabItemHeight}"
+                                                             HorizontalAlignment="Left"
+                                                             Panel.ZIndex="1"
+                                                             Background="Transparent"
+                                                             IsItemsHost="True"
+                                                             IsTabFillEnabled="{TemplateBinding IsTabFillEnabled}"
+                                                             KeyboardNavigation.TabIndex="1"
+                                                             TabItemHeight="{TemplateBinding TabItemHeight}"
+                                                             TabItemWidth="{TemplateBinding TabItemWidth}" />
+                                            </Border>
+                                        </hc:ScrollViewer>
+                                        <Border Grid.Row="0"
+                                                Grid.Column="2"
+                                                Margin="0,0,0,0"
+                                                HorizontalAlignment="Right"
+                                                Background="{DynamicResource RegionBrush}"
+                                                BorderBrush="{DynamicResource BorderBrush}"
+                                                BorderThickness="1,0,0,1"
+                                                Visibility="Collapsed">
+                                            <Border.CacheMode>
+                                                <BitmapCache SnapsToDevicePixels="True" />
+                                            </Border.CacheMode>
+                                            <StackPanel Orientation="Horizontal">
+                                                <RepeatButton x:Name="PART_ScrollButtonRight"
+                                                              Padding="8"
+                                                              hc:IconElement.Geometry="M4.1666641,0C5.2083321,0,6.25,0.41666794,7.0833321,1.25L57.083331,46.666664C57.916664,47.499998 58.33333,48.749998 58.333329,49.999998 58.33333,51.249997 57.916664,52.499997 57.083331,53.333331L7.0833321,98.749996C5.4166641,100.41666 2.9166641,100.41666 1.2499962,98.749996 -0.41666794,97.083328 -0.41666794,94.583328 1.2499962,92.916664L48.333331,49.999998 1.2499962,7.0833321C-0.41666794,5.4166641 -0.41666794,2.9166641 1.2499962,1.25 2.0833282,0.41666794 3.1249962,0 4.1666641,0z"
+                                                              Background="{DynamicResource SecondaryRegionBrush}"
+                                                              BorderBrush="{DynamicResource BorderBrush}"
+                                                              Focusable="False"
+                                                              Foreground="{DynamicResource PrimaryTextBrush}">
+                                                    <RepeatButton.Style>
+                                                        <Style TargetType="{x:Type RepeatButton}">
+                                                            <Setter Property="Background" Value="Transparent" />
+                                                            <Setter Property="BorderBrush" Value="Transparent" />
+                                                            <Setter Property="hc:BorderElement.CornerRadius" Value="0" />
+                                                            <Setter Property="Template">
+                                                                <Setter.Value>
+                                                                    <ControlTemplate TargetType="{x:Type RepeatButton}">
+                                                                        <Border Background="{TemplateBinding Background}"
+                                                                                BorderBrush="{TemplateBinding BorderBrush}"
+                                                                                BorderThickness="{TemplateBinding BorderThickness}"
+                                                                                CornerRadius="{Binding (hc:BorderElement.CornerRadius), RelativeSource={RelativeSource TemplatedParent}}">
+                                                                            <ContentControl Margin="{TemplateBinding Padding}"
+                                                                                            HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                                                                            VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                                                                            SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}">
+                                                                                <Path Width="{TemplateBinding hc:IconElement.Width}"
+                                                                                      Height="{TemplateBinding hc:IconElement.Height}"
+                                                                                      Data="{TemplateBinding hc:IconElement.Geometry}"
+                                                                                      Fill="{TemplateBinding Foreground}"
+                                                                                      SnapsToDevicePixels="True"
+                                                                                      Stretch="Uniform" />
+                                                                            </ContentControl>
+                                                                        </Border>
+                                                                    </ControlTemplate>
+                                                                </Setter.Value>
+                                                            </Setter>
+                                                            <Style.BasedOn>
+                                                                <Style TargetType="{x:Type RepeatButton}">
+                                                                    <Setter Property="Background" Value="{DynamicResource RegionBrush}" />
+                                                                    <Setter Property="hc:BorderElement.CornerRadius" Value="4" />
+                                                                    <Setter Property="Template">
+                                                                        <Setter.Value>
+                                                                            <ControlTemplate TargetType="{x:Type RepeatButton}">
+                                                                                <hc:SimplePanel>
+                                                                                    <Border Background="{TemplateBinding Background}" CornerRadius="{Binding (hc:BorderElement.CornerRadius), RelativeSource={RelativeSource TemplatedParent}}" />
+                                                                                    <Border BorderBrush="{TemplateBinding BorderBrush}"
+                                                                                            BorderThickness="{TemplateBinding BorderThickness}"
+                                                                                            CornerRadius="{Binding (hc:BorderElement.CornerRadius), RelativeSource={RelativeSource TemplatedParent}}">
+                                                                                        <StackPanel Margin="{TemplateBinding Padding}"
+                                                                                                    HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                                                                                    VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                                                                                    Orientation="Horizontal">
+                                                                                            <Path x:Name="PathMain"
+                                                                                                  Width="{TemplateBinding hc:IconElement.Width}"
+                                                                                                  Height="{TemplateBinding hc:IconElement.Height}"
+                                                                                                  Data="{TemplateBinding hc:IconElement.Geometry}"
+                                                                                                  Fill="{TemplateBinding Foreground}"
+                                                                                                  SnapsToDevicePixels="True"
+                                                                                                  Stretch="Uniform" />
+                                                                                            <ContentPresenter x:Name="ContentPresenterMain"
+                                                                                                              Margin="6,0,0,0"
+                                                                                                              VerticalAlignment="Center"
+                                                                                                              Content="{TemplateBinding Content}"
+                                                                                                              ContentStringFormat="{TemplateBinding ContentStringFormat}"
+                                                                                                              ContentTemplate="{TemplateBinding ContentTemplate}"
+                                                                                                              SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                                                                                        </StackPanel>
+                                                                                    </Border>
+                                                                                </hc:SimplePanel>
+                                                                                <ControlTemplate.Triggers>
+                                                                                    <Trigger Property="Content" Value="{x:Null}">
+                                                                                        <Setter TargetName="ContentPresenterMain" Property="Visibility" Value="Collapsed" />
+                                                                                    </Trigger>
+                                                                                    <Trigger Property="hc:IconElement.Geometry" Value="{x:Null}">
+                                                                                        <Setter TargetName="PathMain" Property="Visibility" Value="Collapsed" />
+                                                                                        <Setter TargetName="ContentPresenterMain" Property="Margin" Value="0" />
+                                                                                    </Trigger>
+                                                                                </ControlTemplate.Triggers>
+                                                                            </ControlTemplate>
+                                                                        </Setter.Value>
+                                                                    </Setter>
+                                                                    <Style.BasedOn>
+                                                                        <Style TargetType="{x:Type ButtonBase}">
+                                                                            <Setter Property="Height" Value="30" />
+                                                                            <Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}" />
+                                                                            <Setter Property="Padding" Value="10,6" />
+                                                                            <Setter Property="Foreground" Value="{DynamicResource TextIconBrush}" />
+                                                                            <Setter Property="BorderThickness" Value="0" />
+                                                                            <Setter Property="HorizontalAlignment" Value="Center" />
+                                                                            <Setter Property="VerticalAlignment" Value="Center" />
+                                                                            <Setter Property="HorizontalContentAlignment" Value="Center" />
+                                                                            <Setter Property="VerticalContentAlignment" Value="Center" />
+                                                                            <Style.BasedOn>
+                                                                                <Style TargetType="{x:Type Control}">
+                                                                                    <Setter Property="Foreground" Value="{DynamicResource PrimaryTextBrush}" />
+                                                                                    <Setter Property="FontSize" Value="12" />
+                                                                                    <Setter Property="FocusVisualStyle">
+                                                                                        <Setter.Value>
+                                                                                            <Style>
+                                                                                                <Setter Property="Control.Template">
+                                                                                                    <Setter.Value>
+                                                                                                        <ControlTemplate>
+                                                                                                            <Rectangle RadiusX="4" RadiusY="4">
+                                                                                                                <Rectangle.Style>
+                                                                                                                    <Style TargetType="{x:Type Rectangle}">
+                                                                                                                        <Setter Property="Margin" Value="-2" />
+                                                                                                                        <Setter Property="Opacity" Value="0.6" />
+                                                                                                                        <Setter Property="SnapsToDevicePixels" Value="True" />
+                                                                                                                        <Setter Property="Stroke" Value="{DynamicResource SecondaryBorderBrush}" />
+                                                                                                                        <Setter Property="StrokeThickness" Value="2" />
+                                                                                                                        <Setter Property="StrokeDashArray" Value="1 1" />
+                                                                                                                    </Style>
+                                                                                                                </Rectangle.Style>
+                                                                                                            </Rectangle>
+                                                                                                        </ControlTemplate>
+                                                                                                    </Setter.Value>
+                                                                                                </Setter>
+                                                                                            </Style>
+                                                                                        </Setter.Value>
+                                                                                    </Setter>
+                                                                                </Style>
+                                                                            </Style.BasedOn>
+                                                                        </Style>
+                                                                    </Style.BasedOn>
+                                                                    <Style.Triggers>
+                                                                        <Trigger Property="IsMouseOver" Value="True">
+                                                                            <Setter Property="Opacity" Value="0.9" />
+                                                                        </Trigger>
+                                                                        <Trigger Property="IsPressed" Value="True">
+                                                                            <Setter Property="Opacity" Value="0.6" />
+                                                                        </Trigger>
+                                                                        <Trigger Property="IsEnabled" Value="False">
+                                                                            <Setter Property="Opacity" Value="0.4" />
+                                                                        </Trigger>
+                                                                    </Style.Triggers>
+                                                                </Style>
+                                                            </Style.BasedOn>
+                                                        </Style>
+                                                    </RepeatButton.Style>
+                                                    <RepeatButton.Visibility>
+                                                        <TemplateBinding Property="ShowScrollButton">
+                                                            <TemplateBinding.Converter>
+                                                                <BooleanToVisibilityConverter />
+                                                            </TemplateBinding.Converter>
+                                                        </TemplateBinding>
+                                                    </RepeatButton.Visibility>
+                                                </RepeatButton>
+                                                <Border Width="1"
+                                                        Background="{DynamicResource BorderBrush}"
+                                                        Visibility="{Binding Visibility, ElementName=PART_OverflowButton}" />
+                                                <hc:ContextMenuToggleButton x:Name="PART_OverflowButton"
+                                                                            hc:IconElement.Geometry="M512,801.6896L5.12,282.0096 63.2832,222.4128 512,682.3936 960.7168,222.3104 1018.88,281.9072 512,801.6896z"
+                                                                            hc:IconSwitchElement.GeometrySelected="M50.000001,0L100,51.262779 94.262627,57.141584 50.000001,11.767713 5.7373757,57.151686 0,51.27288z"
+                                                                            Menu="{x:Null}"
+                                                                            Visibility="Collapsed">
+                                                    <hc:ContextMenuToggleButton.Style>
+                                                        <Style TargetType="{x:Type ToggleButton}">
+                                                            <Setter Property="Background" Value="Transparent" />
+                                                            <Setter Property="BorderBrush" Value="Transparent" />
+                                                            <Setter Property="Foreground" Value="{DynamicResource PrimaryTextBrush}" />
+                                                            <Setter Property="Template">
+                                                                <Setter.Value>
+                                                                    <ControlTemplate TargetType="{x:Type ToggleButton}">
+                                                                        <Border Background="{TemplateBinding Background}"
+                                                                                BorderBrush="{TemplateBinding BorderBrush}"
+                                                                                BorderThickness="{TemplateBinding BorderThickness}">
+                                                                            <ContentControl Margin="{TemplateBinding Padding}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}">
+                                                                                <Path x:Name="PathIcon"
+                                                                                      Width="{TemplateBinding hc:IconElement.Width}"
+                                                                                      Height="{TemplateBinding hc:IconElement.Height}"
+                                                                                      HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                                                                      VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                                                                      Data="{TemplateBinding hc:IconElement.Geometry}"
+                                                                                      Fill="{TemplateBinding Foreground}"
+                                                                                      SnapsToDevicePixels="True"
+                                                                                      Stretch="Uniform" />
+                                                                            </ContentControl>
+                                                                        </Border>
+                                                                        <ControlTemplate.Triggers>
+                                                                            <Trigger Property="IsChecked" Value="True">
+                                                                                <Setter TargetName="PathIcon" Property="Data" Value="{Binding (hc:IconSwitchElement.GeometrySelected), RelativeSource={RelativeSource TemplatedParent}}" />
+                                                                            </Trigger>
+                                                                        </ControlTemplate.Triggers>
+                                                                    </ControlTemplate>
+                                                                </Setter.Value>
+                                                            </Setter>
+                                                            <Style.BasedOn>
+                                                                <Style TargetType="{x:Type ToggleButton}">
+                                                                    <Setter Property="Foreground" Value="{DynamicResource TextIconBrush}" />
+                                                                    <Setter Property="Width" Value="30" />
+                                                                    <Setter Property="Height" Value="30" />
+                                                                    <Setter Property="Padding" Value="8" />
+                                                                    <Setter Property="hc:IconElement.Geometry" Value="{x:Null}" />
+                                                                    <Setter Property="hc:IconSwitchElement.GeometrySelected" Value="{x:Null}" />
+                                                                    <Setter Property="hc:BorderElement.CornerRadius" Value="4" />
+                                                                    <Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}" />
+                                                                    <Setter Property="BorderThickness" Value="0" />
+                                                                    <Setter Property="Template">
+                                                                        <Setter.Value>
+                                                                            <ControlTemplate TargetType="{x:Type ToggleButton}">
+                                                                                <hc:SimplePanel>
+                                                                                    <Border Background="{TemplateBinding Background}" CornerRadius="{Binding (hc:BorderElement.CornerRadius), RelativeSource={RelativeSource TemplatedParent}}" />
+                                                                                    <Border BorderBrush="{TemplateBinding BorderBrush}"
+                                                                                            BorderThickness="{TemplateBinding BorderThickness}"
+                                                                                            CornerRadius="{Binding (hc:BorderElement.CornerRadius), RelativeSource={RelativeSource TemplatedParent}}">
+                                                                                        <ContentControl Margin="{TemplateBinding Padding}"
+                                                                                                        HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                                                                                        VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                                                                                        SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}">
+                                                                                            <Path x:Name="PathIcon"
+                                                                                                  Width="{TemplateBinding hc:IconElement.Width}"
+                                                                                                  Height="{TemplateBinding hc:IconElement.Height}"
+                                                                                                  Data="{TemplateBinding hc:IconElement.Geometry}"
+                                                                                                  Fill="{TemplateBinding Foreground}"
+                                                                                                  SnapsToDevicePixels="True"
+                                                                                                  Stretch="Uniform" />
+                                                                                        </ContentControl>
+                                                                                    </Border>
+                                                                                    <Border x:Name="BorderChecked"
+                                                                                            BorderBrush="{TemplateBinding BorderBrush}"
+                                                                                            BorderThickness="4"
+                                                                                            CornerRadius="{Binding (hc:BorderElement.CornerRadius), RelativeSource={RelativeSource TemplatedParent}}"
+                                                                                            Visibility="Collapsed" />
+                                                                                </hc:SimplePanel>
+                                                                                <ControlTemplate.Triggers>
+                                                                                    <Trigger Property="IsChecked" Value="True">
+                                                                                        <Setter TargetName="PathIcon" Property="Data" Value="{Binding (hc:IconSwitchElement.GeometrySelected), RelativeSource={RelativeSource TemplatedParent}}" />
+                                                                                    </Trigger>
+                                                                                </ControlTemplate.Triggers>
+                                                                            </ControlTemplate>
+                                                                        </Setter.Value>
+                                                                    </Setter>
+                                                                    <Style.BasedOn>
+                                                                        <Style TargetType="{x:Type Control}">
+                                                                            <Setter Property="Foreground" Value="{DynamicResource PrimaryTextBrush}" />
+                                                                            <Setter Property="FontSize" Value="12" />
+                                                                            <Setter Property="FocusVisualStyle">
+                                                                                <Setter.Value>
+                                                                                    <Style>
+                                                                                        <Setter Property="Control.Template">
+                                                                                            <Setter.Value>
+                                                                                                <ControlTemplate>
+                                                                                                    <Rectangle RadiusX="4" RadiusY="4">
+                                                                                                        <Rectangle.Style>
+                                                                                                            <Style TargetType="{x:Type Rectangle}">
+                                                                                                                <Setter Property="Margin" Value="-2" />
+                                                                                                                <Setter Property="Opacity" Value="0.6" />
+                                                                                                                <Setter Property="SnapsToDevicePixels" Value="True" />
+                                                                                                                <Setter Property="Stroke" Value="{DynamicResource SecondaryBorderBrush}" />
+                                                                                                                <Setter Property="StrokeThickness" Value="2" />
+                                                                                                                <Setter Property="StrokeDashArray" Value="1 1" />
+                                                                                                            </Style>
+                                                                                                        </Rectangle.Style>
+                                                                                                    </Rectangle>
+                                                                                                </ControlTemplate>
+                                                                                            </Setter.Value>
+                                                                                        </Setter>
+                                                                                    </Style>
+                                                                                </Setter.Value>
+                                                                            </Setter>
+                                                                        </Style>
+                                                                    </Style.BasedOn>
+                                                                    <Style.Triggers>
+                                                                        <Trigger Property="IsMouseOver" Value="True">
+                                                                            <Setter Property="Opacity" Value="0.9" />
+                                                                        </Trigger>
+                                                                        <Trigger Property="IsPressed" Value="True">
+                                                                            <Setter Property="Opacity" Value="0.6" />
+                                                                        </Trigger>
+                                                                        <Trigger Property="IsEnabled" Value="False">
+                                                                            <Setter Property="Opacity" Value="0.4" />
+                                                                        </Trigger>
+                                                                    </Style.Triggers>
+                                                                </Style>
+                                                            </Style.BasedOn>
+                                                        </Style>
+                                                    </hc:ContextMenuToggleButton.Style>
+                                                </hc:ContextMenuToggleButton>
+                                            </StackPanel>
+                                        </Border>
+                                        <Border x:Name="contentPanel"
+                                                Grid.Row="1"
+                                                Grid.Column="0"
+                                                Grid.ColumnSpan="3"
+                                                Background="Transparent"
+                                                BorderBrush="{StaticResource GridLineBrush}"
+                                                BorderThickness="0,2,0,0"
+                                                KeyboardNavigation.DirectionalNavigation="Contained"
+                                                KeyboardNavigation.TabIndex="2"
+                                                KeyboardNavigation.TabNavigation="Local">
+                                            <ContentPresenter x:Name="PART_SelectedContentHost"
+                                                              Margin="{TemplateBinding Padding}"
+                                                              Content="{TemplateBinding SelectedContent}"
+                                                              ContentSource="SelectedContent"
+                                                              ContentStringFormat="{TemplateBinding SelectedContentStringFormat}"
+                                                              ContentTemplate="{TemplateBinding SelectedContentTemplate}"
+                                                              SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                                        </Border>
+                                        <Border x:Name="Mask_border"
+                                                Grid.Row="1"
+                                                Grid.Column="0"
+                                                Grid.ColumnSpan="3"
+                                                Background="#1D2837"
+                                                BorderThickness="0,2,0,0"
+                                                KeyboardNavigation.DirectionalNavigation="Contained"
+                                                Visibility="Collapsed">
+                                            <TextBlock HorizontalAlignment="Center"
+                                                       VerticalAlignment="Center"
+                                                       FontSize="24"
+                                                       FontWeight="Black"
+                                                       Foreground="White"
+                                                       Text="请点击左上角号 + 添加序列" />
+                                        </Border>
+                                    </Grid>
+                                </Border>
+                                <ControlTemplate.Triggers>
+                                    <DataTrigger Binding="{Binding RelativeSource={RelativeSource Self}, Path=Items.Count}" Value="0">
+                                        <Setter TargetName="Mask_border" Property="Visibility" Value="Visible" />
+                                    </DataTrigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </MultiTrigger>
+            </Style.Triggers>
+        </Style>
+        <cv:Bool2Visibiliy x:Key="Bool2Visibiliy" />
+        <cv:MultiConverter x:Key="MultiConverter" />
+    </UserControl.Resources>
+
+    <UserControl.Triggers>
+        <EventTrigger RoutedEvent="Window.Loaded">
+            <BeginStoryboard Storyboard="{StaticResource Loading}" />
+        </EventTrigger>
+        <!--<EventTrigger SourceName="CloseButton" RoutedEvent="Button.Click">
+            <BeginStoryboard Storyboard="{StaticResource Closing}"  />
+        </EventTrigger>-->
+    </UserControl.Triggers>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="80" />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+
+        <Grid ZIndex="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+
+            <StackPanel Grid.Column="1"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Orientation="Vertical">
+                <TextBlock HorizontalAlignment="Center"
+                           FontSize="24"
+                           FontWeight="Bold"
+                           Foreground="White"
+                           Text="运行控制" />
+                <StackPanel Margin="0,5,0,0" Orientation="Horizontal">
+                    <TextBlock VerticalAlignment="Center"
+                               FontSize="16"
+                               FontWeight="Bold"
+                               Foreground="White"
+                               Text="执行区域：" />
+                    <hc:ComboBox x:Name="RunArea"
+                                 hc:BorderElement.CornerRadius="5"
+                                 SelectedIndex="{Binding RunArea}"
+                                 Style="{StaticResource ComboBoxModifiy}">
+                        <TextBlock Foreground="White" Text="A区" />
+                        <TextBlock Foreground="White" Text="B区" />
+                    </hc:ComboBox>
+                </StackPanel>
+                <StackPanel Margin="0,5,0,0"
+                            Orientation="Horizontal"
+                            Visibility="Collapsed">
+                    <TextBlock VerticalAlignment="Center"
+                               FontSize="16"
+                               FontWeight="Bold"
+                               Foreground="White"
+                               Text="当前溶剂类型：" />
+                    <hc:ComboBox x:Name="LiquidType"
+                                 hc:BorderElement.CornerRadius="5"
+                                 ItemsSource="{Binding LiquidTypes}"
+                                 SelectedIndex="{Binding LiquidSelectindex}"
+                                 Style="{StaticResource ComboBoxModifiy}">
+                        <hc:ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Foreground="White" Text="{Binding LiquidName}" />
+                            </DataTemplate>
+                        </hc:ComboBox.ItemTemplate>
+                    </hc:ComboBox>
+                </StackPanel>
+            </StackPanel>
+
+            <StackPanel Grid.Column="0"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Orientation="Horizontal">
+
+                <Button Width="80"
+                        Height="40"
+                        Margin="5,0,10,0"
+                        hc:IconElement.Geometry="M511.937888 0.129764a514.308851 514.308851 0 0 0-362.389929 151.127678L141.635515 38.900739A38.770975 38.770975 0 0 0 99.699562 0.129764 39.562219 39.562219 0 0 0 63.302321 44.43945l15.824887 221.548428a40.353464 40.353464 0 0 0 13.451155 27.693553 39.562219 39.562219 0 0 0 26.111065 9.494933l221.548428-15.033643a39.562219 39.562219 0 1 0-4.747466-79.124439l-143.215234 9.494933A432.019435 432.019435 0 1 1 79.127208 512.064882 39.562219 39.562219 0 0 0 39.564989 474.876396a39.562219 39.562219 0 0 0-39.562219 39.562219A511.935118 511.935118 0 1 0 511.937888 0.129764z M511.937888 507.317416m-128.181591 0a128.181591 128.181591 0 1 0 256.363181 0 128.181591 128.181591 0 1 0-256.363181 0Z"
+                        Background="#304258"
+                        Command="{Binding ActionCommand}"
+                        Content="复位"
+                        IsHitTestVisible="{Binding ReSetEnable}">
+                    <Button.Style>
+                        <Style BasedOn="{StaticResource ButtonPrimary}" TargetType="Button">
+                            <Setter Property="Background" Value="Transparent" />
+                            <Style.Triggers>
+                                <EventTrigger RoutedEvent="MouseEnter">
+                                    <EventTrigger.Actions>
+                                        <BeginStoryboard Storyboard="{StaticResource PauseColorAnnimation}" />
+                                    </EventTrigger.Actions>
+                                </EventTrigger>
+                                <EventTrigger RoutedEvent="MouseLeave">
+                                    <EventTrigger.Actions>
+                                        <BeginStoryboard Storyboard="{StaticResource PauseColorAnnimationBack}" />
+                                    </EventTrigger.Actions>
+                                </EventTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                    <Button.CommandParameter>
+                        <MultiBinding Converter="{x:Static cv:MultiConverter.Instance}">
+                            <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=Window}" />
+                            <Binding Path="Content" RelativeSource="{RelativeSource Self}" />
+                            <Binding ElementName="LiquidType" Path="SelectedItem" />
+                        </MultiBinding>
+                    </Button.CommandParameter>
+                </Button>
+
+                <Button Width="80"
+                        Height="40"
+                        Margin="5,0,10,0"
+                        hc:IconElement.Geometry="M511.091 960.558c-60.438 0-119.086-11.844-174.313-35.203-53.328-22.556-101.213-54.839-142.329-95.954-41.115-41.114-73.398-89.001-95.954-142.328-23.359-55.228-35.204-113.875-35.204-174.314 0-60.438 11.844-119.086 35.204-174.313 22.555-53.328 54.839-101.213 95.954-142.329 41.115-41.115 89.001-73.398 142.329-95.954 55.228-23.359 113.875-35.204 174.313-35.204 60.439 0 119.086 11.844 174.314 35.204 53.327 22.555 101.214 54.839 142.328 95.954 41.115 41.115 73.398 89.001 95.954 142.329 23.359 55.228 35.203 113.875 35.203 174.313 0 60.439-11.844 119.086-35.203 174.314-22.556 53.327-54.839 101.214-95.954 142.328-41.114 41.115-89.001 73.398-142.328 95.954-55.227 23.359-113.875 35.203-174.314 35.203z m0-831.599c-211.627 0-383.799 172.172-383.799 383.799s172.172 383.799 383.799 383.799S894.89 724.385 894.89 512.758 722.719 128.959 511.091 128.959z M383.908 319.996v383.887l315.949-193.775z"
+                        Background="#304258"
+                        Command="{Binding ActionCommand}"
+                        Content="开始"
+                        IsHitTestVisible="{Binding StartEnable}">
+                    <Button.Style>
+                        <Style BasedOn="{StaticResource ButtonPrimary}" TargetType="Button">
+                            <Setter Property="Background" Value="Transparent" />
+                            <Style.Triggers>
+                                <EventTrigger RoutedEvent="MouseEnter">
+                                    <EventTrigger.Actions>
+                                        <BeginStoryboard Storyboard="{StaticResource StartColorAnnimation}" />
+                                    </EventTrigger.Actions>
+                                </EventTrigger>
+                                <EventTrigger RoutedEvent="MouseLeave">
+                                    <EventTrigger.Actions>
+                                        <BeginStoryboard Storyboard="{StaticResource StartColorAnnimationBack}" />
+                                    </EventTrigger.Actions>
+                                </EventTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                    <Button.CommandParameter>
+                        <MultiBinding Converter="{x:Static cv:MultiConverter.Instance}">
+                            <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=Window}" />
+                            <Binding Path="Content" RelativeSource="{RelativeSource Self}" />
+                            <Binding ElementName="LiquidType" Path="SelectedItem" />
+                        </MultiBinding>
+                    </Button.CommandParameter>
+                </Button>
+
+                <Button Width="80"
+                        Height="40"
+                        Margin="5,0,10,0"
+                        hc:IconElement.Geometry="M512 1024A512 512 0 1 1 512 0a512 512 0 0 1 0 1024z m3.008-92.992a416 416 0 1 0 0-832 416 416 0 0 0 0 832zM320 320h128v384H320V320z m256 0h128v384H576V320z"
+                        Background="#304258"
+                        Command="{Binding ActionCommand}"
+                        Content="暂停"
+                        IsHitTestVisible="{Binding PauseEnable}">
+                    <Button.Style>
+                        <Style BasedOn="{StaticResource ButtonPrimary}" TargetType="Button">
+                            <Setter Property="Background" Value="Transparent" />
+                            <Style.Triggers>
+                                <EventTrigger RoutedEvent="MouseEnter">
+                                    <EventTrigger.Actions>
+                                        <BeginStoryboard Storyboard="{StaticResource PauseColorAnnimation}" />
+                                    </EventTrigger.Actions>
+                                </EventTrigger>
+                                <EventTrigger RoutedEvent="MouseLeave">
+                                    <EventTrigger.Actions>
+                                        <BeginStoryboard Storyboard="{StaticResource PauseColorAnnimationBack}" />
+                                    </EventTrigger.Actions>
+                                </EventTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                    <Button.CommandParameter>
+                        <MultiBinding Converter="{x:Static cv:MultiConverter.Instance}">
+                            <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=Window}" />
+                            <Binding Path="Content" RelativeSource="{RelativeSource Self}" />
+                        </MultiBinding>
+                    </Button.CommandParameter>
+                </Button>
+
+                <Button Width="80"
+                        Height="40"
+                        Margin="5,0,10,0"
+                        hc:IconElement.Geometry="M512 1024A512 512 0 1 1 512 0a512 512 0 0 1 0 1024z m3.008-92.992a416 416 0 1 0 0-832 416 416 0 0 0 0 832zM320 320h384v384H320V320z"
+                        Background="#304258"
+                        Command="{Binding ActionCommand}"
+                        Content="急停"
+                        IsHitTestVisible="{Binding StopEnable}">
+                    <Button.Style>
+                        <Style BasedOn="{StaticResource ButtonPrimary}" TargetType="Button">
+                            <Setter Property="Background" Value="Transparent" />
+                            <Style.Triggers>
+                                <EventTrigger RoutedEvent="MouseEnter">
+                                    <EventTrigger.Actions>
+                                        <BeginStoryboard Storyboard="{StaticResource StopColorAnnimation}" />
+                                    </EventTrigger.Actions>
+                                </EventTrigger>
+                                <EventTrigger RoutedEvent="MouseLeave">
+                                    <EventTrigger.Actions>
+                                        <BeginStoryboard Storyboard="{StaticResource StopColorAnnimationBack}" />
+                                    </EventTrigger.Actions>
+                                </EventTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                    <Button.CommandParameter>
+                        <MultiBinding Converter="{x:Static cv:MultiConverter.Instance}">
+                            <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=Window}" />
+                            <Binding Path="Content" RelativeSource="{RelativeSource Self}" />
+                        </MultiBinding>
+                    </Button.CommandParameter>
+                </Button>
+
+                <Button Width="80"
+                        Height="40"
+                        Margin="5,0,5,0"
+                        hc:IconElement.Geometry="M627.863704 330.979556c-14.475062-55.978667-3.919012-98.405136 31.61758-127.304692 53.336494-43.324049 145.408 23.67842 127.772444 161.185185-10.315852 80.440889-59.101235 161.652938-135.901234 222.675753-54.52484 43.311407-130.591605 61.111309-183.713185 129.871013C339.689877 883.041975 195.874765 1163.124938 191.728198 933.331753c-4.171852-229.780543 237.201383-142.778469 300.499753-329.070617 32.262321-77.267753 161.526519-192.954469 135.648395-273.28158z m269.982024-5.30963a337.894716 337.894716 0 0 1-90.94637 242.232889L617.750123 770.452543a32.060049 32.060049 0 0 1-56.244148-11.150222 31.958914 31.958914 0 0 1 9.607902-32.287605l189.12395-202.549728c97.09037-111.755062 88.177778-280.184099-20.16395-381.067062s-277.200593-98.025877-382.065778 6.485333L168.871506 352.432988a32.060049 32.060049 0 0 1-45.081284 1.580247 31.314173 31.314173 0 0 1-1.542321-44.373334L311.371852 107.102815a339.576099 339.576099 0 0 1 366.111605-85.699951 338.779654 338.779654 0 0 1 220.349629 304.292346z"
+                        Background="#304258"
+                        Command="{Binding ActionCommand}"
+                        Content="排空"
+                        IsHitTestVisible="{Binding CleanEnable}">
+                    <Button.Style>
+                        <Style BasedOn="{StaticResource ButtonPrimary}" TargetType="Button">
+                            <Setter Property="Background" Value="Transparent" />
+                            <Style.Triggers>
+                                <EventTrigger RoutedEvent="MouseEnter">
+                                    <EventTrigger.Actions>
+                                        <BeginStoryboard Storyboard="{StaticResource PauseColorAnnimation}" />
+                                    </EventTrigger.Actions>
+                                </EventTrigger>
+                                <EventTrigger RoutedEvent="MouseLeave">
+                                    <EventTrigger.Actions>
+                                        <BeginStoryboard Storyboard="{StaticResource PauseColorAnnimationBack}" />
+                                    </EventTrigger.Actions>
+                                </EventTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                    <Button.CommandParameter>
+                        <MultiBinding Converter="{x:Static cv:MultiConverter.Instance}">
+                            <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=Window}" />
+                            <Binding Path="Content" RelativeSource="{RelativeSource Self}" />
+                        </MultiBinding>
+                    </Button.CommandParameter>
+                </Button>
+
+
+            </StackPanel>
+        </Grid>
+
+        <Grid Row="1">
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+
+            <hc:Interaction.Triggers>
+                <!--<hc:RoutedEventTrigger RoutedEvent="hc:TabItem.Closing">
+                    <hc:EventToCommand Command="{Binding ClosingCmd}"
+                                       PassEventArgsToCommand="True" />
+                </hc:RoutedEventTrigger>-->
+                <hc:RoutedEventTrigger RoutedEvent="hc:TabItem.Closed">
+                    <hc:EventToCommand Command="{Binding DelTabItemCommand}" PassEventArgsToCommand="True" />
+                </hc:RoutedEventTrigger>
+            </hc:Interaction.Triggers>
+
+            <Grid.Resources>
+                <Style x:Key="TubeStyle" TargetType="Border">
+                    <Setter Property="BorderThickness" Value="2" />
+                    <Setter Property="BorderBrush" Value="#304258" />
+                    <Setter Property="MinWidth" Value="16" />
+                    <Setter Property="MinHeight" Value="16" />
+                    <Setter Property="CornerRadius" Value="500" />
+                    <Setter Property="Margin" Value="5" />
+                </Style>
+
+                <Style TargetType="TextBlock">
+                    <Setter Property="Foreground" Value="Black" />
+                    <Setter Property="FontSize" Value="16" />
+                    <Setter Property="FontWeight" Value="Bold" />
+                    <Setter Property="HorizontalAlignment" Value="Center" />
+                    <Setter Property="VerticalAlignment" Value="Center" />
+                </Style>
+            </Grid.Resources>
+
+            <!--<StackPanel Margin="5" Visibility="{Binding IsBusy,Converter={x:Static cv:Bool2Visibiliy.instance}}" Grid.ColumnSpan="2" Orientation="Vertical" Grid.RowSpan="2" Background="{StaticResource Bg}" ZIndex="1">
+                    <hc:LoadingCircle DotDiameter="10" Width="100" Height="100" Foreground="White" Margin="0 100 0 20">
+                    </hc:LoadingCircle>
+                <TextBlock Text="{Binding BusyContent}"
+                           Width="auto"
+                           FontWeight="Bold"
+                           Foreground="White"
+                           HorizontalAlignment="Center"
+                           FontSize="20" />
+            </StackPanel>-->
+
+            <Grid Grid.Column="1" Margin="5">
+
+                <Grid.Resources>
+                    <Style TargetType="TextBlock">
+                        <Setter Property="Foreground" Value="White" />
+                        <Setter Property="FontSize" Value="20" />
+                        <Setter Property="FontWeight" Value="Bold" />
+                        <Setter Property="HorizontalAlignment" Value="Center" />
+                        <Setter Property="VerticalAlignment" Value="Center" />
+                    </Style>
+                </Grid.Resources>
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="2*" />
+                    <RowDefinition Height="3*" />
+                    <RowDefinition Height="3*" />
+                    <RowDefinition Height="3*" />
+                    <RowDefinition Height="3*" />
+                    <RowDefinition Height="3*" />
+                    <RowDefinition Height="3*" />
+                </Grid.RowDefinitions>
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="2*" />
+                    <ColumnDefinition Width="3*" />
+                    <ColumnDefinition Width="3*" />
+                    <ColumnDefinition Width="3*" />
+                    <ColumnDefinition Width="3*" />
+                    <ColumnDefinition Width="3*" />
+                    <ColumnDefinition Width="3*" />
+                </Grid.ColumnDefinitions>
+
+                <Border Grid.Row="0"
+                        Grid.Column="0"
+                        Panel.ZIndex="1">
+                    <hc:Poptip.Instance>
+                        <hc:Poptip Content="全选"
+                                   FontSize="12"
+                                   PlacementType="TopRight" />
+                    </hc:Poptip.Instance>
+                    <TextBlock Text="ALL" />
+
+                    <hc:Interaction.Triggers>
+                        <hc:RoutedEventTrigger RoutedEvent="Mouse.MouseDown">
+                            <hc:EventToCommand Command="{Binding SelectAllCommand}" PassEventArgsToCommand="True">
+                                <hc:EventToCommand.CommandParameter>
+                                    <MultiBinding Converter="{StaticResource MultiConverter}">
+                                        <Binding ElementName="MethodData" Path="SelectedItem" />
+                                    </MultiBinding>
+                                </hc:EventToCommand.CommandParameter>
+                            </hc:EventToCommand>
+                        </hc:RoutedEventTrigger>
+                    </hc:Interaction.Triggers>
+                </Border>
+
+                <!--  背景与边框线  -->
+
+                <Border Grid.Row="1"
+                        Grid.RowSpan="6"
+                        Grid.Column="1"
+                        Grid.ColumnSpan="6"
+                        Background="#1D2837" />
+
+                <Border Grid.Row="0"
+                        Grid.Column="0"
+                        Grid.ColumnSpan="7"
+                        Background="#304258" />
+                <Border Grid.Row="1"
+                        Grid.RowSpan="6"
+                        Grid.Column="0"
+                        Background="#304258" />
+
+                <Border Grid.RowSpan="7"
+                        Grid.ColumnSpan="7"
+                        BorderBrush="{StaticResource GridLineBrush}"
+                        BorderThickness="2" />
+
+                <Border Grid.RowSpan="7"
+                        Grid.Column="1"
+                        BorderBrush="{StaticResource GridLineBrush}"
+                        BorderThickness="2" />
+
+                <Border Grid.RowSpan="7"
+                        Grid.Column="3"
+                        BorderBrush="{StaticResource GridLineBrush}"
+                        BorderThickness="2" />
+
+                <Border Grid.RowSpan="7"
+                        Grid.Column="5"
+                        BorderBrush="{StaticResource GridLineBrush}"
+                        BorderThickness="2" />
+
+                <Border Grid.Row="1"
+                        Grid.ColumnSpan="7"
+                        BorderBrush="{StaticResource GridLineBrush}"
+                        BorderThickness="2" />
+
+                <Border Grid.Row="3"
+                        Grid.ColumnSpan="7"
+                        BorderBrush="{StaticResource GridLineBrush}"
+                        BorderThickness="2" />
+
+                <Border Grid.Row="5"
+                        Grid.ColumnSpan="7"
+                        BorderBrush="{StaticResource GridLineBrush}"
+                        BorderThickness="2" />
+
+                <!--#region 文字标识-->
+
+                <TextBlock Grid.Row="0"
+                           Grid.Column="1"
+                           FontSize="28"
+                           Text="1">
+                    <hc:Interaction.Triggers>
+                        <hc:RoutedEventTrigger RoutedEvent="Mouse.MouseDown">
+                            <hc:EventToCommand Command="{Binding SetColumnCommand}" PassEventArgsToCommand="True">
+                                <hc:EventToCommand.CommandParameter>
+                                    <MultiBinding Converter="{StaticResource MultiConverter}">
+                                        <Binding Path="Text" RelativeSource="{RelativeSource AncestorType=TextBlock, Mode=FindAncestor}" />
+                                        <Binding ElementName="MethodData" Path="SelectedItem" />
+                                    </MultiBinding>
+                                </hc:EventToCommand.CommandParameter>
+                            </hc:EventToCommand>
+                        </hc:RoutedEventTrigger>
+                    </hc:Interaction.Triggers>
+                </TextBlock>
+                <TextBlock Grid.Row="0"
+                           Grid.Column="2"
+                           FontSize="28"
+                           Text="2">
+                    <hc:Interaction.Triggers>
+                        <hc:RoutedEventTrigger RoutedEvent="Mouse.MouseDown">
+                            <hc:EventToCommand Command="{Binding SetColumnCommand}" PassEventArgsToCommand="True">
+                                <hc:EventToCommand.CommandParameter>
+                                    <MultiBinding Converter="{StaticResource MultiConverter}">
+                                        <Binding Path="Text" RelativeSource="{RelativeSource AncestorType=TextBlock, Mode=FindAncestor}" />
+                                        <Binding ElementName="MethodData" Path="SelectedItem" />
+                                    </MultiBinding>
+                                </hc:EventToCommand.CommandParameter>
+                            </hc:EventToCommand>
+                        </hc:RoutedEventTrigger>
+                    </hc:Interaction.Triggers>
+                </TextBlock>
+                <TextBlock Grid.Row="0"
+                           Grid.Column="3"
+                           FontSize="28"
+                           Text="3">
+                    <hc:Interaction.Triggers>
+                        <hc:RoutedEventTrigger RoutedEvent="Mouse.MouseDown">
+                            <hc:EventToCommand Command="{Binding SetColumnCommand}" PassEventArgsToCommand="True">
+                                <hc:EventToCommand.CommandParameter>
+                                    <MultiBinding Converter="{StaticResource MultiConverter}">
+                                        <Binding Path="Text" RelativeSource="{RelativeSource AncestorType=TextBlock, Mode=FindAncestor}" />
+                                        <Binding ElementName="MethodData" Path="SelectedItem" />
+                                    </MultiBinding>
+                                </hc:EventToCommand.CommandParameter>
+                            </hc:EventToCommand>
+                        </hc:RoutedEventTrigger>
+                    </hc:Interaction.Triggers>
+                </TextBlock>
+                <TextBlock Grid.Row="0"
+                           Grid.Column="4"
+                           FontSize="28"
+                           Text="4">
+                    <hc:Interaction.Triggers>
+                        <hc:RoutedEventTrigger RoutedEvent="Mouse.MouseDown">
+                            <hc:EventToCommand Command="{Binding SetColumnCommand}" PassEventArgsToCommand="True">
+                                <hc:EventToCommand.CommandParameter>
+                                    <MultiBinding Converter="{StaticResource MultiConverter}">
+                                        <Binding Path="Text" RelativeSource="{RelativeSource AncestorType=TextBlock, Mode=FindAncestor}" />
+                                        <Binding ElementName="MethodData" Path="SelectedItem" />
+                                    </MultiBinding>
+                                </hc:EventToCommand.CommandParameter>
+                            </hc:EventToCommand>
+                        </hc:RoutedEventTrigger>
+                    </hc:Interaction.Triggers>
+                </TextBlock>
+                <TextBlock Grid.Row="0"
+                           Grid.Column="5"
+                           FontSize="28"
+                           Text="5">
+                    <hc:Interaction.Triggers>
+                        <hc:RoutedEventTrigger RoutedEvent="Mouse.MouseDown">
+                            <hc:EventToCommand Command="{Binding SetColumnCommand}" PassEventArgsToCommand="True">
+                                <hc:EventToCommand.CommandParameter>
+                                    <MultiBinding Converter="{StaticResource MultiConverter}">
+                                        <Binding Path="Text" RelativeSource="{RelativeSource AncestorType=TextBlock, Mode=FindAncestor}" />
+                                        <Binding ElementName="MethodData" Path="SelectedItem" />
+                                    </MultiBinding>
+                                </hc:EventToCommand.CommandParameter>
+                            </hc:EventToCommand>
+                        </hc:RoutedEventTrigger>
+                    </hc:Interaction.Triggers>
+                </TextBlock>
+                <TextBlock Grid.Row="0"
+                           Grid.Column="6"
+                           FontSize="28"
+                           Text="6">
+                    <hc:Interaction.Triggers>
+                        <hc:RoutedEventTrigger RoutedEvent="Mouse.MouseDown">
+                            <hc:EventToCommand Command="{Binding SetColumnCommand}" PassEventArgsToCommand="True">
+                                <hc:EventToCommand.CommandParameter>
+                                    <MultiBinding Converter="{StaticResource MultiConverter}">
+                                        <Binding Path="Text" RelativeSource="{RelativeSource AncestorType=TextBlock, Mode=FindAncestor}" />
+                                        <Binding ElementName="MethodData" Path="SelectedItem" />
+                                    </MultiBinding>
+                                </hc:EventToCommand.CommandParameter>
+                            </hc:EventToCommand>
+                        </hc:RoutedEventTrigger>
+                    </hc:Interaction.Triggers>
+                </TextBlock>
+
+                <TextBlock Grid.Row="1"
+                           Grid.Column="0"
+                           FontSize="28"
+                           Text="A">
+                    <hc:Interaction.Triggers>
+                        <hc:EventTrigger EventName="MouseDown">
+                            <hc:EventToCommand Command="{Binding SetRowCommand}">
+                                <hc:EventToCommand.CommandParameter>
+                                    <MultiBinding Converter="{StaticResource MultiConverter}">
+                                        <Binding Path="Text" RelativeSource="{RelativeSource AncestorType=TextBlock, Mode=FindAncestor}" />
+                                        <Binding ElementName="MethodData" Path="SelectedItem" />
+                                    </MultiBinding>
+
+                                </hc:EventToCommand.CommandParameter>
+                            </hc:EventToCommand>
+                        </hc:EventTrigger>
+                    </hc:Interaction.Triggers>
+                </TextBlock>
+                <TextBlock Grid.Row="2"
+                           Grid.Column="0"
+                           FontSize="28"
+                           Text="B">
+                    <hc:Interaction.Triggers>
+                        <hc:EventTrigger EventName="MouseDown">
+                            <hc:EventToCommand Command="{Binding SetRowCommand}">
+                                <hc:EventToCommand.CommandParameter>
+                                    <MultiBinding Converter="{StaticResource MultiConverter}">
+                                        <Binding Path="Text" RelativeSource="{RelativeSource AncestorType=TextBlock, Mode=FindAncestor}" />
+                                        <Binding ElementName="MethodData" Path="SelectedItem" />
+                                    </MultiBinding>
+
+                                </hc:EventToCommand.CommandParameter>
+                            </hc:EventToCommand>
+                        </hc:EventTrigger>
+                    </hc:Interaction.Triggers>
+                </TextBlock>
+                <TextBlock Grid.Row="3"
+                           Grid.Column="0"
+                           FontSize="28"
+                           Text="C">
+                    <hc:Interaction.Triggers>
+                        <hc:EventTrigger EventName="MouseDown">
+                            <hc:EventToCommand Command="{Binding SetRowCommand}">
+                                <hc:EventToCommand.CommandParameter>
+                                    <MultiBinding Converter="{StaticResource MultiConverter}">
+                                        <Binding Path="Text" RelativeSource="{RelativeSource AncestorType=TextBlock, Mode=FindAncestor}" />
+                                        <Binding ElementName="MethodData" Path="SelectedItem" />
+                                    </MultiBinding>
+
+                                </hc:EventToCommand.CommandParameter>
+                            </hc:EventToCommand>
+                        </hc:EventTrigger>
+                    </hc:Interaction.Triggers>
+
+                </TextBlock>
+                <TextBlock Grid.Row="4"
+                           Grid.Column="0"
+                           FontSize="28"
+                           Text="D">
+                    <hc:Interaction.Triggers>
+                        <hc:EventTrigger EventName="MouseDown">
+                            <hc:EventToCommand Command="{Binding SetRowCommand}">
+                                <hc:EventToCommand.CommandParameter>
+                                    <MultiBinding Converter="{StaticResource MultiConverter}">
+                                        <Binding Path="Text" RelativeSource="{RelativeSource AncestorType=TextBlock, Mode=FindAncestor}" />
+                                        <Binding ElementName="MethodData" Path="SelectedItem" />
+                                    </MultiBinding>
+
+                                </hc:EventToCommand.CommandParameter>
+                            </hc:EventToCommand>
+                        </hc:EventTrigger>
+                    </hc:Interaction.Triggers>
+
+                </TextBlock>
+                <TextBlock Grid.Row="5"
+                           Grid.Column="0"
+                           FontSize="28"
+                           Text="E">
+                    <hc:Interaction.Triggers>
+                        <hc:EventTrigger EventName="MouseDown">
+                            <hc:EventToCommand Command="{Binding SetRowCommand}">
+                                <hc:EventToCommand.CommandParameter>
+                                    <MultiBinding Converter="{StaticResource MultiConverter}">
+                                        <Binding Path="Text" RelativeSource="{RelativeSource AncestorType=TextBlock, Mode=FindAncestor}" />
+                                        <Binding ElementName="MethodData" Path="SelectedItem" />
+                                    </MultiBinding>
+
+                                </hc:EventToCommand.CommandParameter>
+                            </hc:EventToCommand>
+                        </hc:EventTrigger>
+                    </hc:Interaction.Triggers>
+
+                </TextBlock>
+                <TextBlock Grid.Row="6"
+                           Grid.Column="0"
+                           FontSize="28"
+                           Text="F">
+                    <hc:Interaction.Triggers>
+                        <hc:EventTrigger EventName="MouseDown">
+                            <hc:EventToCommand Command="{Binding SetRowCommand}">
+                                <hc:EventToCommand.CommandParameter>
+                                    <MultiBinding Converter="{StaticResource MultiConverter}">
+                                        <Binding Path="Text" RelativeSource="{RelativeSource AncestorType=TextBlock, Mode=FindAncestor}" />
+                                        <Binding ElementName="MethodData" Path="SelectedItem" />
+                                    </MultiBinding>
+
+                                </hc:EventToCommand.CommandParameter>
+                            </hc:EventToCommand>
+                        </hc:EventTrigger>
+                    </hc:Interaction.Triggers>
+
+                </TextBlock>
+
+                <!--#endregion 文字标识-->
+
+                <!--  A区  -->
+
+                <Border Grid.Row="1"
+                        Grid.Column="1"
+                        Background="{Binding AllData[0].Color}"
+                        Style="{StaticResource TubeStyle}"
+                        Tag="0">
+                    <TextBlock Text="{Binding AllData[0].Name}" />
+                    <hc:Interaction.Triggers>
+                        <hc:RoutedEventTrigger RoutedEvent="Mouse.MouseDown">
+                            <hc:EventToCommand Command="{Binding DeployMethodCommand}" PassEventArgsToCommand="True">
+                                <hc:EventToCommand.CommandParameter>
+                                    <MultiBinding Converter="{StaticResource MultiConverter}">
+                                        <Binding ElementName="MethodData" Path="SelectedItem" />
+                                        <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=Border}" />
+                                        <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=Grid}" />
+                                    </MultiBinding>
+                                </hc:EventToCommand.CommandParameter>
+                            </hc:EventToCommand>
+                        </hc:RoutedEventTrigger>
+                    </hc:Interaction.Triggers>
+                </Border>
+                <Border Grid.Row="2"
+                        Grid.Column="1"
+                        Background="{Binding AllData[1].Color}"
+                        Style="{StaticResource TubeStyle}"
+                        Tag="1">
+                    <TextBlock Text="{Binding AllData[1].Name}" />
+                    <hc:Interaction.Triggers>
+                        <hc:RoutedEventTrigger RoutedEvent="Mouse.MouseDown">
+                            <hc:EventToCommand Command="{Binding DeployMethodCommand}" PassEventArgsToCommand="True">
+                                <hc:EventToCommand.CommandParameter>
+                                    <MultiBinding Converter="{StaticResource MultiConverter}">
+                                        <Binding ElementName="MethodData" Path="SelectedItem" />
+                                        <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=Border}" />
+                                        <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=Grid}" />
+                                    </MultiBinding>
+                                </hc:EventToCommand.CommandParameter>
+                            </hc:EventToCommand>
+                        </hc:RoutedEventTrigger>
+                    </hc:Interaction.Triggers>
+                </Border>
+                <Border Grid.Row="3"
+                        Grid.Column="1"
+                        Background="{Binding AllData[12].Color}"
+                        Style="{StaticResource TubeStyle}"
+                        Tag="12">
+                    <TextBlock Text="{Binding AllData[12].Name}" />
+                    <hc:Interaction.Triggers>
+                        <hc:RoutedEventTrigger RoutedEvent="Mouse.MouseDown">
+                            <hc:EventToCommand Command="{Binding DeployMethodCommand}" PassEventArgsToCommand="True">
+                                <hc:EventToCommand.CommandParameter>
+                                    <MultiBinding Converter="{StaticResource MultiConverter}">
+                                        <Binding ElementName="MethodData" Path="SelectedItem" />
+                                        <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=Border}" />
+                                        <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=Grid}" />
+                                    </MultiBinding>
+                                </hc:EventToCommand.CommandParameter>
+                            </hc:EventToCommand>
+                        </hc:RoutedEventTrigger>
+                    </hc:Interaction.Triggers>
+                </Border>
+                <Border Grid.Row="4"
+                        Grid.Column="1"
+                        Background="{Binding AllData[13].Color}"
+                        Style="{StaticResource TubeStyle}"
+                        Tag="13">
+                    <TextBlock Text="{Binding AllData[13].Name}" />
+                    <hc:Interaction.Triggers>
+                        <hc:RoutedEventTrigger RoutedEvent="Mouse.MouseDown">
+                            <hc:EventToCommand Command="{Binding DeployMethodCommand}" PassEventArgsToCommand="True">
+                                <hc:EventToCommand.CommandParameter>
+                                    <MultiBinding Converter="{StaticResource MultiConverter}">
+                                        <Binding ElementName="MethodData" Path="SelectedItem" />
+                                        <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=Border}" />
+                                        <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=Grid}" />
+                                    </MultiBinding>
+                                </hc:EventToCommand.CommandParameter>
+                            </hc:EventToCommand>
+                        </hc:RoutedEventTrigger>
+                    </hc:Interaction.Triggers>
+                </Border>
+                <Border Grid.Row="5"
+                        Grid.Column="1"
+                        Background="{Binding AllData[24].Color}"
+                        Style="{StaticResource TubeStyle}"
+                        Tag="24">
+                    <TextBlock Text="{Binding AllData[24].Name}" />
+                    <hc:Interaction.Triggers>
+                        <hc:RoutedEventTrigger RoutedEvent="Mouse.MouseDown">
+                            <hc:EventToCommand Command="{Binding DeployMethodCommand}" PassEventArgsToCommand="True">
+                                <hc:EventToCommand.CommandParameter>
+                                    <MultiBinding Converter="{StaticResource MultiConverter}">
+                                        <Binding ElementName="MethodData" Path="SelectedItem" />
+                                        <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=Border}" />
+                                        <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=Grid}" />
+                                    </MultiBinding>
+                                </hc:EventToCommand.CommandParameter>
+                            </hc:EventToCommand>
+                        </hc:RoutedEventTrigger>
+                    </hc:Interaction.Triggers>
+                </Border>
+                <Border Grid.Row="6"
+                        Grid.Column="1"
+                        Background="{Binding AllData[25].Color}"
+                        Style="{StaticResource TubeStyle}"
+                        Tag="25">
+                    <TextBlock Text="{Binding AllData[25].Name}" />
+                    <hc:Interaction.Triggers>
+                        <hc:RoutedEventTrigger RoutedEvent="Mouse.MouseDown">
+                            <hc:EventToCommand Command="{Binding DeployMethodCommand}" PassEventArgsToCommand="True">
+                                <hc:EventToCommand.CommandParameter>
+                                    <MultiBinding Converter="{StaticResource MultiConverter}">
+                                        <Binding ElementName="MethodData" Path="SelectedItem" />
+                                        <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=Border}" />
+                                        <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=Grid}" />
+                                    </MultiBinding>
+                                </hc:EventToCommand.CommandParameter>
+                            </hc:EventToCommand>
+                        </hc:RoutedEventTrigger>
+                    </hc:Interaction.Triggers>
+                </Border>
+
+                <!--  B区  -->
+
+                <Border Grid.Row="1"
+                        Grid.Column="2"
+                        Background="{Binding AllData[2].Color}"
+                        Style="{StaticResource TubeStyle}"
+                        Tag="2">
+                    <TextBlock Text="{Binding AllData[2].Name}" />
+                    <hc:Interaction.Triggers>
+                        <hc:RoutedEventTrigger RoutedEvent="Mouse.MouseDown">
+                            <hc:EventToCommand Command="{Binding DeployMethodCommand}" PassEventArgsToCommand="True">
+                                <hc:EventToCommand.CommandParameter>
+                                    <MultiBinding Converter="{StaticResource MultiConverter}">
+                                        <Binding ElementName="MethodData" Path="SelectedItem" />
+                                        <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=Border}" />
+                                        <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=Grid}" />
+                                    </MultiBinding>
+                                </hc:EventToCommand.CommandParameter>
+                            </hc:EventToCommand>
+                        </hc:RoutedEventTrigger>
+                    </hc:Interaction.Triggers>
+                </Border>
+                <Border Grid.Row="2"
+                        Grid.Column="2"
+                        Background="{Binding AllData[3].Color}"
+                        Style="{StaticResource TubeStyle}"
+                        Tag="3">
+                    <TextBlock Text="{Binding AllData[3].Name}" />
+                    <hc:Interaction.Triggers>
+                        <hc:RoutedEventTrigger RoutedEvent="Mouse.MouseDown">
+                            <hc:EventToCommand Command="{Binding DeployMethodCommand}" PassEventArgsToCommand="True">
+                                <hc:EventToCommand.CommandParameter>
+                                    <MultiBinding Converter="{StaticResource MultiConverter}">
+                                        <Binding ElementName="MethodData" Path="SelectedItem" />
+                                        <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=Border}" />
+                                        <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=Grid}" />
+                                    </MultiBinding>
+                                </hc:EventToCommand.CommandParameter>
+                            </hc:EventToCommand>
+                        </hc:RoutedEventTrigger>
+                    </hc:Interaction.Triggers>
+                </Border>
+                <Border Grid.Row="3"
+                        Grid.Column="2"
+                        Background="{Binding AllData[14].Color}"
+                        Style="{StaticResource TubeStyle}"
+                        Tag="14">
+                    <TextBlock Text="{Binding AllData[14].Name}" />
+                    <hc:Interaction.Triggers>
+                        <hc:RoutedEventTrigger RoutedEvent="Mouse.MouseDown">
+                            <hc:EventToCommand Command="{Binding DeployMethodCommand}" PassEventArgsToCommand="True">
+                                <hc:EventToCommand.CommandParameter>
+                                    <MultiBinding Converter="{StaticResource MultiConverter}">
+                                        <Binding ElementName="MethodData" Path="SelectedItem" />
+                                        <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=Border}" />
+                                        <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=Grid}" />
+                                    </MultiBinding>
+                                </hc:EventToCommand.CommandParameter>
+                            </hc:EventToCommand>
+                        </hc:RoutedEventTrigger>
+                    </hc:Interaction.Triggers>
+                </Border>
+                <Border Grid.Row="4"
+                        Grid.Column="2"
+                        Background="{Binding AllData[15].Color}"
+                        Style="{StaticResource TubeStyle}"
+                        Tag="15">
+                    <TextBlock Text="{Binding AllData[15].Name}" />
+                    <hc:Interaction.Triggers>
+                        <hc:RoutedEventTrigger RoutedEvent="Mouse.MouseDown">
+                            <hc:EventToCommand Command="{Binding DeployMethodCommand}" PassEventArgsToCommand="True">
+                                <hc:EventToCommand.CommandParameter>
+                                    <MultiBinding Converter="{StaticResource MultiConverter}">
+                                        <Binding ElementName="MethodData" Path="SelectedItem" />
+                                        <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=Border}" />
+                                        <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=Grid}" />
+                                    </MultiBinding>
+                                </hc:EventToCommand.CommandParameter>
+                            </hc:EventToCommand>
+                        </hc:RoutedEventTrigger>
+                    </hc:Interaction.Triggers>
+                </Border>
+                <Border Grid.Row="5"
+                        Grid.Column="2"
+                        Background="{Binding AllData[26].Color}"
+                        Style="{StaticResource TubeStyle}"
+                        Tag="26">
+                    <TextBlock Text="{Binding AllData[26].Name}" />
+                    <hc:Interaction.Triggers>
+                        <hc:RoutedEventTrigger RoutedEvent="Mouse.MouseDown">
+                            <hc:EventToCommand Command="{Binding DeployMethodCommand}" PassEventArgsToCommand="True">
+                                <hc:EventToCommand.CommandParameter>
+                                    <MultiBinding Converter="{StaticResource MultiConverter}">
+                                        <Binding ElementName="MethodData" Path="SelectedItem" />
+                                        <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=Border}" />
+                                        <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=Grid}" />
+                                    </MultiBinding>
+                                </hc:EventToCommand.CommandParameter>
+                            </hc:EventToCommand>
+                        </hc:RoutedEventTrigger>
+                    </hc:Interaction.Triggers>
+                </Border>
+                <Border Grid.Row="6"
+                        Grid.Column="2"
+                        Background="{Binding AllData[27].Color}"
+                        Style="{StaticResource TubeStyle}"
+                        Tag="27">
+                    <TextBlock Text="{Binding AllData[27].Name}" />
+                    <hc:Interaction.Triggers>
+                        <hc:RoutedEventTrigger RoutedEvent="Mouse.MouseDown">
+                            <hc:EventToCommand Command="{Binding DeployMethodCommand}" PassEventArgsToCommand="True">
+                                <hc:EventToCommand.CommandParameter>
+                                    <MultiBinding Converter="{StaticResource MultiConverter}">
+                                        <Binding ElementName="MethodData" Path="SelectedItem" />
+                                        <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=Border}" />
+                                        <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=Grid}" />
+                                    </MultiBinding>
+                                </hc:EventToCommand.CommandParameter>
+                            </hc:EventToCommand>
+                        </hc:RoutedEventTrigger>
+                    </hc:Interaction.Triggers>
+                </Border>
+
+                <!--  C区  -->
+
+                <Border Grid.Row="1"
+                        Grid.Column="3"
+                        Background="{Binding AllData[4].Color}"
+                        Style="{StaticResource TubeStyle}"
+                        Tag="4">
+                    <TextBlock Text="{Binding AllData[4].Name}" />
+                    <hc:Interaction.Triggers>
+                        <hc:RoutedEventTrigger RoutedEvent="Mouse.MouseDown">
+                            <hc:EventToCommand Command="{Binding DeployMethodCommand}" PassEventArgsToCommand="True">
+                                <hc:EventToCommand.CommandParameter>
+                                    <MultiBinding Converter="{StaticResource MultiConverter}">
+                                        <Binding ElementName="MethodData" Path="SelectedItem" />
+                                        <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=Border}" />
+                                        <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=Grid}" />
+                                    </MultiBinding>
+                                </hc:EventToCommand.CommandParameter>
+                            </hc:EventToCommand>
+                        </hc:RoutedEventTrigger>
+                    </hc:Interaction.Triggers>
+                </Border>
+                <Border Grid.Row="2"
+                        Grid.Column="3"
+                        Background="{Binding AllData[5].Color}"
+                        Style="{StaticResource TubeStyle}"
+                        Tag="5">
+                    <TextBlock Text="{Binding AllData[5].Name}" />
+                    <hc:Interaction.Triggers>
+                        <hc:RoutedEventTrigger RoutedEvent="Mouse.MouseDown">
+                            <hc:EventToCommand Command="{Binding DeployMethodCommand}" PassEventArgsToCommand="True">
+                                <hc:EventToCommand.CommandParameter>
+                                    <MultiBinding Converter="{StaticResource MultiConverter}">
+                                        <Binding ElementName="MethodData" Path="SelectedItem" />
+                                        <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=Border}" />
+                                        <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=Grid}" />
+                                    </MultiBinding>
+                                </hc:EventToCommand.CommandParameter>
+                            </hc:EventToCommand>
+                        </hc:RoutedEventTrigger>
+                    </hc:Interaction.Triggers>
+                </Border>
+                <Border Grid.Row="3"
+                        Grid.Column="3"
+                        Background="{Binding AllData[16].Color}"
+                        Style="{StaticResource TubeStyle}"
+                        Tag="16">
+                    <TextBlock Text="{Binding AllData[16].Name}" />
+                    <hc:Interaction.Triggers>
+                        <hc:RoutedEventTrigger RoutedEvent="Mouse.MouseDown">
+                            <hc:EventToCommand Command="{Binding DeployMethodCommand}" PassEventArgsToCommand="True">
+                                <hc:EventToCommand.CommandParameter>
+                                    <MultiBinding Converter="{StaticResource MultiConverter}">
+                                        <Binding ElementName="MethodData" Path="SelectedItem" />
+                                        <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=Border}" />
+                                        <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=Grid}" />
+                                    </MultiBinding>
+                                </hc:EventToCommand.CommandParameter>
+                            </hc:EventToCommand>
+                        </hc:RoutedEventTrigger>
+                    </hc:Interaction.Triggers>
+                </Border>
+                <Border Grid.Row="4"
+                        Grid.Column="3"
+                        Background="{Binding AllData[17].Color}"
+                        Style="{StaticResource TubeStyle}"
+                        Tag="17">
+                    <TextBlock Text="{Binding AllData[17].Name}" />
+                    <hc:Interaction.Triggers>
+                        <hc:RoutedEventTrigger RoutedEvent="Mouse.MouseDown">
+                            <hc:EventToCommand Command="{Binding DeployMethodCommand}" PassEventArgsToCommand="True">
+                                <hc:EventToCommand.CommandParameter>
+                                    <MultiBinding Converter="{StaticResource MultiConverter}">
+                                        <Binding ElementName="MethodData" Path="SelectedItem" />
+                                        <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=Border}" />
+                                        <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=Grid}" />
+                                    </MultiBinding>
+                                </hc:EventToCommand.CommandParameter>
+                            </hc:EventToCommand>
+                        </hc:RoutedEventTrigger>
+                    </hc:Interaction.Triggers>
+                </Border>
+                <Border Grid.Row="5"
+                        Grid.Column="3"
+                        Background="{Binding AllData[28].Color}"
+                        Style="{StaticResource TubeStyle}"
+                        Tag="28">
+                    <TextBlock Text="{Binding AllData[28].Name}" />
+                    <hc:Interaction.Triggers>
+                        <hc:RoutedEventTrigger RoutedEvent="Mouse.MouseDown">
+                            <hc:EventToCommand Command="{Binding DeployMethodCommand}" PassEventArgsToCommand="True">
+                                <hc:EventToCommand.CommandParameter>
+                                    <MultiBinding Converter="{StaticResource MultiConverter}">
+                                        <Binding ElementName="MethodData" Path="SelectedItem" />
+                                        <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=Border}" />
+                                        <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=Grid}" />
+                                    </MultiBinding>
+                                </hc:EventToCommand.CommandParameter>
+                            </hc:EventToCommand>
+                        </hc:RoutedEventTrigger>
+                    </hc:Interaction.Triggers>
+                </Border>
+                <Border Grid.Row="6"
+                        Grid.Column="3"
+                        Background="{Binding AllData[29].Color}"
+                        Style="{StaticResource TubeStyle}"
+                        Tag="29">
+                    <TextBlock Text="{Binding AllData[29].Name}" />
+                    <hc:Interaction.Triggers>
+                        <hc:RoutedEventTrigger RoutedEvent="Mouse.MouseDown">
+                            <hc:EventToCommand Command="{Binding DeployMethodCommand}" PassEventArgsToCommand="True">
+                                <hc:EventToCommand.CommandParameter>
+                                    <MultiBinding Converter="{StaticResource MultiConverter}">
+                                        <Binding ElementName="MethodData" Path="SelectedItem" />
+                                        <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=Border}" />
+                                        <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=Grid}" />
+                                    </MultiBinding>
+                                </hc:EventToCommand.CommandParameter>
+                            </hc:EventToCommand>
+                        </hc:RoutedEventTrigger>
+                    </hc:Interaction.Triggers>
+                </Border>
+
+                <!--  D区  -->
+
+                <Border Grid.Row="1"
+                        Grid.Column="4"
+                        Background="{Binding AllData[6].Color}"
+                        Style="{StaticResource TubeStyle}"
+                        Tag="6">
+                    <TextBlock Text="{Binding AllData[6].Name}" />
+                    <hc:Interaction.Triggers>
+                        <hc:RoutedEventTrigger RoutedEvent="Mouse.MouseDown">
+                            <hc:EventToCommand Command="{Binding DeployMethodCommand}" PassEventArgsToCommand="True">
+                                <hc:EventToCommand.CommandParameter>
+                                    <MultiBinding Converter="{StaticResource MultiConverter}">
+                                        <Binding ElementName="MethodData" Path="SelectedItem" />
+                                        <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=Border}" />
+                                        <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=Grid}" />
+                                    </MultiBinding>
+                                </hc:EventToCommand.CommandParameter>
+                            </hc:EventToCommand>
+                        </hc:RoutedEventTrigger>
+                    </hc:Interaction.Triggers>
+                </Border>
+                <Border Grid.Row="2"
+                        Grid.Column="4"
+                        Background="{Binding AllData[7].Color}"
+                        Style="{StaticResource TubeStyle}"
+                        Tag="7">
+                    <TextBlock Text="{Binding AllData[7].Name}" />
+                    <hc:Interaction.Triggers>
+                        <hc:RoutedEventTrigger RoutedEvent="Mouse.MouseDown">
+                            <hc:EventToCommand Command="{Binding DeployMethodCommand}" PassEventArgsToCommand="True">
+                                <hc:EventToCommand.CommandParameter>
+                                    <MultiBinding Converter="{StaticResource MultiConverter}">
+                                        <Binding ElementName="MethodData" Path="SelectedItem" />
+                                        <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=Border}" />
+                                        <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=Grid}" />
+                                    </MultiBinding>
+                                </hc:EventToCommand.CommandParameter>
+                            </hc:EventToCommand>
+                        </hc:RoutedEventTrigger>
+                    </hc:Interaction.Triggers>
+                </Border>
+                <Border Grid.Row="3"
+                        Grid.Column="4"
+                        Background="{Binding AllData[18].Color}"
+                        Style="{StaticResource TubeStyle}"
+                        Tag="18">
+                    <TextBlock Text="{Binding AllData[18].Name}" />
+                    <hc:Interaction.Triggers>
+                        <hc:RoutedEventTrigger RoutedEvent="Mouse.MouseDown">
+                            <hc:EventToCommand Command="{Binding DeployMethodCommand}" PassEventArgsToCommand="True">
+                                <hc:EventToCommand.CommandParameter>
+                                    <MultiBinding Converter="{StaticResource MultiConverter}">
+                                        <Binding ElementName="MethodData" Path="SelectedItem" />
+                                        <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=Border}" />
+                                        <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=Grid}" />
+                                    </MultiBinding>
+                                </hc:EventToCommand.CommandParameter>
+                            </hc:EventToCommand>
+                        </hc:RoutedEventTrigger>
+                    </hc:Interaction.Triggers>
+                </Border>
+                <Border Grid.Row="4"
+                        Grid.Column="4"
+                        Background="{Binding AllData[19].Color}"
+                        Style="{StaticResource TubeStyle}"
+                        Tag="19">
+                    <TextBlock Text="{Binding AllData[19].Name}" />
+                    <hc:Interaction.Triggers>
+                        <hc:RoutedEventTrigger RoutedEvent="Mouse.MouseDown">
+                            <hc:EventToCommand Command="{Binding DeployMethodCommand}" PassEventArgsToCommand="True">
+                                <hc:EventToCommand.CommandParameter>
+                                    <MultiBinding Converter="{StaticResource MultiConverter}">
+                                        <Binding ElementName="MethodData" Path="SelectedItem" />
+                                        <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=Border}" />
+                                        <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=Grid}" />
+                                    </MultiBinding>
+                                </hc:EventToCommand.CommandParameter>
+                            </hc:EventToCommand>
+                        </hc:RoutedEventTrigger>
+                    </hc:Interaction.Triggers>
+                </Border>
+                <Border Grid.Row="5"
+                        Grid.Column="4"
+                        Background="{Binding AllData[30].Color}"
+                        Style="{StaticResource TubeStyle}"
+                        Tag="30">
+                    <TextBlock Text="{Binding AllData[30].Name}" />
+                    <hc:Interaction.Triggers>
+                        <hc:RoutedEventTrigger RoutedEvent="Mouse.MouseDown">
+                            <hc:EventToCommand Command="{Binding DeployMethodCommand}" PassEventArgsToCommand="True">
+                                <hc:EventToCommand.CommandParameter>
+                                    <MultiBinding Converter="{StaticResource MultiConverter}">
+                                        <Binding ElementName="MethodData" Path="SelectedItem" />
+                                        <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=Border}" />
+                                        <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=Grid}" />
+                                    </MultiBinding>
+                                </hc:EventToCommand.CommandParameter>
+                            </hc:EventToCommand>
+                        </hc:RoutedEventTrigger>
+                    </hc:Interaction.Triggers>
+                </Border>
+                <Border Grid.Row="6"
+                        Grid.Column="4"
+                        Background="{Binding AllData[31].Color}"
+                        Style="{StaticResource TubeStyle}"
+                        Tag="31">
+                    <TextBlock Text="{Binding AllData[31].Name}" />
+                    <hc:Interaction.Triggers>
+                        <hc:RoutedEventTrigger RoutedEvent="Mouse.MouseDown">
+                            <hc:EventToCommand Command="{Binding DeployMethodCommand}" PassEventArgsToCommand="True">
+                                <hc:EventToCommand.CommandParameter>
+                                    <MultiBinding Converter="{StaticResource MultiConverter}">
+                                        <Binding ElementName="MethodData" Path="SelectedItem" />
+                                        <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=Border}" />
+                                        <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=Grid}" />
+                                    </MultiBinding>
+                                </hc:EventToCommand.CommandParameter>
+                            </hc:EventToCommand>
+                        </hc:RoutedEventTrigger>
+                    </hc:Interaction.Triggers>
+                </Border>
+
+                <!--  E区  -->
+
+                <Border Grid.Row="1"
+                        Grid.Column="5"
+                        Background="{Binding AllData[8].Color}"
+                        Style="{StaticResource TubeStyle}"
+                        Tag="8">
+                    <TextBlock Text="{Binding AllData[8].Name}" />
+                    <hc:Interaction.Triggers>
+                        <hc:RoutedEventTrigger RoutedEvent="Mouse.MouseDown">
+                            <hc:EventToCommand Command="{Binding DeployMethodCommand}" PassEventArgsToCommand="True">
+                                <hc:EventToCommand.CommandParameter>
+                                    <MultiBinding Converter="{StaticResource MultiConverter}">
+                                        <Binding ElementName="MethodData" Path="SelectedItem" />
+                                        <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=Border}" />
+                                        <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=Grid}" />
+                                    </MultiBinding>
+                                </hc:EventToCommand.CommandParameter>
+                            </hc:EventToCommand>
+                        </hc:RoutedEventTrigger>
+                    </hc:Interaction.Triggers>
+                </Border>
+                <Border Grid.Row="2"
+                        Grid.Column="5"
+                        Background="{Binding AllData[9].Color}"
+                        Style="{StaticResource TubeStyle}"
+                        Tag="9">
+                    <TextBlock Text="{Binding AllData[9].Name}" />
+                    <hc:Interaction.Triggers>
+                        <hc:RoutedEventTrigger RoutedEvent="Mouse.MouseDown">
+                            <hc:EventToCommand Command="{Binding DeployMethodCommand}" PassEventArgsToCommand="True">
+                                <hc:EventToCommand.CommandParameter>
+                                    <MultiBinding Converter="{StaticResource MultiConverter}">
+                                        <Binding ElementName="MethodData" Path="SelectedItem" />
+                                        <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=Border}" />
+                                        <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=Grid}" />
+                                    </MultiBinding>
+                                </hc:EventToCommand.CommandParameter>
+                            </hc:EventToCommand>
+                        </hc:RoutedEventTrigger>
+                    </hc:Interaction.Triggers>
+                </Border>
+                <Border Grid.Row="3"
+                        Grid.Column="5"
+                        Background="{Binding AllData[20].Color}"
+                        Style="{StaticResource TubeStyle}"
+                        Tag="20">
+                    <TextBlock Text="{Binding AllData[20].Name}" />
+                    <hc:Interaction.Triggers>
+                        <hc:RoutedEventTrigger RoutedEvent="Mouse.MouseDown">
+                            <hc:EventToCommand Command="{Binding DeployMethodCommand}" PassEventArgsToCommand="True">
+                                <hc:EventToCommand.CommandParameter>
+                                    <MultiBinding Converter="{StaticResource MultiConverter}">
+                                        <Binding ElementName="MethodData" Path="SelectedItem" />
+                                        <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=Border}" />
+                                        <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=Grid}" />
+                                    </MultiBinding>
+                                </hc:EventToCommand.CommandParameter>
+                            </hc:EventToCommand>
+                        </hc:RoutedEventTrigger>
+                    </hc:Interaction.Triggers>
+                </Border>
+                <Border Grid.Row="4"
+                        Grid.Column="5"
+                        Background="{Binding AllData[21].Color}"
+                        Style="{StaticResource TubeStyle}"
+                        Tag="21">
+                    <TextBlock Text="{Binding AllData[21].Name}" />
+                    <hc:Interaction.Triggers>
+                        <hc:RoutedEventTrigger RoutedEvent="Mouse.MouseDown">
+                            <hc:EventToCommand Command="{Binding DeployMethodCommand}" PassEventArgsToCommand="True">
+                                <hc:EventToCommand.CommandParameter>
+                                    <MultiBinding Converter="{StaticResource MultiConverter}">
+                                        <Binding ElementName="MethodData" Path="SelectedItem" />
+                                        <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=Border}" />
+                                        <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=Grid}" />
+                                    </MultiBinding>
+                                </hc:EventToCommand.CommandParameter>
+                            </hc:EventToCommand>
+                        </hc:RoutedEventTrigger>
+                    </hc:Interaction.Triggers>
+                </Border>
+                <Border Grid.Row="5"
+                        Grid.Column="5"
+                        Background="{Binding AllData[32].Color}"
+                        Style="{StaticResource TubeStyle}"
+                        Tag="32">
+                    <TextBlock Text="{Binding AllData[32].Name}" />
+                    <hc:Interaction.Triggers>
+                        <hc:RoutedEventTrigger RoutedEvent="Mouse.MouseDown">
+                            <hc:EventToCommand Command="{Binding DeployMethodCommand}" PassEventArgsToCommand="True">
+                                <hc:EventToCommand.CommandParameter>
+                                    <MultiBinding Converter="{StaticResource MultiConverter}">
+                                        <Binding ElementName="MethodData" Path="SelectedItem" />
+                                        <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=Border}" />
+                                        <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=Grid}" />
+                                    </MultiBinding>
+                                </hc:EventToCommand.CommandParameter>
+                            </hc:EventToCommand>
+                        </hc:RoutedEventTrigger>
+                    </hc:Interaction.Triggers>
+                </Border>
+                <Border Grid.Row="6"
+                        Grid.Column="5"
+                        Background="{Binding AllData[33].Color}"
+                        Style="{StaticResource TubeStyle}"
+                        Tag="33">
+                    <TextBlock Text="{Binding AllData[33].Name}" />
+                    <hc:Interaction.Triggers>
+                        <hc:RoutedEventTrigger RoutedEvent="Mouse.MouseDown">
+                            <hc:EventToCommand Command="{Binding DeployMethodCommand}" PassEventArgsToCommand="True">
+                                <hc:EventToCommand.CommandParameter>
+                                    <MultiBinding Converter="{StaticResource MultiConverter}">
+                                        <Binding ElementName="MethodData" Path="SelectedItem" />
+                                        <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=Border}" />
+                                        <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=Grid}" />
+                                    </MultiBinding>
+                                </hc:EventToCommand.CommandParameter>
+                            </hc:EventToCommand>
+                        </hc:RoutedEventTrigger>
+                    </hc:Interaction.Triggers>
+                </Border>
+
+                <!--  F区  -->
+
+                <Border Grid.Row="1"
+                        Grid.Column="6"
+                        Background="{Binding AllData[10].Color}"
+                        Style="{StaticResource TubeStyle}"
+                        Tag="10">
+                    <TextBlock Text="{Binding AllData[10].Name}" />
+                    <hc:Interaction.Triggers>
+                        <hc:RoutedEventTrigger RoutedEvent="Mouse.MouseDown">
+                            <hc:EventToCommand Command="{Binding DeployMethodCommand}" PassEventArgsToCommand="True">
+                                <hc:EventToCommand.CommandParameter>
+                                    <MultiBinding Converter="{StaticResource MultiConverter}">
+                                        <Binding ElementName="MethodData" Path="SelectedItem" />
+                                        <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=Border}" />
+                                        <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=Grid}" />
+                                    </MultiBinding>
+                                </hc:EventToCommand.CommandParameter>
+                            </hc:EventToCommand>
+                        </hc:RoutedEventTrigger>
+                    </hc:Interaction.Triggers>
+                </Border>
+                <Border Grid.Row="2"
+                        Grid.Column="6"
+                        Background="{Binding AllData[11].Color}"
+                        Style="{StaticResource TubeStyle}"
+                        Tag="11">
+                    <TextBlock Text="{Binding AllData[11].Name}" />
+                    <hc:Interaction.Triggers>
+                        <hc:RoutedEventTrigger RoutedEvent="Mouse.MouseDown">
+                            <hc:EventToCommand Command="{Binding DeployMethodCommand}" PassEventArgsToCommand="True">
+                                <hc:EventToCommand.CommandParameter>
+                                    <MultiBinding Converter="{StaticResource MultiConverter}">
+                                        <Binding ElementName="MethodData" Path="SelectedItem" />
+                                        <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=Border}" />
+                                        <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=Grid}" />
+                                    </MultiBinding>
+                                </hc:EventToCommand.CommandParameter>
+                            </hc:EventToCommand>
+                        </hc:RoutedEventTrigger>
+                    </hc:Interaction.Triggers>
+                </Border>
+                <Border Grid.Row="3"
+                        Grid.Column="6"
+                        Background="{Binding AllData[22].Color}"
+                        Style="{StaticResource TubeStyle}"
+                        Tag="22">
+                    <TextBlock Text="{Binding AllData[22].Name}" />
+                    <hc:Interaction.Triggers>
+                        <hc:RoutedEventTrigger RoutedEvent="Mouse.MouseDown">
+                            <hc:EventToCommand Command="{Binding DeployMethodCommand}" PassEventArgsToCommand="True">
+                                <hc:EventToCommand.CommandParameter>
+                                    <MultiBinding Converter="{StaticResource MultiConverter}">
+                                        <Binding ElementName="MethodData" Path="SelectedItem" />
+                                        <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=Border}" />
+                                        <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=Grid}" />
+                                    </MultiBinding>
+                                </hc:EventToCommand.CommandParameter>
+                            </hc:EventToCommand>
+                        </hc:RoutedEventTrigger>
+                    </hc:Interaction.Triggers>
+                </Border>
+                <Border Grid.Row="4"
+                        Grid.Column="6"
+                        Background="{Binding AllData[23].Color}"
+                        Style="{StaticResource TubeStyle}"
+                        Tag="23">
+                    <TextBlock Text="{Binding AllData[23].Name}" />
+                    <hc:Interaction.Triggers>
+                        <hc:RoutedEventTrigger RoutedEvent="Mouse.MouseDown">
+                            <hc:EventToCommand Command="{Binding DeployMethodCommand}" PassEventArgsToCommand="True">
+                                <hc:EventToCommand.CommandParameter>
+                                    <MultiBinding Converter="{StaticResource MultiConverter}">
+                                        <Binding ElementName="MethodData" Path="SelectedItem" />
+                                        <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=Border}" />
+                                        <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=Grid}" />
+                                    </MultiBinding>
+                                </hc:EventToCommand.CommandParameter>
+                            </hc:EventToCommand>
+                        </hc:RoutedEventTrigger>
+                    </hc:Interaction.Triggers>
+                </Border>
+                <Border Grid.Row="5"
+                        Grid.Column="6"
+                        Background="{Binding AllData[34].Color}"
+                        Style="{StaticResource TubeStyle}"
+                        Tag="34">
+                    <TextBlock Text="{Binding AllData[34].Name}" />
+                    <hc:Interaction.Triggers>
+                        <hc:RoutedEventTrigger RoutedEvent="Mouse.MouseDown">
+                            <hc:EventToCommand Command="{Binding DeployMethodCommand}" PassEventArgsToCommand="True">
+                                <hc:EventToCommand.CommandParameter>
+                                    <MultiBinding Converter="{StaticResource MultiConverter}">
+                                        <Binding ElementName="MethodData" Path="SelectedItem" />
+                                        <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=Border}" />
+                                        <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=Grid}" />
+                                    </MultiBinding>
+                                </hc:EventToCommand.CommandParameter>
+                            </hc:EventToCommand>
+                        </hc:RoutedEventTrigger>
+                    </hc:Interaction.Triggers>
+                </Border>
+                <Border Grid.Row="6"
+                        Grid.Column="6"
+                        Background="{Binding AllData[35].Color}"
+                        Style="{StaticResource TubeStyle}"
+                        Tag="35">
+                    <TextBlock Text="{Binding AllData[35].Name}" />
+                    <hc:Interaction.Triggers>
+                        <hc:RoutedEventTrigger RoutedEvent="Mouse.MouseDown">
+                            <hc:EventToCommand Command="{Binding DeployMethodCommand}" PassEventArgsToCommand="True">
+                                <hc:EventToCommand.CommandParameter>
+                                    <MultiBinding Converter="{StaticResource MultiConverter}">
+                                        <Binding ElementName="MethodData" Path="SelectedItem" />
+                                        <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=Border}" />
+                                        <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=Grid}" />
+                                    </MultiBinding>
+                                </hc:EventToCommand.CommandParameter>
+                            </hc:EventToCommand>
+                        </hc:RoutedEventTrigger>
+                    </hc:Interaction.Triggers>
+                </Border>
+
+            </Grid>
+
+            <hc:TabControl x:Name="MethodData"
+                           Grid.Column="0"
+                           Margin="5"
+                           IsAnimationEnabled="True"
+                           IsScrollable="True"
+                           ItemsSource="{Binding MethodItems}"
+                           SelectedIndex="0"
+                           ShowCloseButton="False"
+                           ShowContextMenu="False"
+                           ShowOverflowButton="False"
+                           ShowScrollButton="True"
+                           Style="{DynamicResource ExtendTabControl}"
+                           TabItemWidth="72">
+                <!--<hc:TabControl.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal">
+                            <Button Grid.Column="2"
+                                    Margin="0 0 22 0"
+                                    Focusable="False"
+                                    VerticalContentAlignment="Center"
+                                    HorizontalContentAlignment="Center"
+                                    SnapsToDevicePixels="True"
+                                    Visibility="{Binding ShowClose,Converter={StaticResource Bool2Visibiliy}}"
+                                    Command="{Binding DataContext.ItemCloseCommand, RelativeSource={RelativeSource AncestorType=TabControl,Mode=FindAncestor}}"
+                                    CommandParameter="{Binding DataContext , RelativeSource={RelativeSource AncestorType=hc:TabItem,Mode=FindAncestor}}"
+                                    Background="Transparent"
+                                    Style="{StaticResource ButtonCustom}"
+                                    Width="13">
+                                <Path Fill="{DynamicResource PrimaryTextBrush}"
+                                      Width="9"
+                                      Height="9"
+                                      Stretch="Uniform"
+                                      Style="{StaticResource ClosePathStyle}" />
+                            </Button>
+                            <TextBlock Text="{Binding Name}" />
+                        </StackPanel>
+                    </DataTemplate>
+                </hc:TabControl.ItemTemplate>-->
+                <hc:TabControl.ContentTemplate>
+                    <DataTemplate>
+                        <DataTemplate.Resources>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="FontSize" Value="18" />
+                                <Setter Property="FontWeight" Value="Black" />
+                                <Setter Property="Foreground" Value="White" />
+                                <Setter Property="VerticalAlignment" Value="Center" />
+                            </Style>
+                        </DataTemplate.Resources>
+                        <Grid Background="{Binding Color}">
+                            <StackPanel HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                        Orientation="Vertical">
+
+                                <StackPanel Margin="0,0,0,25" Orientation="Horizontal">
+                                    <TextBlock Text="方法名称: ">
+                                        <!--<hc:Interaction.Triggers>
+                                            <hc:RoutedEventTrigger RoutedEvent="Mouse.MouseDown">
+                                                <hc:EventToCommand Command="{Binding DataContext.testCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}" />
+                                            </hc:RoutedEventTrigger>
+                                        </hc:Interaction.Triggers>-->
+                                    </TextBlock>
+                                    <TextBlock Width="100"
+                                               Margin="0,0,0,0"
+                                               Text="{Binding Name}">
+                                        <!--<i:Interaction.Behaviors>
+                                            <b:TextBoxShowVirtualKeyboard />
+                                        </i:Interaction.Behaviors>-->
+                                    </TextBlock>
+                                </StackPanel>
+
+                                <StackPanel Margin="0,0,0,20"
+                                            HorizontalAlignment="Left"
+                                            VerticalAlignment="Center"
+                                            Orientation="Horizontal">
+                                    <TextBlock VerticalAlignment="Center" Text="清洗体积(粗针): " />
+                                    <hc:NumericUpDown Name="N2"
+                                                      Width="85"
+                                                      DecimalPlaces="1"
+                                                      Maximum="4.5"
+                                                      Minimum="0.1"
+                                                      Tag="清洗体积(粗针)"
+                                                      Value="{Binding BigCleanValue}">
+                                        <hc:Interaction.Triggers>
+                                            <hc:EventTrigger EventName="TouchDown">
+                                                <hc:EventToCommand Command="{Binding DataContext.ShowKeyPadCommand, RelativeSource={RelativeSource AncestorType=Window, Mode=FindAncestor}}">
+                                                    <hc:EventToCommand.CommandParameter>
+                                                        <MultiBinding Converter="{StaticResource MultiConverter}">
+                                                            <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=Window}" />
+                                                            <Binding ElementName="N2" />
+                                                        </MultiBinding>
+                                                    </hc:EventToCommand.CommandParameter>
+                                                </hc:EventToCommand>
+                                            </hc:EventTrigger>
+                                        </hc:Interaction.Triggers>
+
+                                    </hc:NumericUpDown>
+                                    <Button Margin="5,0,0,0"
+                                            Command="{Binding DataContext.UpValueCommand, RelativeSource={RelativeSource AncestorType=Window, Mode=FindAncestor}}"
+                                            CommandParameter="{Binding ElementName=N2}"
+                                            Content="增加"
+                                            Style="{StaticResource ButtonPrimary}" />
+                                    <Button Margin="10,0,0,0"
+                                            Command="{Binding DataContext.DownValueCommand, RelativeSource={RelativeSource AncestorType=Window, Mode=FindAncestor}}"
+                                            CommandParameter="{Binding ElementName=N2}"
+                                            Content="减少"
+                                            Style="{StaticResource ButtonPrimary}" />
+
+                                    <TextBlock VerticalAlignment="Center" Text=" 毫升" />
+                                </StackPanel>
+
+                                <StackPanel Margin="0,0,0,20"
+                                            HorizontalAlignment="Left"
+                                            VerticalAlignment="Center"
+                                            Orientation="Horizontal">
+                                    <TextBlock VerticalAlignment="Center" Text="清洗体积(细针): " />
+                                    <hc:NumericUpDown Name="N3"
+                                                      Width="85"
+                                                      DecimalPlaces="1"
+                                                      Maximum="1000"
+                                                      Minimum="0"
+                                                      Tag="清洗体积(细针)"
+                                                      Value="{Binding LittleCleanValue}">
+                                        <hc:Interaction.Triggers>
+                                            <hc:EventTrigger EventName="TouchDown">
+                                                <hc:EventToCommand Command="{Binding DataContext.ShowKeyPadCommand, RelativeSource={RelativeSource AncestorType=Window, Mode=FindAncestor}}">
+                                                    <hc:EventToCommand.CommandParameter>
+                                                        <MultiBinding Converter="{StaticResource MultiConverter}">
+                                                            <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=Window}" />
+                                                            <Binding ElementName="N2" />
+                                                        </MultiBinding>
+                                                    </hc:EventToCommand.CommandParameter>
+                                                </hc:EventToCommand>
+                                            </hc:EventTrigger>
+                                        </hc:Interaction.Triggers>
+
+                                    </hc:NumericUpDown>
+                                    <Button Margin="5,0,0,0"
+                                            Command="{Binding DataContext.UpValueCommand, RelativeSource={RelativeSource AncestorType=Window, Mode=FindAncestor}}"
+                                            CommandParameter="{Binding ElementName=N3}"
+                                            Content="增加"
+                                            Style="{StaticResource ButtonPrimary}" />
+                                    <Button Margin="10,0,0,0"
+                                            Command="{Binding DataContext.DownValueCommand, RelativeSource={RelativeSource AncestorType=Window, Mode=FindAncestor}}"
+                                            CommandParameter="{Binding ElementName=N3}"
+                                            Content="减少"
+                                            Style="{StaticResource ButtonPrimary}" />
+
+                                    <TextBlock VerticalAlignment="Center" Text=" 微升" />
+                                </StackPanel>
+
+
+                                <StackPanel Margin="0,0,0,20"
+                                            HorizontalAlignment="Left"
+                                            VerticalAlignment="Center"
+                                            Orientation="Horizontal">
+                                    <TextBlock VerticalAlignment="Center" Text="吸取体积: " />
+                                    <hc:NumericUpDown Name="N1"
+                                                      Width="85"
+                                                      DecimalPlaces="1"
+                                                      Increment="0.1"
+                                                      Maximum="1"
+                                                      Minimum="0.1"
+                                                      Tag="吸取体积"
+                                                      Value="{Binding Value}">
+                                        <hc:Interaction.Triggers>
+                                            <hc:EventTrigger EventName="TouchDown">
+                                                <hc:EventToCommand Command="{Binding DataContext.ShowKeyPadCommand, RelativeSource={RelativeSource AncestorType=Window, Mode=FindAncestor}}">
+                                                    <hc:EventToCommand.CommandParameter>
+                                                        <MultiBinding Converter="{StaticResource MultiConverter}">
+                                                            <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=Window}" />
+                                                            <Binding ElementName="N1" />
+                                                        </MultiBinding>
+                                                    </hc:EventToCommand.CommandParameter>
+                                                </hc:EventToCommand>
+                                            </hc:EventTrigger>
+                                        </hc:Interaction.Triggers>
+                                    </hc:NumericUpDown>
+                                    <Button Margin="5,0,0,0"
+                                            Command="{Binding DataContext.UpValueCommand, RelativeSource={RelativeSource AncestorType=Window, Mode=FindAncestor}}"
+                                            CommandParameter="{Binding ElementName=N1}"
+                                            Content="增加"
+                                            Style="{StaticResource ButtonPrimary}" />
+                                    <Button Margin="10,0,0,0"
+                                            Command="{Binding DataContext.DownValueCommand, RelativeSource={RelativeSource AncestorType=Window, Mode=FindAncestor}}"
+                                            CommandParameter="{Binding ElementName=N1}"
+                                            Content="减少"
+                                            Style="{StaticResource ButtonPrimary}" />
+                                    <TextBlock VerticalAlignment="Center" Text=" 毫升" />
+                                </StackPanel>
+
+
+
+                                <StackPanel Margin="0,0,0,20"
+                                            HorizontalAlignment="Left"
+                                            VerticalAlignment="Center"
+                                            Orientation="Horizontal">
+                                    <TextBlock VerticalAlignment="Center" Text="加标体积: " />
+                                    <hc:NumericUpDown Name="N4"
+                                                      Width="85"
+                                                      DecimalPlaces="1"
+                                                      Maximum="1000"
+                                                      Minimum="0"
+                                                      Tag="加标体积"
+                                                      Value="{Binding TagValue}">
+                                        <hc:Interaction.Triggers>
+                                            <hc:EventTrigger EventName="TouchDown">
+                                                <hc:EventToCommand Command="{Binding DataContext.ShowKeyPadCommand, RelativeSource={RelativeSource AncestorType=Window, Mode=FindAncestor}}">
+                                                    <hc:EventToCommand.CommandParameter>
+                                                        <MultiBinding Converter="{StaticResource MultiConverter}">
+                                                            <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=Window}" />
+                                                            <Binding ElementName="N3" />
+                                                        </MultiBinding>
+                                                    </hc:EventToCommand.CommandParameter>
+                                                </hc:EventToCommand>
+                                            </hc:EventTrigger>
+                                        </hc:Interaction.Triggers>
+
+                                    </hc:NumericUpDown>
+                                    <Button Margin="5,0,0,0"
+                                            Command="{Binding DataContext.UpValueCommand, RelativeSource={RelativeSource AncestorType=Window, Mode=FindAncestor}}"
+                                            CommandParameter="{Binding ElementName=N4}"
+                                            Content="增加"
+                                            Style="{StaticResource ButtonPrimary}" />
+                                    <Button Margin="10,0,0,0"
+                                            Command="{Binding DataContext.DownValueCommand, RelativeSource={RelativeSource AncestorType=Window, Mode=FindAncestor}}"
+                                            CommandParameter="{Binding ElementName=N4}"
+                                            Content="减少"
+                                            Style="{StaticResource ButtonPrimary}" />
+
+                                    <TextBlock VerticalAlignment="Center" Text=" 微升" />
+                                </StackPanel>
+
+                                <StackPanel Margin="0,0,0,20"
+                                            HorizontalAlignment="Left"
+                                            VerticalAlignment="Center"
+                                            Orientation="Horizontal">
+                                    <TextBlock Margin="0,0,20,0"
+                                               VerticalAlignment="Center"
+                                               Text="启用加标:" />
+                                    <ToggleButton Name="EnableTag"
+                                                  Width="50"
+                                                  Height="30"
+                                                  IsChecked="{Binding EnableTag}"
+                                                  Style="{StaticResource ToggleButtonSwitch}" />
+                                </StackPanel>
+                                <StackPanel Margin="0,0,0,20"
+                                            HorizontalAlignment="Left"
+                                            VerticalAlignment="Center"
+                                            Orientation="Horizontal"
+                                            Visibility="{Binding EnableTag, Converter={StaticResource Bool2Visibiliy}}">
+                                    <TextBlock Margin="0,0,20,0"
+                                               VerticalAlignment="Center"
+                                               Text="加标来源:" />
+                                    <hc:ComboBox SelectedIndex="{Binding TagIndex}" Style="{StaticResource ComboBoxModifiy}">
+                                        <TextBlock Text="1" />
+                                        <TextBlock Text="2" />
+                                        <TextBlock Text="3" />
+                                    </hc:ComboBox>
+                                </StackPanel>
+                                <Button Width="80"
+                                        Height="40"
+                                        Content="保存方法"
+                                        FontWeight="Bold">
+                                    <Button.Style>
+                                        <Style BasedOn="{StaticResource ButtonPrimary}" TargetType="Button">
+                                            <Setter Property="Background" Value="#293547" />
+                                            <Style.Triggers>
+                                                <EventTrigger RoutedEvent="MouseEnter">
+                                                    <EventTrigger.Actions>
+                                                        <BeginStoryboard Storyboard="{StaticResource ColorAnnimation}" />
+                                                    </EventTrigger.Actions>
+                                                </EventTrigger>
+                                                <EventTrigger RoutedEvent="MouseLeave">
+                                                    <EventTrigger.Actions>
+                                                        <BeginStoryboard>
+                                                            <Storyboard>
+                                                                <ColorAnimation Storyboard.TargetProperty="(Button.Background).(SolidColorBrush.Color)"
+                                                                                From="#1A7985"
+                                                                                To="#293547"
+                                                                                Duration="0:0:0.2" />
+                                                            </Storyboard>
+                                                        </BeginStoryboard>
+                                                    </EventTrigger.Actions>
+                                                </EventTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Button.Style>
+                                </Button>
+                            </StackPanel>
+
+                        </Grid>
+                    </DataTemplate>
+                </hc:TabControl.ContentTemplate>
+                <hc:TabControl.Resources>
+                    <Style TargetType="hc:TabItem">
+                        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                        <Setter Property="VerticalContentAlignment" Value="Stretch" />
+                        <Setter Property="Foreground" Value="White" />
+                        <Setter Property="Margin" Value="0,0,2,-1" />
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="hc:TabItem">
+                                    <Grid x:Name="templateRoot" SnapsToDevicePixels="true">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition />
+                                            <ColumnDefinition Width="Auto" />
+                                        </Grid.ColumnDefinitions>
+                                        <Border x:Name="Borderedge"
+                                                Grid.ColumnSpan="2"
+                                                Background="{Binding Color}"
+                                                BorderBrush="{StaticResource BorderBrush}"
+                                                BorderThickness="0,0,0,0" />
+                                        <ContentPresenter x:Name="contentPresenter"
+                                                          Grid.Column="0"
+                                                          Margin="5,0,0,0"
+                                                          HorizontalAlignment="Stretch"
+                                                          VerticalAlignment="Center"
+                                                          Content="{Binding Name, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                                                          ContentSource="Header"
+                                                          Focusable="False"
+                                                          RecognizesAccessKey="True"
+                                                          SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                                        <Button Grid.Column="1"
+                                                Margin="6,6,10,5"
+                                                HorizontalContentAlignment="Center"
+                                                VerticalContentAlignment="Center"
+                                                Background="Transparent"
+                                                Command="{Binding DataContext.ItemCloseCommand, RelativeSource={RelativeSource AncestorType=TabControl, Mode=FindAncestor}}"
+                                                CommandParameter="{Binding DataContext, RelativeSource={RelativeSource AncestorType=hc:TabItem, Mode=FindAncestor}}"
+                                                Focusable="False"
+                                                SnapsToDevicePixels="True"
+                                                Style="{StaticResource ButtonCustom}"
+                                                Visibility="{Binding ShowClose, Converter={StaticResource Bool2Visibiliy}}">
+                                            <Path Width="9"
+                                                  Height="9"
+                                                  Fill="White"
+                                                  Stretch="Uniform"
+                                                  Style="{StaticResource ClosePathStyle}" />
+                                        </Button>
+                                    </Grid>
+
+                                    <ControlTemplate.Triggers>
+                                        <Trigger Property="IsSelected" Value="true">
+                                            <Setter Property="Panel.ZIndex" Value="1" />
+                                            <Setter TargetName="Borderedge" Property="Background" Value="#009FE8" />
+                                        </Trigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </hc:TabControl.Resources>
+            </hc:TabControl>
+
+            <!--<ScrollViewer Grid.Column="1"
+                          VerticalScrollBarVisibility="Hidden"
+                          HorizontalAlignment="Right">
+                <StackPanel hc:Growl.GrowlParent="True"
+                            VerticalAlignment="Top"
+                            Margin="0,10,10,10" />
+            </ScrollViewer>-->
+
+        </Grid>
+    </Grid>
+
+</UserControl>
