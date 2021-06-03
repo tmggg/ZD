@@ -90,6 +90,20 @@ namespace SgS.Model
             }
         }
 
+        private ushort _addIndex;
+
+        public ushort AddIndex
+        {
+            get { return _addIndex; }
+            set
+            {
+                _addIndex = value;
+                RaisePropertyChanged(() => AddIndex);
+            }
+        }
+
+        
+
 
         private Brush _color;
         public Brush Color

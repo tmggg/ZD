@@ -423,7 +423,8 @@ namespace SgS.ViewModel
             {
                 for (int i = 0; i < 36; i++)
                 {
-                    AllData.Add(new Data() { Name = $@"N", BigCleanValue = 0, LittleCleanValue = 0, Value = 0, Color = new SolidColorBrush(Color.FromRgb(128, 128, 128)) });
+                    AllData.Add(new Data() { Name = $@"N", BigCleanValue = 0, LittleCleanValue = 0, 
+                        Value = 0, TagIndex = 0, TagValue = 0, AddIndex = 0, EnableTag = false, Color = new SolidColorBrush(Color.FromRgb(128, 128, 128)) });
                 }
                 //for (int i = 1; i < 2; i++)
                 //{
@@ -497,6 +498,10 @@ namespace SgS.ViewModel
             }
         }
 
+        /// <summary>
+        /// 显示软件盘
+        /// </summary>
+        /// <param name="obj">命令参数数组</param>
         private void ShowKeyPad(object[] obj)
         {
             if (obj[0] is Window && obj[1] is NumericUpDown)
@@ -509,6 +514,10 @@ namespace SgS.ViewModel
             }
         }
 
+        /// <summary>
+        /// 将数值进行减法操作
+        /// </summary>
+        /// <param name="obj">被操作的控件</param>
         private void DownValue(NumericUpDown obj)
         {
             if (obj.Name == "N3" || obj.Name == "N4")
@@ -519,6 +528,10 @@ namespace SgS.ViewModel
             obj.Value -= 0.1;
         }
 
+        /// <summary>
+        /// 将数值进行加法操作
+        /// </summary>
+        /// <param name="obj">被操作的控件</param>
         private void UpValue(NumericUpDown obj)
         {
             if (obj.Name == "N3" || obj.Name == "N4")
@@ -529,6 +542,10 @@ namespace SgS.ViewModel
             obj.Value += 0.1;
         }
 
+        /// <summary>
+        /// 全选操作
+        /// </summary>
+        /// <param name="obj">方法内容</param>
         private void SelectAll(object[] obj)
         {
             //throw new NotImplementedException();
@@ -545,6 +562,7 @@ namespace SgS.ViewModel
                     item.TagValue = ((Data)obj[0]).TagValue;
                     item.EnableTag = ((Data)obj[0]).EnableTag;
                     item.TagIndex = ((Data)obj[0]).TagIndex;
+                    item.AddIndex = ((Data)obj[0]).AddIndex;
                     item.Color = ((Data)obj[0]).Color;
                     item.Color = new SolidColorBrush(Color.FromRgb(3, 195, 175));
                 }
@@ -561,6 +579,7 @@ namespace SgS.ViewModel
                     item.TagValue = 0;
                     item.EnableTag = false;
                     item.TagIndex = 0;
+                    item.AddIndex = 0;
                     item.Color = ((Data)obj[0]).Color;
                     item.Color = new SolidColorBrush(Color.FromRgb(128, 128, 128));
                 }
@@ -572,6 +591,10 @@ namespace SgS.ViewModel
             zoneSelPoint.Clear();
         }
 
+        /// <summary>
+        /// 应用列方法
+        /// </summary>
+        /// <param name="obj">方法内容</param>
         private void SetRow(object[] obj)
         {
             if (_isRuning != RunStatus.stop) return;
@@ -611,6 +634,7 @@ namespace SgS.ViewModel
                     AllData[i].TagValue = 0;
                     AllData[i].EnableTag = false;
                     AllData[i].TagIndex = 0;
+                    AllData[i].AddIndex = 0;
                     AllData[i].Color = ((Data)obj[1]).Color;
                     AllData[i].Color = new SolidColorBrush(Color.FromRgb(128, 128, 128));
                     _select = false;
@@ -625,6 +649,7 @@ namespace SgS.ViewModel
                     AllData[i].TagValue = ((Data)obj[1]).TagValue;
                     AllData[i].EnableTag = ((Data)obj[1]).EnableTag;
                     AllData[i].TagIndex = ((Data)obj[1]).TagIndex;
+                    AllData[i].AddIndex = ((Data)obj[1]).AddIndex;
                     AllData[i].Color = ((Data)obj[1]).Color;
                     AllData[i].Color = new SolidColorBrush(Color.FromRgb(3, 195, 175));
                 }
@@ -638,6 +663,10 @@ namespace SgS.ViewModel
             //throw new NotImplementedException();
         }
 
+        /// <summary>
+        /// 应用行方法
+        /// </summary>
+        /// <param name="obj">方法内容</param>
         private void SetColums(object[] obj)
         {
             bool iscancel = false;
@@ -671,6 +700,7 @@ namespace SgS.ViewModel
                     AllData[i].TagValue = 0;
                     AllData[i].EnableTag = false;
                     AllData[i].TagIndex = 0;
+                    AllData[i].AddIndex = 0;
                     AllData[tag].Color = ((Data)obj[1]).Color;
                     AllData[tag].Color = new SolidColorBrush(Color.FromRgb(128, 128, 128));
                     iscancel = true;
@@ -684,6 +714,7 @@ namespace SgS.ViewModel
                     AllData[i].TagValue = ((Data)obj[1]).TagValue;
                     AllData[i].EnableTag = ((Data)obj[1]).EnableTag;
                     AllData[i].TagIndex = ((Data)obj[1]).TagIndex;
+                    AllData[i].AddIndex = ((Data)obj[1]).AddIndex;
                     AllData[tag].Color = ((Data)obj[1]).Color;
                     AllData[tag].Color = new SolidColorBrush(Color.FromRgb(3, 195, 175));
                     iscancel = false;
@@ -697,7 +728,10 @@ namespace SgS.ViewModel
             zoneSelPoint.Clear();
         }
 
-
+        /// <summary>
+        /// 接收从工程师界面发送过来的新溶剂类型消息处理
+        /// </summary>
+        /// <param name="obj">溶剂类型集合</param>
         private void UpdateLiquidType(ObservableCollection<LiquidTypes> obj)
         {
             LiquidTypes.Clear();
@@ -708,15 +742,28 @@ namespace SgS.ViewModel
             LiquidSelectindex = 0;
         }
 
+        /// <summary>
+        /// 没用的函数
+        /// </summary>
+        /// <param name="obj"></param>
         private void DoSomeThing(LogViewViewModel obj)
         {
             //throw new NotImplementedException();
         }
 
+        /// <summary>
+        /// 没用的函数
+        /// </summary>
+        /// <param name="obj"></param>
+
         private void NotifyMe(NotificationMessage obj)
         {
         }
 
+        /// <summary>
+        /// 没用的函数
+        /// </summary>
+        /// <param name="obj"></param>
         private void OpenHelper(Window obj)
         {
             //Window w = new HelpView();
@@ -724,6 +771,10 @@ namespace SgS.ViewModel
             //w.ShowDialog();
         }
 
+        /// <summary>
+        /// 根据命令执行对应函数
+        /// </summary>
+        /// <param name="obj">命令内容及参数</param>
         private void ActionDo(object[] obj)
         {
             switch (obj[1].ToString())
@@ -913,6 +964,9 @@ namespace SgS.ViewModel
             }
         }
 
+        /// <summary>
+        /// 向下位机发送参数以及配置
+        /// </summary>
         private void SendData()
         {
             NetVar writeVar = new NetVar(_controlerIP, 34);
@@ -1196,8 +1250,8 @@ namespace SgS.ViewModel
                     dataTypeCollection.Add(new CDataTypeCollection(data.LittleCleanValue, DataTypes.realtype));
                     dataTypeCollection.Add(new CDataTypeCollection(data.TagValue, DataTypes.realtype));
                     dataTypeCollection.Add(new CDataTypeCollection(data.EnableTag, DataTypes.booltype));
-                    dataTypeCollection.Add(new CDataTypeCollection(data.TagIndex, DataTypes.realtype));
-
+                    dataTypeCollection.Add(new CDataTypeCollection(data.TagIndex + 1, DataTypes.realtype));//0->1
+                    dataTypeCollection.Add(new CDataTypeCollection(data.AddIndex + 1, DataTypes.realtype));//0->1
                     loop++;
                 }
                 else
@@ -1206,7 +1260,8 @@ namespace SgS.ViewModel
                     dataTypeCollection.Add(new CDataTypeCollection(0, DataTypes.realtype));
                     dataTypeCollection.Add(new CDataTypeCollection(0, DataTypes.realtype));
                     dataTypeCollection.Add(new CDataTypeCollection(false, DataTypes.booltype));
-                    dataTypeCollection.Add(new CDataTypeCollection(0, DataTypes.realtype));
+                    dataTypeCollection.Add(new CDataTypeCollection(1, DataTypes.realtype));//0->1
+                    dataTypeCollection.Add(new CDataTypeCollection(1, DataTypes.realtype));//0->1
                 }
             }
 
@@ -1251,6 +1306,10 @@ namespace SgS.ViewModel
 
         }
 
+        /// <summary>
+        /// 向下位机发送操作指令
+        /// </summary>
+        /// <param name="runStatus">操作指令</param>
         private void SendCommand2Plc(RunStatus runStatus)
         {
             NetVar sender = new NetVar(_controlerIP, 88);
@@ -1322,6 +1381,10 @@ namespace SgS.ViewModel
             sender.Disconnect();
         }
 
+        /// <summary>
+        /// 更新下位机返回的样品区工作状态
+        /// </summary>
+        /// <param name="reStatus">下位机返回的样品状态集合</param>
         private void _clientRead_EDataReceiveCallBack(List<int> reStatus)
         {
             Application.Current.Dispatcher.Invoke(() =>
@@ -1355,12 +1418,20 @@ namespace SgS.ViewModel
             //throw new NotImplementedException();
         }
 
+        /// <summary>
+        /// 更新下位机返回的错误ID号
+        /// </summary>
+        /// <param name="device_error_id">下位机错误ID号</param>
         private void _clientRead_EDeviceErrorCallBack(int device_error_id)
         {
             ErrorID = device_error_id;
             //throw new NotImplementedException();
         }
 
+        /// <summary>
+        /// 更新下位机初始化动作步骤内容
+        /// </summary>
+        /// <param name="init_step_id">下位机当前动作ID号</param>
         private void _clientRead_EInitStepCallBack(int init_step_id)
         {
             //throw new NotImplementedException();
@@ -1368,16 +1439,24 @@ namespace SgS.ViewModel
                 BusyContent = _allStatus.InitStatus[init_step_id];
         }
 
+        /// <summary>
+        /// 更新下位机操作样品时的动作ID号
+        /// </summary>
+        /// <param name="run_step_id">下位机操作样品的动作ID号</param>
         private void _clientRead_ERuningStepCallBack(int run_step_id)
         {
             RunId = run_step_id;
             //throw new NotImplementedException();
         }
 
+        /// <summary>
+        /// 更新下位机的工作状态
+        /// </summary>
+        /// <param name="runStatus">工作状态集合</param>
         private void _clientRead_ERunStatusCallBack(List<bool> runStatus)// 0:
         {
             //throw new NotImplementedException();
-
+            //设备急停
             if (runStatus[6] == true && EStop == false && _isRuning != RunStatus.estop)
             {
                 Application.Current.Dispatcher.Invoke(() =>
@@ -1399,7 +1478,7 @@ namespace SgS.ViewModel
                     IsBusy = false;
                 });
             }
-
+            //设备急停，并弹出急停按钮
             if (runStatus[6] == false && EStop == true && _isRuning == RunStatus.estop)
             {
                 Application.Current.Dispatcher.Invoke(() =>
@@ -1426,7 +1505,7 @@ namespace SgS.ViewModel
                     musicPlayer.Stop();
                 });
             }
-
+            //设备暂停
             if (runStatus[5] == true && _isRuning == RunStatus.start)//从运行状态暂停
             {
                 Application.Current.Dispatcher.Invoke(() =>
@@ -1444,7 +1523,7 @@ namespace SgS.ViewModel
                     Growl.InfoGlobal("设备已暂停！");
                 });
             }
-
+            //设备恢复运行
             if (runStatus[5] == false && _isRuning == RunStatus.pause)//从暂停状态取消
             {
                 Application.Current.Dispatcher.Invoke(() =>
@@ -1462,7 +1541,7 @@ namespace SgS.ViewModel
                     Growl.InfoGlobal("设备恢复继续运行！");
                 });
             }
-
+            //设备复位完成
             if (runStatus[2] == true && _isRuning == RunStatus.init)//复位动作执行完成
             {
                 Application.Current.Dispatcher.Invoke(() =>
@@ -1484,7 +1563,7 @@ namespace SgS.ViewModel
                 });
                 return;
             }
-
+            //设备动作执行完成
             if (runStatus[0] == true && runStatus[3] == true && _isRuning == RunStatus.start)//工作流程执行完成
             {
                 Application.Current.Dispatcher.Invoke(() =>
@@ -1549,7 +1628,7 @@ namespace SgS.ViewModel
                 });
                 return;
             }
-
+            //设备排空操作执行完成
             if (runStatus[7] == true && _isRuning == RunStatus.clean)//设备排空操作完成
             {
                 Application.Current.Dispatcher.Invoke(() =>
@@ -1579,6 +1658,10 @@ namespace SgS.ViewModel
 
         }
 
+        /// <summary>
+        /// 添加方法
+        /// </summary>
+        /// <param name="t">被操作的控件</param>
         private void Addtabitem(TabControl t)
         {
             //if (tabItemCount < 5)
@@ -1610,7 +1693,7 @@ namespace SgS.ViewModel
                     MethodItems.Last().ShowClose = false;
                 }
                 //MethodItems.Add(new Data() { Name = $@"S{_tabItemCount + 1}", Value = 0, CleanValue = 0, Color = new SolidColorBrush(Color.FromRgb((byte)_random.Next(0,255), (byte)_random.Next(0, 255), (byte)_random.Next(0, 255))), ShowClose = true });
-                MethodItems.Add(new Data() { Name = $@"S{_tabItemCount + 1}", Value = 0.6, BigCleanValue = 1.1,LittleCleanValue = 500, Color = new SolidColorBrush(Color.FromRgb(48, 66, 88)), ShowClose = true });
+                MethodItems.Add(new Data() { Name = $@"S{_tabItemCount + 1}", Value = 0.6, BigCleanValue = 1.1, LittleCleanValue = 500, AddIndex = 0, EnableTag = false, TagIndex = 0, TagValue = 0, Color = new SolidColorBrush(Color.FromRgb(48, 66, 88)), ShowClose = true });
                 _tabItemCount++;
                 t.SelectedIndex++;
             }
@@ -1620,6 +1703,10 @@ namespace SgS.ViewModel
             }
         }
 
+        /// <summary>
+        /// 部署方法
+        /// </summary>
+        /// <param name="parm">控件及方法参数</param>
         private void DeployMethod(object[] parm)
         {
             bool iscancel = false;
@@ -1649,6 +1736,7 @@ namespace SgS.ViewModel
                         AllData[_endtag].TagValue = 0;
                         AllData[_endtag].EnableTag = false;
                         AllData[_endtag].TagIndex = 0;
+                        AllData[_endtag].AddIndex = 0;
                         AllData[_endtag].Color = ((Data)parm[0]).Color;
                         AllData[_endtag].Color = new SolidColorBrush(Color.FromRgb(128, 128, 128));
                         zoneSelPoint.Clear();
@@ -1660,9 +1748,10 @@ namespace SgS.ViewModel
                         AllData[_endtag].Value = ((Data)parm[0]).Value;
                         AllData[_endtag].BigCleanValue = ((Data)parm[0]).BigCleanValue;
                         AllData[_endtag].LittleCleanValue = ((Data)parm[0]).LittleCleanValue;
-                        AllData[_endtag].TagValue = ((Data)parm[0]).TagValue; ;
-                        AllData[_endtag].EnableTag = ((Data)parm[0]).EnableTag; ;
-                        AllData[_endtag].TagIndex = ((Data)parm[0]).TagIndex; ;
+                        AllData[_endtag].TagValue = ((Data)parm[0]).TagValue;
+                        AllData[_endtag].EnableTag = ((Data)parm[0]).EnableTag;
+                        AllData[_endtag].TagIndex = ((Data)parm[0]).TagIndex;
+                        AllData[_endtag].AddIndex = ((Data)parm[0]).AddIndex;
                         AllData[_endtag].Color = ((Data)parm[0]).Color;
                         AllData[_endtag].Color = new SolidColorBrush(Color.FromRgb(3, 195, 175));
                         zoneSelPoint.Clear();
@@ -1705,6 +1794,7 @@ namespace SgS.ViewModel
                                         AllData[tubeTags[i - 1, j - 1]].TagValue = 0;
                                         AllData[tubeTags[i - 1, j - 1]].EnableTag = false;
                                         AllData[tubeTags[i - 1, j - 1]].TagIndex = 0;
+                                        AllData[tubeTags[i - 1, j - 1]].AddIndex = 0;
                                         AllData[tubeTags[i - 1, j - 1]].Color = ((Data)parm[0]).Color;
                                         AllData[tubeTags[i - 1, j - 1]].Color = new SolidColorBrush(Color.FromRgb(128, 128, 128));
                                         iscancel = true;
@@ -1715,9 +1805,10 @@ namespace SgS.ViewModel
                                         AllData[tubeTags[i - 1, j - 1]].Value = ((Data)parm[0]).Value;
                                         AllData[tubeTags[i - 1, j - 1]].BigCleanValue = ((Data)parm[0]).BigCleanValue;
                                         AllData[tubeTags[i - 1, j - 1]].LittleCleanValue = ((Data)parm[0]).LittleCleanValue;
-                                        AllData[tubeTags[i - 1, j - 1]].TagValue = ((Data)parm[0]).TagValue; ;
-                                        AllData[tubeTags[i - 1, j - 1]].EnableTag = ((Data)parm[0]).EnableTag; ;
-                                        AllData[tubeTags[i - 1, j - 1]].TagIndex = ((Data)parm[0]).TagIndex; ;
+                                        AllData[tubeTags[i - 1, j - 1]].TagValue = ((Data)parm[0]).TagValue;
+                                        AllData[tubeTags[i - 1, j - 1]].EnableTag = ((Data)parm[0]).EnableTag;
+                                        AllData[tubeTags[i - 1, j - 1]].TagIndex = ((Data)parm[0]).TagIndex;
+                                        AllData[tubeTags[i - 1, j - 1]].AddIndex = ((Data)parm[0]).AddIndex;
                                         AllData[tubeTags[i - 1, j - 1]].Color = ((Data)parm[0]).Color;
                                         AllData[tubeTags[i - 1, j - 1]].Color = new SolidColorBrush(Color.FromRgb(3, 195, 175));
                                     }
@@ -1792,6 +1883,10 @@ AllData[i].Color = new SolidColorBrush(Color.FromRgb(3, 195, 175));
             }
         }
 
+        /// <summary>
+        /// 关闭窗口前执行数据统计操作
+        /// </summary>
+        /// <param name="e"></param>
         private void WindowClosing(CancelEventArgs e)
         {
             if (_isRuning != RunStatus.stop && _isRuning != RunStatus.estop)
@@ -1823,6 +1918,10 @@ AllData[i].Color = new SolidColorBrush(Color.FromRgb(3, 195, 175));
             _clientRead.stop = true;
         }
 
+        /// <summary>
+        /// 方法被删除时，同时重置在样品区被应用的方法
+        /// </summary>
+        /// <param name="data"></param>
         private void ItemClose(Data data)
         {
             MethodItems.Remove(data);
@@ -1836,6 +1935,10 @@ AllData[i].Color = new SolidColorBrush(Color.FromRgb(3, 195, 175));
                     item.Value = 0;
                     item.BigCleanValue = 0;
                     item.LittleCleanValue = 0;
+                    item.TagValue = 0;
+                    item.EnableTag = false;
+                    item.TagIndex = 0;
+                    item.AddIndex = 0;
                     item.Color = new SolidColorBrush(Color.FromRgb(128, 128, 128));
                 }
             }
@@ -1843,6 +1946,10 @@ AllData[i].Color = new SolidColorBrush(Color.FromRgb(3, 195, 175));
             _tabItemCount--;
         }
 
+        /// <summary>
+        /// 没用的函数
+        /// </summary>
+        /// <param name="parent"></param>
         private void OpenEngineerView(Window parent)
         {
             //Window w = new EngineerView();
@@ -1850,6 +1957,10 @@ AllData[i].Color = new SolidColorBrush(Color.FromRgb(3, 195, 175));
             //w.ShowDialog();
         }
 
+        /// <summary>
+        /// 没用的函数
+        /// </summary>
+        /// <param name="w"></param>
         private void CloseWindow(Window w)
         {
             if (w != null)
@@ -1858,12 +1969,20 @@ AllData[i].Color = new SolidColorBrush(Color.FromRgb(3, 195, 175));
             }
         }
 
+        /// <summary>
+        /// 没用的函数
+        /// </summary>
+        /// <param name="w"></param>
         private void DragWindow(Window w)
         {
             if (w != null)
                 w.DragMove();
         }
 
+        /// <summary>
+        /// 重写UI刷新响应
+        /// </summary>
+        /// <param name="propertyName"></param>
         public override void RaisePropertyChanged([CallerMemberName] string propertyName = null)
         {
             base.RaisePropertyChanged(propertyName);
@@ -1960,6 +2079,12 @@ AllData[i].Color = new SolidColorBrush(Color.FromRgb(3, 195, 175));
             }
         }
 
+        /// <summary>
+        /// 写入统计数据
+        /// </summary>
+        /// <param name="filepath"></param>
+        /// <param name="logstr"></param>
+        /// <returns></returns>
         public bool CountLog(string filepath, string logstr)
         {
             try

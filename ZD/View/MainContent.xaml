@@ -2282,6 +2282,22 @@
                                     <TextBlock VerticalAlignment="Center" Text=" 微升" />
                                 </StackPanel>
 
+                                <StackPanel Margin="0,0,0,20"
+                                            HorizontalAlignment="Left"
+                                            VerticalAlignment="Center"
+                                            Orientation="Horizontal">
+                                    <TextBlock Margin="0,0,20,0"
+                                               VerticalAlignment="Center"
+                                               Text="加液来源:" />
+                                    <hc:ComboBox SelectedIndex="{Binding AddIndex}" Style="{StaticResource ComboBoxModifiy}">
+                                        <TextBlock Text="1" />
+                                        <TextBlock Text="2" />
+                                        <TextBlock Text="3" />
+                                        <TextBlock Text="4" />
+                                        <TextBlock Text="5" />
+                                        <TextBlock Text="6" />
+                                    </hc:ComboBox>
+                                </StackPanel>
 
                                 <StackPanel Margin="0,0,0,20"
                                             HorizontalAlignment="Left"

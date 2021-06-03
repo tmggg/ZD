@@ -311,6 +311,10 @@ namespace SgS.ViewModel
             Z2_Down = MainViewModel._config.AppSettings.Settings["Z2_Down"].Value == null ? -95000 : int.Parse(MainViewModel._config.AppSettings.Settings["Z2_Down"].Value);
         }
 
+        /// <summary>
+        /// 显示软键盘
+        /// </summary>
+        /// <param name="obj">参数与控件</param>
         private void ShowKeyPad(object[] obj)
         {
             if (obj[0] is Window && obj[1] is NumericUpDown)
@@ -323,6 +327,10 @@ namespace SgS.ViewModel
             }
         }
 
+        /// <summary>
+        /// 取消操作
+        /// </summary>
+        /// <param name="obj">列表控件</param>
         private void CancelAction(Grid obj)
         {
             //throw new NotImplementedException();
@@ -331,12 +339,19 @@ namespace SgS.ViewModel
             _okButton.Focus();
         }
 
+        /// <summary>
+        /// 没用的函数
+        /// </summary>
         private void CleanNeedle()
         {
             SendCommand2Plc(8, true);
 
         }
 
+        /// <summary>
+        /// 实现长按操作电机
+        /// </summary>
+        /// <param name="obj">参数</param>
         private void RunMotorUp(MouseButtonEventArgs obj)
         {
             //throw new NotImplementedException();
@@ -375,6 +390,10 @@ namespace SgS.ViewModel
             }
         }
 
+        /// <summary>
+        /// 实现长按操作电机
+        /// </summary>
+        /// <param name="obj">参数</param>
         private void RunMotorDown(MouseButtonEventArgs obj)
         {
             if (obj.Source is Button)
@@ -412,6 +431,11 @@ namespace SgS.ViewModel
             }
         }
 
+        /// <summary>
+        /// 向下位机发送指令
+        /// </summary>
+        /// <param name="commandPos"></param>
+        /// <param name="value"></param>
         private void SendCommand2Plc(int commandPos, bool value)
         {
             NetVar sender = new NetVar(_controlerIP, 99);
@@ -428,6 +452,10 @@ namespace SgS.ViewModel
             sender.Disconnect();
         }
 
+        /// <summary>
+        /// 检查密码
+        /// </summary>
+        /// <param name="data">控件与参数</param>
         private void CheckPasswd(object[] data)
         {
             if (((HandyControl.Controls.PasswordBox)data[0]).Password == "8888")
@@ -447,6 +475,10 @@ namespace SgS.ViewModel
             }
         }
 
+        /// <summary>
+        /// 更新下位机，针头位置
+        /// </summary>
+        /// <param name="posData">下位机返回的针头参数集合</param>
         private void _clientRead_EPosStatusCallBack(Dictionary<string, int> posData)
         {
             Pos_X = posData["x"];
@@ -457,11 +489,19 @@ namespace SgS.ViewModel
             Sensor_Z2 = posData["z2sensor"];
         }
 
+        /// <summary>
+        /// 没用的函数
+        /// </summary>
+        /// <param name="w"></param>
         private void Loaded(EngineerView w)
         {
 
         }
 
+        /// <summary>
+        /// 参数保存
+        /// </summary>
+        /// <param name="w">列表控件</param>
         private void CloseWindow(Grid w)
         {
             if (w.ActualWidth == 0)
@@ -484,11 +524,18 @@ namespace SgS.ViewModel
             //w?.Close();
         }
 
+        /// <summary>
+        /// 实现窗口拖动
+        /// </summary>
+        /// <param name="w"></param>
         private void DragWindow(Window w)
         {
             w?.DragMove();
         }
 
+        /// <summary>
+        /// 添加新溶剂
+        /// </summary>
         private void AddLiquidCommand()
         {
             AddLiquidItem w = new AddLiquidItem();
