@@ -166,6 +166,28 @@ namespace SgS.ViewModel
             }
         }
 
+        private int _bigcleanValue;
+        public int BigCleanValue
+        {
+            get { return _bigcleanValue; }
+            set 
+            {
+                _bigcleanValue = value;
+                RaisePropertyChanged(() => BigCleanValue);
+            }
+        }
+
+        private int _littlecleanValue;
+        public int LittleCleanValue
+        {
+            get { return _littlecleanValue; }
+            set
+            {
+                _littlecleanValue = value;
+                RaisePropertyChanged(() => LittleCleanValue);
+            }
+        }
+
 
         #endregion
 
@@ -309,6 +331,8 @@ namespace SgS.ViewModel
             Z2_Sensitivity = MainViewModel._config.AppSettings.Settings["Z2_Sensitivity"].Value == null ? -5000 : int.Parse(MainViewModel._config.AppSettings.Settings["Z2_Sensitivity"].Value);
             Z1_Down = MainViewModel._config.AppSettings.Settings["Z1_Down"].Value == null ? -95000 : int.Parse(MainViewModel._config.AppSettings.Settings["Z1_Down"].Value);
             Z2_Down = MainViewModel._config.AppSettings.Settings["Z2_Down"].Value == null ? -95000 : int.Parse(MainViewModel._config.AppSettings.Settings["Z2_Down"].Value);
+            BigCleanValue = MainViewModel._config.AppSettings.Settings["BigClean"].Value == null ? 10 : int.Parse(MainViewModel._config.AppSettings.Settings["BigClean"].Value);
+            LittleCleanValue = MainViewModel._config.AppSettings.Settings["LittleClean"].Value == null ? 200 : int.Parse(MainViewModel._config.AppSettings.Settings["LittleClean"].Value);
         }
 
         /// <summary>
@@ -334,7 +358,7 @@ namespace SgS.ViewModel
         private void CancelAction(Grid obj)
         {
             //throw new NotImplementedException();
-            obj.CreateWidthChangedAnimation(0, 1046, TimeSpan.FromSeconds(0.5));
+            obj.CreateWidthChangedAnimation(0, ((FrameworkElement)obj.Parent).ActualWidth, TimeSpan.FromSeconds(0.5));
             _okButton.IsDefault = true;
             _okButton.Focus();
         }
@@ -384,6 +408,9 @@ namespace SgS.ViewModel
                     case "Z2 反转点动":
                         SendCommand2Plc(7, false);
                         break;
+                    case "流动泵点动":
+                        SendCommand2Plc(9, false);
+                        break;
                     default:
                         break;
                 }
@@ -425,6 +452,9 @@ namespace SgS.ViewModel
                     case "Z2 反转点动":
                         SendCommand2Plc(7, true);
                         break;
+                    case "流动泵点动":
+                        SendCommand2Plc(9, false);
+                        break;
                     default:
                         break;
                 }
@@ -441,7 +471,7 @@ namespace SgS.ViewModel
             NetVar sender = new NetVar(_controlerIP, 99);
             List<CDataTypeCollection> sendercommand;
             sendercommand = new List<CDataTypeCollection>();
-            for (int i = 0; i < 9; i++)
+            for (int i = 0; i < 10; i++)
             {
                 if (commandPos == i)
                     sendercommand.Add(new CDataTypeCollection(value, DataTypes.booltype));
@@ -516,6 +546,8 @@ namespace SgS.ViewModel
                 MainViewModel._config.AppSettings.Settings["Z2_Sensitivity"].Value = Z2_Sensitivity.ToString();
                 MainViewModel._config.AppSettings.Settings["Z1_Down"].Value = Z1_Down.ToString();
                 MainViewModel._config.AppSettings.Settings["Z2_Down"].Value = Z2_Down.ToString();
+                MainViewModel._config.AppSettings.Settings["BigClean"].Value = BigCleanValue.ToString();
+                MainViewModel._config.AppSettings.Settings["LittleClean"].Value = LittleCleanValue.ToString();
                 MainViewModel._config.Save();
                 MainViewModel._clientRead.EPosStatusCallBack -= _clientRead_EPosStatusCallBack;
                 MessengerInstance.Send<ObservableCollection<LiquidTypes>, MainViewModel>(LiquidTypes);

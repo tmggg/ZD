@@ -2,6 +2,9 @@
 
 namespace SgS.Model
 {
+    /// <summary>
+    /// 针头位置参数类
+    /// </summary>
     public class PositionData : ObservableObject
     {
         private int _x;

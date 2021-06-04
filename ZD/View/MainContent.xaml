@@ -2205,7 +2205,8 @@
                                 <StackPanel Margin="0,0,0,20"
                                             HorizontalAlignment="Left"
                                             VerticalAlignment="Center"
-                                            Orientation="Horizontal">
+                                            Orientation="Horizontal"
+                                            Visibility="Collapsed">
                                     <TextBlock VerticalAlignment="Center" Text="清洗体积(粗针): " />
                                     <hc:NumericUpDown Name="N2"
                                                       Width="85"
@@ -2245,7 +2246,8 @@
                                 <StackPanel Margin="0,0,0,20"
                                             HorizontalAlignment="Left"
                                             VerticalAlignment="Center"
-                                            Orientation="Horizontal">
+                                            Orientation="Horizontal"
+                                            Visibility="Collapsed">
                                     <TextBlock VerticalAlignment="Center" Text="清洗体积(细针): " />
                                     <hc:NumericUpDown Name="N3"
                                                       Width="85"
@@ -2303,14 +2305,14 @@
                                             HorizontalAlignment="Left"
                                             VerticalAlignment="Center"
                                             Orientation="Horizontal">
-                                    <TextBlock VerticalAlignment="Center" Text="吸取体积: " />
+                                    <TextBlock VerticalAlignment="Center" Text="加液体积: " />
                                     <hc:NumericUpDown Name="N1"
                                                       Width="85"
                                                       DecimalPlaces="1"
-                                                      Increment="0.1"
-                                                      Maximum="1"
-                                                      Minimum="0.1"
-                                                      Tag="吸取体积"
+                                                      Increment="1"
+                                                      Maximum="50"
+                                                      Minimum="1"
+                                                      Tag="加液体积"
                                                       Value="{Binding Value}">
                                         <hc:Interaction.Triggers>
                                             <hc:EventTrigger EventName="TouchDown">
@@ -2340,10 +2342,25 @@
 
 
 
+
                                 <StackPanel Margin="0,0,0,20"
                                             HorizontalAlignment="Left"
                                             VerticalAlignment="Center"
                                             Orientation="Horizontal">
+                                    <TextBlock Margin="0,0,20,0"
+                                               VerticalAlignment="Center"
+                                               Text="启用加标:" />
+                                    <ToggleButton Name="EnableTag"
+                                                  Width="50"
+                                                  Height="30"
+                                                  IsChecked="{Binding EnableTag}"
+                                                  Style="{StaticResource ToggleButtonSwitch}" />
+                                </StackPanel>
+                                <StackPanel Margin="0,0,0,20"
+                                            HorizontalAlignment="Left"
+                                            VerticalAlignment="Center"
+                                            Orientation="Horizontal"
+                                            Visibility="{Binding EnableTag, Converter={StaticResource Bool2Visibiliy}}">
                                     <TextBlock VerticalAlignment="Center" Text="加标体积: " />
                                     <hc:NumericUpDown Name="N4"
                                                       Width="85"
@@ -2380,19 +2397,6 @@
                                     <TextBlock VerticalAlignment="Center" Text=" 微升" />
                                 </StackPanel>
 
-                                <StackPanel Margin="0,0,0,20"
-                                            HorizontalAlignment="Left"
-                                            VerticalAlignment="Center"
-                                            Orientation="Horizontal">
-                                    <TextBlock Margin="0,0,20,0"
-                                               VerticalAlignment="Center"
-                                               Text="启用加标:" />
-                                    <ToggleButton Name="EnableTag"
-                                                  Width="50"
-                                                  Height="30"
-                                                  IsChecked="{Binding EnableTag}"
-                                                  Style="{StaticResource ToggleButtonSwitch}" />
-                                </StackPanel>
                                 <StackPanel Margin="0,0,0,20"
                                             HorizontalAlignment="Left"
                                             VerticalAlignment="Center"

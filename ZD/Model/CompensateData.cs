@@ -7,6 +7,9 @@ using GalaSoft.MvvmLight;
 
 namespace SgS.Model
 {
+    /// <summary>
+    /// 补偿规则参数
+    /// </summary>
     public class CompensateData:ObservableObject
     {
         private double _min;

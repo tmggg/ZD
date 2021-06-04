@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace SgS.Model
 {
+    /// <summary>
+    /// 溶剂的导电针数值类
+    /// </summary>
     public class LiquidTypes: ObservableObject
     {
         private string _liquidName;

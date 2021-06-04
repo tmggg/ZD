@@ -7,6 +7,9 @@ using GalaSoft.MvvmLight;
 
 namespace SgS.Model
 {
+    /// <summary>
+    /// 日志类
+    /// </summary>
     public class LogData:ObservableObject
     {
         private string _time;

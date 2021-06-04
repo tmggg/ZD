@@ -153,11 +153,9 @@
     <Compile Include="Model\Data.cs" />
     <Compile Include="Model\LiquidTypes.cs" />
     <Compile Include="Model\LogData.cs" />
-    <Compile Include="Model\NavigationData.cs" />
     <Compile Include="Model\NetVar.cs" />
-    <Compile Include="Model\PathData.cs" />
     <Compile Include="Model\PositionData.cs" />
-    <Compile Include="ViewModel\DataSetViewModel.cs" />
+    <Compile Include="Settings.cs" />
     <Compile Include="ViewModel\EngineerViewModel.cs" />
     <Compile Include="ViewModel\LogViewViewModel.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
@@ -179,10 +177,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\CusSplashScreen.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="View\DataSet.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -213,9 +207,6 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="View\DataSet.xaml.cs">
-      <DependentUpon>DataSet.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\DeviceMain.xaml.cs">
       <DependentUpon>DeviceMain.xaml</DependentUpon>

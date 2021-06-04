@@ -10,8 +10,13 @@ namespace SgS.Model
     [Serializable]
     [XmlInclude(typeof(System.Windows.Media.SolidColorBrush))]
     [XmlInclude(typeof(System.Windows.Media.MatrixTransform))]
+
+    //方法参数
     public class Data:ObservableObject
     {
+        /// <summary>
+        /// 方法名
+        /// </summary>
         private string _name;
         public string Name
         {
@@ -23,6 +28,9 @@ namespace SgS.Model
             }
         }
 
+        /// <summary>
+        /// 加液体积
+        /// </summary>
         private double _value;
         public double Value
         {
@@ -34,6 +42,9 @@ namespace SgS.Model
             }
         }
 
+        /// <summary>
+        /// 粗针清洗体积
+        /// </summary>
         private double _bigcleanValue;
         public double BigCleanValue
         {
@@ -45,6 +56,9 @@ namespace SgS.Model
             }
         }
 
+        /// <summary>
+        /// 细针清洗体积
+        /// </summary>
         private double _littlecleanValue;
         public double LittleCleanValue
         {
@@ -56,6 +70,9 @@ namespace SgS.Model
             }
         }
 
+        /// <summary>
+        /// 加标体积
+        /// </summary>
         private double _tagValue;
         public double TagValue
         {
@@ -67,6 +84,9 @@ namespace SgS.Model
             }
         }
 
+        /// <summary>
+        /// 启用加标
+        /// </summary>
         private bool? _enableTag;
         public bool? EnableTag
         {
@@ -78,6 +98,9 @@ namespace SgS.Model
             }
         }
 
+        /// <summary>
+        /// 加标通道
+        /// </summary>
         private ushort _tagIndex;
 
         public ushort TagIndex
@@ -90,6 +113,9 @@ namespace SgS.Model
             }
         }
 
+        /// <summary>
+        /// 加液通道
+        /// </summary>
         private ushort _addIndex;
 
         public ushort AddIndex

@@ -302,7 +302,6 @@ namespace SgS.ViewModel
         public ObservableCollection<TabItem> TabItems { get; private set; }
         public ObservableCollection<Data> MethodItems { get; private set; }
         public ObservableCollection<Data> AllData { get; private set; }
-        public ObservableCollection<NavigationData> TitleItems { get; private set; }
         public ObservableCollection<LiquidTypes> LiquidTypes { get; private set; }
         public RelayCommand<TabControl> AddTabItemCommand { get; private set; }
         public RelayCommand<RoutedEventArgs> DelTabItemCommand { get; private set; }
@@ -342,7 +341,6 @@ namespace SgS.ViewModel
             TabItems = new ObservableCollection<TabItem>();
             AllData = new ObservableCollection<Data>();
             MethodItems = new ObservableCollection<Data>();
-            TitleItems = new ObservableCollection<NavigationData>();
             AddTabItemCommand = new RelayCommand<TabControl>(Addtabitem);
             DeployMethodCommand = new RelayCommand<object[]>(DeployMethod);
             WindowClosingCommand = new RelayCommand<CancelEventArgs>(WindowClosing);
@@ -423,8 +421,18 @@ namespace SgS.ViewModel
             {
                 for (int i = 0; i < 36; i++)
                 {
-                    AllData.Add(new Data() { Name = $@"N", BigCleanValue = 0, LittleCleanValue = 0, 
-                        Value = 0, TagIndex = 0, TagValue = 0, AddIndex = 0, EnableTag = false, Color = new SolidColorBrush(Color.FromRgb(128, 128, 128)) });
+                    AllData.Add(new Data()
+                    {
+                        Name = $@"N",
+                        BigCleanValue = 0,
+                        LittleCleanValue = 0,
+                        Value = 0,
+                        TagIndex = 0,
+                        TagValue = 0,
+                        AddIndex = 0,
+                        EnableTag = false,
+                        Color = new SolidColorBrush(Color.FromRgb(128, 128, 128))
+                    });
                 }
                 //for (int i = 1; i < 2; i++)
                 //{
@@ -783,8 +791,8 @@ namespace SgS.ViewModel
                     Status_Light = ((DeviceMain)obj[0]).StatusLight;
                     LightStatus = RunStatus.init;
                     SendCommand2Plc(RunStatus.init);
-                    _config.AppSettings.Settings["Z1_Sensitivity"].Value = ((LiquidTypes)obj[2]).Z1Value.ToString();
-                    _config.AppSettings.Settings["Z2_Sensitivity"].Value = ((LiquidTypes)obj[2]).Z2Value.ToString();
+                    _config.AppSettings.Settings["Z1_Sensitivity"].Value = ((LiquidTypes)obj[2])?.Z1Value.ToString();
+                    _config.AppSettings.Settings["Z2_Sensitivity"].Value = ((LiquidTypes)obj[2])?.Z2Value.ToString();
                     SendData();
                     _clientRead.EInitStepCallBack += _clientRead_EInitStepCallBack;
                     //_clientRead.ERunStatusCallBack += _clientRead_ERunStatusCallBack;
@@ -838,8 +846,8 @@ namespace SgS.ViewModel
                     SettingEnable = false;
                     //HelperEnable = true;
                     _isRuning = RunStatus.start;
-                    _config.AppSettings.Settings["Z1_Sensitivity"].Value = ((LiquidTypes)obj[2]).Z1Value.ToString();
-                    _config.AppSettings.Settings["Z2_Sensitivity"].Value = ((LiquidTypes)obj[2]).Z2Value.ToString();
+                    _config.AppSettings.Settings["Z1_Sensitivity"].Value = ((LiquidTypes)obj[2])?.Z1Value.ToString();
+                    _config.AppSettings.Settings["Z2_Sensitivity"].Value = ((LiquidTypes)obj[2])?.Z2Value.ToString();
                     _config.Save();
                     System.Threading.Tasks.Task.Run(() =>
                     {
@@ -1245,21 +1253,22 @@ namespace SgS.ViewModel
                         }
 
                     }
-                    dataTypeCollection.Add(new CDataTypeCollection(data.Value + compensation, DataTypes.realtype));
-                    dataTypeCollection.Add(new CDataTypeCollection(data.BigCleanValue, DataTypes.realtype));
-                    dataTypeCollection.Add(new CDataTypeCollection(data.LittleCleanValue, DataTypes.realtype));
-                    dataTypeCollection.Add(new CDataTypeCollection(data.TagValue, DataTypes.realtype));
-                    dataTypeCollection.Add(new CDataTypeCollection(data.EnableTag, DataTypes.booltype));
+                    dataTypeCollection.Add(new CDataTypeCollection(data.Value + compensation, DataTypes.realtype));//加液值
+                    //dataTypeCollection.Add(new CDataTypeCollection(data.BigCleanValue, DataTypes.realtype));
+                    //dataTypeCollection.Add(new CDataTypeCollection(data.LittleCleanValue, DataTypes.realtype));
+                    dataTypeCollection.Add(new CDataTypeCollection(data.TagValue, DataTypes.realtype));//加标值
+                    dataTypeCollection.Add(new CDataTypeCollection(data.EnableTag, DataTypes.realtype));//启用加标
                     dataTypeCollection.Add(new CDataTypeCollection(data.TagIndex + 1, DataTypes.realtype));//0->1
                     dataTypeCollection.Add(new CDataTypeCollection(data.AddIndex + 1, DataTypes.realtype));//0->1
                     loop++;
                 }
                 else
                 {
-                    dataTypeCollection.Add(new CDataTypeCollection(0, DataTypes.realtype));
-                    dataTypeCollection.Add(new CDataTypeCollection(0, DataTypes.realtype));
-                    dataTypeCollection.Add(new CDataTypeCollection(0, DataTypes.realtype));
-                    dataTypeCollection.Add(new CDataTypeCollection(false, DataTypes.booltype));
+                    dataTypeCollection.Add(new CDataTypeCollection(0, DataTypes.realtype));//加液值
+                    //dataTypeCollection.Add(new CDataTypeCollection(0, DataTypes.realtype));
+                    //dataTypeCollection.Add(new CDataTypeCollection(0, DataTypes.realtype));
+                    dataTypeCollection.Add(new CDataTypeCollection(0, DataTypes.realtype));//加标值
+                    dataTypeCollection.Add(new CDataTypeCollection(0, DataTypes.realtype));//启用加标
                     dataTypeCollection.Add(new CDataTypeCollection(1, DataTypes.realtype));//0->1
                     dataTypeCollection.Add(new CDataTypeCollection(1, DataTypes.realtype));//0->1
                 }
@@ -1278,6 +1287,14 @@ namespace SgS.ViewModel
             dataTypeCollection.Add(
                 new CDataTypeCollection(_config.AppSettings.Settings["Z2_Down"].Value ==
                 null ? -95000 : int.Parse(MainViewModel._config.AppSettings.Settings["Z2_Down"].Value), DataTypes.dinttype));
+
+            dataTypeCollection.Add(
+                new CDataTypeCollection(_config.AppSettings.Settings["BigClean"].Value ==
+                null ? 10 : int.Parse(MainViewModel._config.AppSettings.Settings["BigClean"].Value), DataTypes.dinttype));
+            dataTypeCollection.Add(
+                new CDataTypeCollection(_config.AppSettings.Settings["LittleClean"].Value ==
+                null ? 200 : int.Parse(MainViewModel._config.AppSettings.Settings["LittleClean"].Value), DataTypes.dinttype));
+
 
             dataTypeCollection.Add(new CDataTypeCollection(RunArea, DataTypes.realtype));
 

@@ -10,8 +10,17 @@ namespace SgS.Model
     {
         private static AllStatus allstatus = null;
 
+        /// <summary>
+        /// 初始化动作集合
+        /// </summary>
         public Dictionary<int, string> InitStatus;
+        /// <summary>
+        /// 操作动作集合
+        /// </summary>
         public Dictionary<int, string> SeparationStatus;
+        /// <summary>
+        /// 错误代码集合
+        /// </summary>
         public Dictionary<int, string> ErrorStatus;
 
         private AllStatus()

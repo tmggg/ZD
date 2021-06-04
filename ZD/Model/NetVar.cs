@@ -260,7 +260,7 @@ namespace SgS.Model
                 _client.dataTypeCollection = dataTypeCollection;
                 _client.SendValues();
 
-                _client.CreateGVLFile(@"C:\Users\TMGG\Desktop\" + string.Format("{0}.GVL",_client.CobID));
+                _client.CreateGVLFile(AppDomain.CurrentDomain.BaseDirectory + "\\" + string.Format("{0}.GVL",_client.CobID));
             }
             catch (Exception ex)
             {
