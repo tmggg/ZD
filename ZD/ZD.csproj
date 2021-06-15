@@ -153,6 +153,7 @@
     <Compile Include="Model\Data.cs" />
     <Compile Include="Model\LiquidTypes.cs" />
     <Compile Include="Model\LogData.cs" />
+    <Compile Include="Model\LogFile.cs" />
     <Compile Include="Model\NetVar.cs" />
     <Compile Include="Model\PositionData.cs" />
     <Compile Include="Settings.cs" />

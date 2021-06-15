@@ -500,80 +500,107 @@
                         </hc:EventTrigger>
                     </hc:Interaction.Triggers>-->
                     <hc:TransitioningContentControl TransitionMode="Bottom2TopWithFade">
-                        <DataGrid VerticalAlignment="Top"
-                                  AutoGenerateColumns="False"
-                                  Background="Transparent"
-                                  CanUserAddRows="False"
-                                  HeadersVisibility="Column"
-                                  ItemsSource="{Binding LogDatas}">
-                            <DataGrid.Columns>
-                                <DataGridTextColumn Width="1.5*"
-                                                    Binding="{Binding Time}"
-                                                    CanUserResize="False"
-                                                    Header="时间"
-                                                    IsReadOnly="True">
-                                    <DataGridTextColumn.CellStyle>
-                                        <Style BasedOn="{StaticResource DataGridCellStyle}" TargetType="DataGridCell">
-                                            <Setter Property="Foreground" Value="White" />
-                                            <Setter Property="HorizontalContentAlignment" Value="Center" />
-                                            <Style.Triggers>
-                                                <Trigger Property="IsEditing" Value="True">
-                                                    <Setter Property="Foreground" Value="Black" />
-                                                </Trigger>
-                                            </Style.Triggers>
-                                        </Style>
-                                    </DataGridTextColumn.CellStyle>
-                                </DataGridTextColumn>
-                                <DataGridTextColumn Width="*"
-                                                    Binding="{Binding Level}"
-                                                    CanUserResize="False"
-                                                    CanUserSort="True"
-                                                    Header="错误类型"
-                                                    IsReadOnly="True">
-                                    <DataGridTextColumn.CellStyle>
-                                        <Style BasedOn="{StaticResource DataGridCellStyle}" TargetType="DataGridCell">
-                                            <Setter Property="Foreground" Value="White" />
-                                            <Setter Property="HorizontalContentAlignment" Value="Center" />
-                                            <Style.Triggers>
-                                                <Trigger Property="IsEditing" Value="True">
-                                                    <Setter Property="Foreground" Value="Black" />
-                                                </Trigger>
-                                            </Style.Triggers>
-                                        </Style>
-                                    </DataGridTextColumn.CellStyle>
-                                </DataGridTextColumn>
-                                <DataGridTextColumn Width="4*"
-                                                    Binding="{Binding Data}"
-                                                    CanUserResize="False"
-                                                    Header="数据"
-                                                    IsReadOnly="True">
-                                    <DataGridTextColumn.CellStyle>
-                                        <Style BasedOn="{StaticResource DataGridCellStyle}" TargetType="DataGridCell">
-                                            <Setter Property="Foreground" Value="White" />
-                                            <Setter Property="HorizontalContentAlignment" Value="Center" />
-                                            <Style.Triggers>
-                                                <Trigger Property="IsEditing" Value="True">
-                                                    <Setter Property="Foreground" Value="Black" />
-                                                </Trigger>
-                                            </Style.Triggers>
-                                        </Style>
-                                    </DataGridTextColumn.CellStyle>
-                                </DataGridTextColumn>
-                            </DataGrid.Columns>
-                            <DataGrid.RowStyle>
-                                <Style BasedOn="{StaticResource DataGridRowStyle}" TargetType="DataGridRow">
-                                    <Setter Property="Background" Value="Transparent" />
-                                    <Setter Property="BorderThickness" Value="2" />
-                                    <Setter Property="BorderBrush" Value="White" />
-                                </Style>
-                            </DataGrid.RowStyle>
-                            <DataGrid.ColumnHeaderStyle>
-                                <Style BasedOn="{StaticResource DataGridColumnHeaderStyle}" TargetType="DataGridColumnHeader">
-                                    <Setter Property="HorizontalContentAlignment" Value="Center" />
-                                    <Setter Property="Foreground" Value="White" />
-                                </Style>
-                            </DataGrid.ColumnHeaderStyle>
-                        </DataGrid>
+                        <StackPanel>
+                            <StackPanel Margin="5" Orientation="Horizontal">
+                                <hc:ComboBox x:Name="LogfileCombobox"
+                                             Width="200"
+                                             Margin="3"
+                                             HorizontalAlignment="Left"
+                                             DisplayMemberPath="FileName"
+                                             Foreground="White"
+                                             ItemsSource="{Binding LogList}"
+                                             Style="{StaticResource ComboBoxModifiy}" />
+                                <Button Margin="3"
+                                        Command="{Binding LoadLogCommand}"
+                                        CommandParameter="{Binding ElementName=LogfileCombobox, Path=SelectedItem}"
+                                        Content="载入"
+                                        Style="{StaticResource ButtonPrimary}" />
+                                <Button Margin="3"
+                                        Command="{Binding RealTimeLogCommand}"
+                                        Content="实时日志"
+                                        Style="{StaticResource ButtonPrimary}" />
+                            </StackPanel>
+                            <DataGrid MaxHeight="550"
+                                      VerticalAlignment="Top"
+                                      AutoGenerateColumns="False"
+                                      Background="Transparent"
+                                      CanUserAddRows="False"
+                                      HeadersVisibility="Column"
+                                      ItemsSource="{Binding LogDatas}"
+                                      VirtualizingPanel.CacheLength="12,12"
+                                      VirtualizingPanel.CacheLengthUnit="Item"
+                                      VirtualizingPanel.IsVirtualizing="True"
+                                      VirtualizingPanel.ScrollUnit="Pixel"
+                                      VirtualizingPanel.VirtualizationMode="Recycling">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Width="1.5*"
+                                                        Binding="{Binding Time}"
+                                                        CanUserResize="False"
+                                                        Header="时间"
+                                                        IsReadOnly="True">
+                                        <DataGridTextColumn.CellStyle>
+                                            <Style BasedOn="{StaticResource DataGridCellStyle}" TargetType="DataGridCell">
+                                                <Setter Property="Foreground" Value="White" />
+                                                <Setter Property="HorizontalContentAlignment" Value="Center" />
+                                                <Style.Triggers>
+                                                    <Trigger Property="IsEditing" Value="True">
+                                                        <Setter Property="Foreground" Value="Black" />
+                                                    </Trigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </DataGridTextColumn.CellStyle>
+                                    </DataGridTextColumn>
+                                    <DataGridTextColumn Width="*"
+                                                        Binding="{Binding Level}"
+                                                        CanUserResize="False"
+                                                        CanUserSort="True"
+                                                        Header="错误类型"
+                                                        IsReadOnly="True">
+                                        <DataGridTextColumn.CellStyle>
+                                            <Style BasedOn="{StaticResource DataGridCellStyle}" TargetType="DataGridCell">
+                                                <Setter Property="Foreground" Value="White" />
+                                                <Setter Property="HorizontalContentAlignment" Value="Center" />
+                                                <Style.Triggers>
+                                                    <Trigger Property="IsEditing" Value="True">
+                                                        <Setter Property="Foreground" Value="Black" />
+                                                    </Trigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </DataGridTextColumn.CellStyle>
+                                    </DataGridTextColumn>
+                                    <DataGridTextColumn Width="4*"
+                                                        Binding="{Binding Data}"
+                                                        CanUserResize="False"
+                                                        Header="数据"
+                                                        IsReadOnly="True">
+                                        <DataGridTextColumn.CellStyle>
+                                            <Style BasedOn="{StaticResource DataGridCellStyle}" TargetType="DataGridCell">
+                                                <Setter Property="Foreground" Value="White" />
+                                                <Setter Property="HorizontalContentAlignment" Value="Center" />
+                                                <Style.Triggers>
+                                                    <Trigger Property="IsEditing" Value="True">
+                                                        <Setter Property="Foreground" Value="Black" />
+                                                    </Trigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </DataGridTextColumn.CellStyle>
+                                    </DataGridTextColumn>
+                                </DataGrid.Columns>
+                                <DataGrid.RowStyle>
+                                    <Style BasedOn="{StaticResource DataGridRowStyle}" TargetType="DataGridRow">
+                                        <Setter Property="Background" Value="Transparent" />
+                                        <Setter Property="BorderThickness" Value="2" />
+                                        <Setter Property="BorderBrush" Value="White" />
+                                    </Style>
+                                </DataGrid.RowStyle>
+                                <DataGrid.ColumnHeaderStyle>
+                                    <Style BasedOn="{StaticResource DataGridColumnHeaderStyle}" TargetType="DataGridColumnHeader">
+                                        <Setter Property="HorizontalContentAlignment" Value="Center" />
+                                        <Setter Property="Foreground" Value="White" />
+                                    </Style>
+                                </DataGrid.ColumnHeaderStyle>
+                            </DataGrid>
+                        </StackPanel>
                     </hc:TransitioningContentControl>
                 </hc:TabItem>
                 <hc:TabItem Header="版本与版权">

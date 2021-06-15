@@ -303,6 +303,7 @@ namespace SgS.ViewModel
         public ObservableCollection<Data> MethodItems { get; private set; }
         public ObservableCollection<Data> AllData { get; private set; }
         public ObservableCollection<LiquidTypes> LiquidTypes { get; private set; }
+        public ObservableCollection<bool> WatchLiquidTube { get; set; }
         public RelayCommand<TabControl> AddTabItemCommand { get; private set; }
         public RelayCommand<RoutedEventArgs> DelTabItemCommand { get; private set; }
         public RelayCommand<object[]> DeployMethodCommand { get; private set; }
@@ -330,7 +331,6 @@ namespace SgS.ViewModel
         public RelayCommand<Window> MinCommand { get; private set; } = new RelayCommand<Window>((w) => { w.WindowState = WindowState.Minimized; });
         public RelayCommand<Window> MaxCommand { get; private set; } = new RelayCommand<Window>((w) => { w.WindowState = w.WindowState == WindowState.Normal ? WindowState.Maximized : WindowState.Normal; });
 
-
         #endregion
 
         public MainViewModel()
@@ -341,6 +341,7 @@ namespace SgS.ViewModel
             TabItems = new ObservableCollection<TabItem>();
             AllData = new ObservableCollection<Data>();
             MethodItems = new ObservableCollection<Data>();
+            WatchLiquidTube = new ObservableCollection<bool>();
             AddTabItemCommand = new RelayCommand<TabControl>(Addtabitem);
             DeployMethodCommand = new RelayCommand<object[]>(DeployMethod);
             WindowClosingCommand = new RelayCommand<CancelEventArgs>(WindowClosing);
@@ -986,15 +987,18 @@ namespace SgS.ViewModel
             ObservableCollection<PositionData> PositionDatas = new ObservableCollection<PositionData>();
             ObservableCollection<CompensateData> pump_A = new ObservableCollection<CompensateData>();
             ObservableCollection<CompensateData> pump_B = new ObservableCollection<CompensateData>();
+            ObservableCollection<CompensateData> pump_C = new ObservableCollection<CompensateData>();
+
 
             PositionDatas = XmlReadWriter.LoadFromFile<PositionData>(AppDomain.CurrentDomain.BaseDirectory + @"\Settings\PositionData.xml");
             pump_A = XmlReadWriter.LoadFromFile<CompensateData>(AppDomain.CurrentDomain.BaseDirectory + @"\Settings\Pump_A.xml");
             pump_B = XmlReadWriter.LoadFromFile<CompensateData>(AppDomain.CurrentDomain.BaseDirectory + @"\Settings\Pump_B.xml");
+            pump_C = XmlReadWriter.LoadFromFile<CompensateData>(AppDomain.CurrentDomain.BaseDirectory + @"\Settings\Pump_C.xml");
 
             foreach (var pos in PositionDatas)
             {
-                PostionCollection.Add(new CDataTypeCollection(pos.Px, DataTypes.dinttype));
-                PostionCollection.Add(new CDataTypeCollection(pos.Py, DataTypes.dinttype));
+                PostionCollection.Add(new CDataTypeCollection(pos.Px, DataTypes.dinttype, "Px"));
+                PostionCollection.Add(new CDataTypeCollection(pos.Py, DataTypes.dinttype, "Py"));
                 //PostionCollection.Add(new CDataTypeCollection(pos.Px2, DataTypes.dinttype));
                 //PostionCollection.Add(new CDataTypeCollection(pos.Py2, DataTypes.dinttype));
             }
@@ -1014,289 +1018,413 @@ namespace SgS.ViewModel
             {
                 if (data.Name != "N")
                 {
-                    double compensation = 0.0;
-                    if (loop % 2 == 0)
-                    {
-                        if (pump_A[0].Min < data.Value && data.Value <= pump_A[0].Max)
-                        {
-                            switch (pump_A[0].SelectMethod)
-                            {
-                                case 0:
-                                    compensation = pump_A[0].A;
-                                    compensation = Math.Round(compensation, 2);
-                                    break;
-                                case 1:
-                                    compensation = Math.Round(pump_A[0].B * data.Value, 4) + pump_A[0].C;
-                                    compensation = Math.Round(compensation, 2);
-                                    break;
-                                case 2:
-                                    compensation = Math.Round(pump_A[0].A * Math.Pow(data.Value, 2), 4)
-                                        + Math.Round(pump_A[0].B * data.Value, 4)
-                                        + pump_A[0].C;
-                                    compensation = Math.Round(compensation, 2);
-                                    break;
-                                default:
-                                    compensation = Math.Round(compensation, 2);
-                                    break;
-                            }
-                        }
-                        else if (pump_A[1].Min < data.Value && data.Value <= pump_A[1].Max)
-                        {
-                            switch (pump_A[1].SelectMethod)
-                            {
-                                case 0:
-                                    compensation = pump_A[1].A;
-                                    compensation = Math.Round(compensation, 2);
-                                    break;
-                                case 1:
-                                    compensation = Math.Round(pump_A[1].B * data.Value, 4) + pump_A[1].C;
-                                    compensation = Math.Round(compensation, 2);
-                                    break;
-                                case 2:
-                                    compensation = Math.Round(pump_A[1].A * Math.Pow(data.Value, 2), 4)
-                                        + Math.Round(pump_A[1].B * data.Value, 4)
-                                        + pump_A[1].C;
-                                    compensation = Math.Round(compensation, 2);
-                                    break;
-                                default:
-                                    compensation = Math.Round(compensation, 2);
-                                    break;
-                            }
-                        }
-                        else if (pump_A[2].Min < data.Value && data.Value <= pump_A[2].Max)
-                        {
-                            switch (pump_A[2].SelectMethod)
-                            {
-                                case 0:
-                                    compensation = pump_A[2].A;
-                                    compensation = Math.Round(compensation, 2);
-                                    break;
-                                case 1:
-                                    compensation = Math.Round(pump_A[2].B * data.Value, 4) + pump_A[2].C;
-                                    compensation = Math.Round(compensation, 2);
-                                    break;
-                                case 2:
-                                    compensation = Math.Round(pump_A[2].A * Math.Pow(data.Value, 2), 4)
-                                        + Math.Round(pump_A[2].B * data.Value, 4)
-                                        + pump_A[2].C;
-                                    compensation = Math.Round(compensation, 2);
-                                    break;
-                                default:
-                                    compensation = Math.Round(compensation, 2);
-                                    break;
-                            }
-                        }
-                        else if (pump_A[3].Min < data.Value && data.Value <= pump_A[3].Max)
-                        {
-                            switch (pump_A[3].SelectMethod)
-                            {
-                                case 0:
-                                    compensation = pump_A[3].A;
-                                    compensation = Math.Round(compensation, 2);
-                                    break;
-                                case 1:
-                                    compensation = Math.Round(pump_A[3].B * data.Value, 4) + pump_A[3].C;
-                                    compensation = Math.Round(compensation, 2);
-                                    break;
-                                case 2:
-                                    compensation = Math.Round(pump_A[3].A * Math.Pow(data.Value, 2), 4)
-                                        + Math.Round(pump_A[3].B * data.Value, 4)
-                                        + pump_A[3].C;
-                                    compensation = Math.Round(compensation, 2);
-                                    break;
-                                default:
-                                    compensation = Math.Round(compensation, 2);
-                                    break;
-                            }
-                        }
-                        else if (pump_A[4].Min < data.Value && data.Value <= pump_A[4].Max)
-                        {
-                            switch (pump_A[4].SelectMethod)
-                            {
-                                case 0:
-                                    compensation = pump_A[4].A;
-                                    compensation = Math.Round(compensation, 2);
-                                    break;
-                                case 1:
-                                    compensation = Math.Round(pump_A[4].B * data.Value, 4) + pump_A[4].C;
-                                    compensation = Math.Round(compensation, 2);
-                                    break;
-                                case 2:
-                                    compensation = Math.Round(pump_A[4].A * Math.Pow(data.Value, 2), 4)
-                                        + Math.Round(pump_A[4].B * data.Value, 4)
-                                        + pump_A[4].C;
-                                    compensation = Math.Round(compensation, 2);
-                                    break;
-                                default:
-                                    compensation = Math.Round(compensation, 2);
-                                    break;
-                            }
-                        }
+                    double compensationA = 0.0;
+                    double compensationB = 0.0;
+                    double compensationC = 0.0;
 
-                    }
-                    else
-                    {
-                        if (pump_B[0].Min < data.Value && data.Value <= pump_B[0].Max)
-                        {
-                            switch (pump_B[0].SelectMethod)
-                            {
-                                case 0:
-                                    compensation = pump_B[0].A;
-                                    compensation = Math.Round(compensation, 2);
-                                    break;
-                                case 1:
-                                    compensation = Math.Round(pump_B[0].B * data.Value, 4) + pump_B[0].C;
-                                    compensation = Math.Round(compensation, 2);
-                                    break;
-                                case 2:
-                                    compensation = Math.Round(pump_B[0].A * Math.Pow(data.Value, 2), 4)
-                                        + Math.Round(pump_B[0].B * data.Value, 4)
-                                        + pump_B[0].C;
-                                    compensation = Math.Round(compensation, 2);
-                                    break;
-                                default:
-                                    compensation = Math.Round(compensation, 2);
-                                    break;
-                            }
-                        }
-                        else if (pump_B[1].Min < data.Value && data.Value <= pump_B[1].Max)
-                        {
-                            switch (pump_B[1].SelectMethod)
-                            {
-                                case 0:
-                                    compensation = pump_B[1].A;
-                                    compensation = Math.Round(compensation, 2);
-                                    break;
-                                case 1:
-                                    compensation = Math.Round(pump_B[1].B * data.Value, 4) + pump_B[1].C;
-                                    compensation = Math.Round(compensation, 2);
-                                    break;
-                                case 2:
-                                    compensation = Math.Round(pump_B[1].A * Math.Pow(data.Value, 2), 4)
-                                        + Math.Round(pump_B[1].B * data.Value, 4)
-                                        + pump_B[1].C;
-                                    compensation = Math.Round(compensation, 2);
-                                    break;
-                                default:
-                                    compensation = Math.Round(compensation, 2);
-                                    break;
-                            }
-                        }
-                        else if (pump_B[2].Min < data.Value && data.Value <= pump_B[2].Max)
-                        {
-                            switch (pump_B[2].SelectMethod)
-                            {
-                                case 0:
-                                    compensation = pump_B[2].A;
-                                    compensation = Math.Round(compensation, 2);
-                                    break;
-                                case 1:
-                                    compensation = Math.Round(pump_B[2].B * data.Value, 4) + pump_B[2].C;
-                                    compensation = Math.Round(compensation, 2);
-                                    break;
-                                case 2:
-                                    compensation = Math.Round(pump_B[2].A * Math.Pow(data.Value, 2), 4)
-                                        + Math.Round(pump_B[2].B * data.Value, 4)
-                                        + pump_B[2].C;
-                                    compensation = Math.Round(compensation, 2);
-                                    break;
-                                default:
-                                    compensation = Math.Round(compensation, 2);
-                                    break;
-                            }
-                        }
-                        else if (pump_B[3].Min < data.Value && data.Value <= pump_B[3].Max)
-                        {
-                            switch (pump_B[3].SelectMethod)
-                            {
-                                case 0:
-                                    compensation = pump_B[3].A;
-                                    compensation = Math.Round(compensation, 2);
-                                    break;
-                                case 1:
-                                    compensation = Math.Round(pump_B[3].B * data.Value, 4) + pump_B[3].C;
-                                    compensation = Math.Round(compensation, 2);
-                                    break;
-                                case 2:
-                                    compensation = Math.Round(pump_B[3].A * Math.Pow(data.Value, 2), 4)
-                                        + Math.Round(pump_B[3].B * data.Value, 4)
-                                        + pump_B[3].C;
-                                    compensation = Math.Round(compensation, 2);
-                                    break;
-                                default:
-                                    compensation = Math.Round(compensation, 2);
-                                    break;
-                            }
-                        }
-                        else if (pump_B[4].Min < data.Value && data.Value <= pump_B[4].Max)
-                        {
-                            switch (pump_B[4].SelectMethod)
-                            {
-                                case 0:
-                                    compensation = pump_B[4].A;
-                                    compensation = Math.Round(compensation, 2);
-                                    break;
-                                case 1:
-                                    compensation = Math.Round(pump_B[4].B * data.Value, 4) + pump_B[4].C;
-                                    compensation = Math.Round(compensation, 2);
-                                    break;
-                                case 2:
-                                    compensation = Math.Round(pump_B[4].A * Math.Pow(data.Value, 2), 4)
-                                        + Math.Round(pump_B[4].B * data.Value, 4)
-                                        + pump_B[4].C;
-                                    compensation = Math.Round(compensation, 2);
-                                    break;
-                                default:
-                                    compensation = Math.Round(compensation, 2);
-                                    break;
-                            }
-                        }
+                    double temp = data.Value % 25;
 
+                    if (pump_A[0].Min < temp && temp <= pump_A[0].Max)
+                    {
+                        switch (pump_A[0].SelectMethod)
+                        {
+                            case 0:
+                                compensationA = pump_A[0].A;
+                                compensationA = Math.Round(compensationA, 2);
+                                break;
+                            case 1:
+                                compensationA = Math.Round(pump_A[0].A * temp, 4) + pump_A[0].C;
+                                compensationA = Math.Round(compensationA, 2);
+                                break;
+                            case 2:
+                                compensationA = Math.Round(pump_A[0].A * Math.Pow(temp, 2), 4)
+                                    + Math.Round(pump_A[0].B * temp, 4)
+                                    + pump_A[0].C;
+                                compensationA = Math.Round(compensationA, 2);
+                                break;
+                            default:
+                                compensationA = Math.Round(compensationA, 2);
+                                break;
+                        }
                     }
-                    dataTypeCollection.Add(new CDataTypeCollection(data.Value + compensation, DataTypes.realtype));//加液值
+                    else if (pump_A[1].Min < temp && temp <= pump_A[1].Max)
+                    {
+                        switch (pump_A[1].SelectMethod)
+                        {
+                            case 0:
+                                compensationA = pump_A[1].A;
+                                compensationA = Math.Round(compensationA, 2);
+                                break;
+                            case 1:
+                                compensationA = Math.Round(pump_A[1].A * temp, 4) + pump_A[1].C;
+                                compensationA = Math.Round(compensationA, 2);
+                                break;
+                            case 2:
+                                compensationA = Math.Round(pump_A[1].A * Math.Pow(temp, 2), 4)
+                                    + Math.Round(pump_A[1].B * temp, 4)
+                                    + pump_A[1].C;
+                                compensationA = Math.Round(compensationA, 2);
+                                break;
+                            default:
+                                compensationA = Math.Round(compensationA, 2);
+                                break;
+                        }
+                    }
+                    else if (pump_A[2].Min < temp && temp <= pump_A[2].Max)
+                    {
+                        switch (pump_A[2].SelectMethod)
+                        {
+                            case 0:
+                                compensationA = pump_A[2].A;
+                                compensationA = Math.Round(compensationA, 2);
+                                break;
+                            case 1:
+                                compensationA = Math.Round(pump_A[2].A * temp, 4) + pump_A[2].C;
+                                compensationA = Math.Round(compensationA, 2);
+                                break;
+                            case 2:
+                                compensationA = Math.Round(pump_A[2].A * Math.Pow(temp, 2), 4)
+                                    + Math.Round(pump_A[2].B * temp, 4)
+                                    + pump_A[2].C;
+                                compensationA = Math.Round(compensationA, 2);
+                                break;
+                            default:
+                                compensationA = Math.Round(compensationA, 2);
+                                break;
+                        }
+                    }
+                    else if (pump_A[3].Min < temp && temp <= pump_A[3].Max)
+                    {
+                        switch (pump_A[3].SelectMethod)
+                        {
+                            case 0:
+                                compensationA = pump_A[3].A;
+                                compensationA = Math.Round(compensationA, 2);
+                                break;
+                            case 1:
+                                compensationA = Math.Round(pump_A[3].A * temp, 4) + pump_A[3].C;
+                                compensationA = Math.Round(compensationA, 2);
+                                break;
+                            case 2:
+                                compensationA = Math.Round(pump_A[3].A * Math.Pow(temp, 2), 4)
+                                    + Math.Round(pump_A[3].B * temp, 4)
+                                    + pump_A[3].C;
+                                compensationA = Math.Round(compensationA, 2);
+                                break;
+                            default:
+                                compensationA = Math.Round(compensationA, 2);
+                                break;
+                        }
+                    }
+                    else if (pump_A[4].Min < temp && temp <= pump_A[4].Max)
+                    {
+                        switch (pump_A[4].SelectMethod)
+                        {
+                            case 0:
+                                compensationA = pump_A[4].A;
+                                compensationA = Math.Round(compensationA, 2);
+                                break;
+                            case 1:
+                                compensationA = Math.Round(pump_A[4].A * temp, 4) + pump_A[4].C;
+                                compensationA = Math.Round(compensationA, 2);
+                                break;
+                            case 2:
+                                compensationA = Math.Round(pump_A[4].A * Math.Pow(temp, 2), 4)
+                                    + Math.Round(pump_A[4].B * temp, 4)
+                                    + pump_A[4].C;
+                                compensationA = Math.Round(compensationA, 2);
+                                break;
+                            default:
+                                compensationA = Math.Round(compensationA, 2);
+                                break;
+                        }
+                    }
+
+                    if (pump_B[0].Min < temp && temp <= pump_B[0].Max)
+                    {
+                        switch (pump_B[0].SelectMethod)
+                        {
+                            case 0:
+                                compensationB = pump_B[0].A;
+                                compensationB = Math.Round(compensationB, 2);
+                                break;
+                            case 1:
+                                compensationB = Math.Round(pump_B[0].A * temp, 4) + pump_B[0].C;
+                                compensationB = Math.Round(compensationB, 2);
+                                break;
+                            case 2:
+                                compensationB = Math.Round(pump_B[0].A * Math.Pow(temp, 2), 4)
+                                    + Math.Round(pump_B[0].B * temp, 4)
+                                    + pump_B[0].C;
+                                compensationB = Math.Round(compensationB, 2);
+                                break;
+                            default:
+                                compensationB = Math.Round(compensationB, 2);
+                                break;
+                        }
+                    }
+                    else if (pump_B[1].Min < temp && temp <= pump_B[1].Max)
+                    {
+                        switch (pump_B[1].SelectMethod)
+                        {
+                            case 0:
+                                compensationB = pump_B[1].A;
+                                compensationB = Math.Round(compensationB, 2);
+                                break;
+                            case 1:
+                                compensationB = Math.Round(pump_B[1].A * temp, 4) + pump_B[1].C;
+                                compensationB = Math.Round(compensationB, 2);
+                                break;
+                            case 2:
+                                compensationB = Math.Round(pump_B[1].A * Math.Pow(temp, 2), 4)
+                                    + Math.Round(pump_B[1].B * temp, 4)
+                                    + pump_B[1].C;
+                                compensationB = Math.Round(compensationB, 2);
+                                break;
+                            default:
+                                compensationB = Math.Round(compensationB, 2);
+                                break;
+                        }
+                    }
+                    else if (pump_B[2].Min < temp && temp <= pump_B[2].Max)
+                    {
+                        switch (pump_B[2].SelectMethod)
+                        {
+                            case 0:
+                                compensationB = pump_B[2].A;
+                                compensationB = Math.Round(compensationB, 2);
+                                break;
+                            case 1:
+                                compensationB = Math.Round(pump_B[2].A * temp, 4) + pump_B[2].C;
+                                compensationB = Math.Round(compensationB, 2);
+                                break;
+                            case 2:
+                                compensationB = Math.Round(pump_B[2].A * Math.Pow(temp, 2), 4)
+                                    + Math.Round(pump_B[2].B * temp, 4)
+                                    + pump_B[2].C;
+                                compensationB = Math.Round(compensationB, 2);
+                                break;
+                            default:
+                                compensationB = Math.Round(compensationB, 2);
+                                break;
+                        }
+                    }
+                    else if (pump_B[3].Min < temp && temp <= pump_B[3].Max)
+                    {
+                        switch (pump_B[3].SelectMethod)
+                        {
+                            case 0:
+                                compensationB = pump_B[3].A;
+                                compensationB = Math.Round(compensationB, 2);
+                                break;
+                            case 1:
+                                compensationB = Math.Round(pump_B[3].A * temp, 4) + pump_B[3].C;
+                                compensationB = Math.Round(compensationB, 2);
+                                break;
+                            case 2:
+                                compensationB = Math.Round(pump_B[3].A * Math.Pow(temp, 2), 4)
+                                    + Math.Round(pump_B[3].B * temp, 4)
+                                    + pump_B[3].C;
+                                compensationB = Math.Round(compensationB, 2);
+                                break;
+                            default:
+                                compensationB = Math.Round(compensationB, 2);
+                                break;
+                        }
+                    }
+                    else if (pump_B[4].Min < temp && temp <= pump_B[4].Max)
+                    {
+                        switch (pump_B[4].SelectMethod)
+                        {
+                            case 0:
+                                compensationB = pump_B[4].A;
+                                compensationB = Math.Round(compensationB, 2);
+                                break;
+                            case 1:
+                                compensationB = Math.Round(pump_B[4].A * temp, 4) + pump_B[4].C;
+                                compensationB = Math.Round(compensationB, 2);
+                                break;
+                            case 2:
+                                compensationB = Math.Round(pump_B[4].A * Math.Pow(temp, 2), 4)
+                                    + Math.Round(pump_B[4].B * temp, 4)
+                                    + pump_B[4].C;
+                                compensationB = Math.Round(compensationB, 2);
+                                break;
+                            default:
+                                compensationB = Math.Round(compensationB, 2);
+                                break;
+                        }
+                    }
+
+                    if (pump_C[0].Min < data.TagValue && data.TagValue <= pump_C[0].Max)
+                    {
+                        switch (pump_C[0].SelectMethod)
+                        {
+                            case 0:
+                                compensationC = pump_C[0].A;
+                                compensationC = Math.Round(compensationC, 2);
+                                break;
+                            case 1:
+                                compensationC = Math.Round(pump_C[0].A * data.TagValue, 4) + pump_C[0].C;
+                                compensationC = Math.Round(compensationC, 2);
+                                break;
+                            case 2:
+                                compensationC = Math.Round(pump_C[0].A * Math.Pow(data.TagValue, 2), 4)
+                                    + Math.Round(pump_C[0].B * data.TagValue, 4)
+                                    + pump_C[0].C;
+                                compensationC = Math.Round(compensationC, 2);
+                                break;
+                            default:
+                                compensationC = Math.Round(compensationC, 2);
+                                break;
+                        }
+                    }
+                    else if (pump_C[1].Min < data.TagValue && data.TagValue <= pump_C[1].Max)
+                    {
+                        switch (pump_C[1].SelectMethod)
+                        {
+                            case 0:
+                                compensationC = pump_C[1].A;
+                                compensationC = Math.Round(compensationC, 2);
+                                break;
+                            case 1:
+                                compensationC = Math.Round(pump_C[1].A * data.TagValue, 4) + pump_C[1].C;
+                                compensationC = Math.Round(compensationC, 2);
+                                break;
+                            case 2:
+                                compensationC = Math.Round(pump_C[1].A * Math.Pow(data.TagValue, 2), 4)
+                                    + Math.Round(pump_C[1].B * data.TagValue, 4)
+                                    + pump_C[1].C;
+                                compensationC = Math.Round(compensationC, 2);
+                                break;
+                            default:
+                                compensationC = Math.Round(compensationC, 2);
+                                break;
+                        }
+                    }
+                    else if (pump_C[2].Min < data.TagValue && data.TagValue <= pump_C[2].Max)
+                    {
+                        switch (pump_C[2].SelectMethod)
+                        {
+                            case 0:
+                                compensationC = pump_C[2].A;
+                                compensationC = Math.Round(compensationC, 2);
+                                break;
+                            case 1:
+                                compensationC = Math.Round(pump_C[2].A * data.TagValue, 4) + pump_C[2].C;
+                                compensationC = Math.Round(compensationC, 2);
+                                break;
+                            case 2:
+                                compensationC = Math.Round(pump_C[2].A * Math.Pow(data.TagValue, 2), 4)
+                                    + Math.Round(pump_C[2].B * data.TagValue, 4)
+                                    + pump_C[2].C;
+                                compensationC = Math.Round(compensationC, 2);
+                                break;
+                            default:
+                                compensationC = Math.Round(compensationC, 2);
+                                break;
+                        }
+                    }
+                    else if (pump_C[3].Min < data.TagValue && data.TagValue <= pump_C[3].Max)
+                    {
+                        switch (pump_C[3].SelectMethod)
+                        {
+                            case 0:
+                                compensationC = pump_C[3].A;
+                                compensationC = Math.Round(compensationC, 2);
+                                break;
+                            case 1:
+                                compensationC = Math.Round(pump_C[3].A * data.TagValue, 4) + pump_C[3].C;
+                                compensationC = Math.Round(compensationC, 2);
+                                break;
+                            case 2:
+                                compensationC = Math.Round(pump_C[3].A * Math.Pow(data.TagValue, 2), 4)
+                                    + Math.Round(pump_C[3].B * data.TagValue, 4)
+                                    + pump_C[3].C;
+                                compensationC = Math.Round(compensationC, 2);
+                                break;
+                            default:
+                                compensationC = Math.Round(compensationC, 2);
+                                break;
+                        }
+                    }
+                    else if (pump_C[4].Min < data.TagValue && data.TagValue <= pump_C[4].Max)
+                    {
+                        switch (pump_C[4].SelectMethod)
+                        {
+                            case 0:
+                                compensationC = pump_C[4].A;
+                                compensationC = Math.Round(compensationC, 2);
+                                break;
+                            case 1:
+                                compensationC = Math.Round(pump_C[4].A * data.TagValue, 4) + pump_C[4].C;
+                                compensationC = Math.Round(compensationC, 2);
+                                break;
+                            case 2:
+                                compensationC = Math.Round(pump_C[4].A * Math.Pow(data.TagValue, 2), 4)
+                                    + Math.Round(pump_C[4].B * data.TagValue, 4)
+                                    + pump_C[4].C;
+                                compensationC = Math.Round(compensationC, 2);
+                                break;
+                            default:
+                                compensationC = Math.Round(compensationC, 2);
+                                break;
+                        }
+                    }
+
+                    dataTypeCollection.Add(new CDataTypeCollection(data.Value, DataTypes.realtype, "AddValue"));//加液值
                     //dataTypeCollection.Add(new CDataTypeCollection(data.BigCleanValue, DataTypes.realtype));
                     //dataTypeCollection.Add(new CDataTypeCollection(data.LittleCleanValue, DataTypes.realtype));
-                    dataTypeCollection.Add(new CDataTypeCollection(data.TagValue, DataTypes.realtype));//加标值
-                    dataTypeCollection.Add(new CDataTypeCollection(data.EnableTag, DataTypes.realtype));//启用加标
-                    dataTypeCollection.Add(new CDataTypeCollection(data.TagIndex + 1, DataTypes.realtype));//0->1
-                    dataTypeCollection.Add(new CDataTypeCollection(data.AddIndex + 1, DataTypes.realtype));//0->1
+                    dataTypeCollection.Add(new CDataTypeCollection(data.TagValue, DataTypes.realtype, "TagValue"));//加标值
+                    dataTypeCollection.Add(new CDataTypeCollection(data.EnableTag, DataTypes.realtype, "EnableTag"));//启用加标
+                    dataTypeCollection.Add(new CDataTypeCollection(data.TagIndex + 1, DataTypes.realtype, "TagIndex"));//0->1
+                    dataTypeCollection.Add(new CDataTypeCollection(data.AddIndex + 1, DataTypes.realtype, "AddIndex"));//0->1
+                    dataTypeCollection.Add(new CDataTypeCollection(compensationA, DataTypes.realtype, "compensationA"));//补偿值A
+                    dataTypeCollection.Add(new CDataTypeCollection(compensationB, DataTypes.realtype, "compensationB"));//补偿值B
+                    dataTypeCollection.Add(new CDataTypeCollection(compensationC, DataTypes.realtype, "compensationC"));//加标补偿值C
                     loop++;
                 }
                 else
                 {
-                    dataTypeCollection.Add(new CDataTypeCollection(0, DataTypes.realtype));//加液值
+                    dataTypeCollection.Add(new CDataTypeCollection(0, DataTypes.realtype, "AddValue"));//加液值
                     //dataTypeCollection.Add(new CDataTypeCollection(0, DataTypes.realtype));
                     //dataTypeCollection.Add(new CDataTypeCollection(0, DataTypes.realtype));
-                    dataTypeCollection.Add(new CDataTypeCollection(0, DataTypes.realtype));//加标值
-                    dataTypeCollection.Add(new CDataTypeCollection(0, DataTypes.realtype));//启用加标
-                    dataTypeCollection.Add(new CDataTypeCollection(1, DataTypes.realtype));//0->1
-                    dataTypeCollection.Add(new CDataTypeCollection(1, DataTypes.realtype));//0->1
+                    dataTypeCollection.Add(new CDataTypeCollection(0, DataTypes.realtype, "TagValue"));//加标值
+                    dataTypeCollection.Add(new CDataTypeCollection(0, DataTypes.realtype, "EnableTag"));//启用加标
+                    dataTypeCollection.Add(new CDataTypeCollection(1, DataTypes.realtype, "TagIndex"));//0->1
+                    dataTypeCollection.Add(new CDataTypeCollection(1, DataTypes.realtype, "AddIndex"));//0->1
+                    dataTypeCollection.Add(new CDataTypeCollection(0, DataTypes.realtype, "compensationA"));//补偿值A
+                    dataTypeCollection.Add(new CDataTypeCollection(0, DataTypes.realtype, "compensationB"));//补偿值B
+                    dataTypeCollection.Add(new CDataTypeCollection(0, DataTypes.realtype, "compensationC"));//加标补偿值C
                 }
             }
 
             dataTypeCollection.Add(
                 new CDataTypeCollection(_config.AppSettings.Settings["Z1_Sensitivity"].Value ==
-                null ? -5000 : int.Parse(MainViewModel._config.AppSettings.Settings["Z1_Sensitivity"].Value), DataTypes.dinttype));
+                null ? -5000 : int.Parse(MainViewModel._config.AppSettings.Settings["Z1_Sensitivity"].Value), DataTypes.dinttype, "Z1_Sensitivity"));
             dataTypeCollection.Add(
                 new CDataTypeCollection(_config.AppSettings.Settings["Z2_Sensitivity"].Value ==
-                null ? -5000 : int.Parse(MainViewModel._config.AppSettings.Settings["Z2_Sensitivity"].Value), DataTypes.dinttype));
-
+                null ? -5000 : int.Parse(MainViewModel._config.AppSettings.Settings["Z2_Sensitivity"].Value), DataTypes.dinttype, "Z2_Sensitivity"));
             dataTypeCollection.Add(
                 new CDataTypeCollection(_config.AppSettings.Settings["Z1_Down"].Value ==
-                null ? -95000 : int.Parse(MainViewModel._config.AppSettings.Settings["Z1_Down"].Value), DataTypes.dinttype));
+                null ? -95000 : int.Parse(MainViewModel._config.AppSettings.Settings["Z1_Down"].Value), DataTypes.dinttype, "Z1_Down"));
             dataTypeCollection.Add(
                 new CDataTypeCollection(_config.AppSettings.Settings["Z2_Down"].Value ==
-                null ? -95000 : int.Parse(MainViewModel._config.AppSettings.Settings["Z2_Down"].Value), DataTypes.dinttype));
-
+                null ? -95000 : int.Parse(MainViewModel._config.AppSettings.Settings["Z2_Down"].Value), DataTypes.dinttype, "Z2_Down"));
             dataTypeCollection.Add(
                 new CDataTypeCollection(_config.AppSettings.Settings["BigClean"].Value ==
-                null ? 10 : int.Parse(MainViewModel._config.AppSettings.Settings["BigClean"].Value), DataTypes.dinttype));
+                null ? 10 : int.Parse(MainViewModel._config.AppSettings.Settings["BigClean"].Value), DataTypes.realtype, "BigClean"));
             dataTypeCollection.Add(
                 new CDataTypeCollection(_config.AppSettings.Settings["LittleClean"].Value ==
-                null ? 200 : int.Parse(MainViewModel._config.AppSettings.Settings["LittleClean"].Value), DataTypes.dinttype));
+                null ? 200 : int.Parse(MainViewModel._config.AppSettings.Settings["LittleClean"].Value), DataTypes.realtype, "LittleClean"));
+            dataTypeCollection.Add(
+                new CDataTypeCollection(_config.AppSettings.Settings["FullA"].Value ==
+                null ? 0 : double.Parse(MainViewModel._config.AppSettings.Settings["FullA"].Value), DataTypes.realtype, "FullA"));
+            dataTypeCollection.Add(
+                new CDataTypeCollection(_config.AppSettings.Settings["FullB"].Value ==
+                null ? 0 : double.Parse(MainViewModel._config.AppSettings.Settings["FullB"].Value), DataTypes.realtype, "FullB"));
 
-
-            dataTypeCollection.Add(new CDataTypeCollection(RunArea, DataTypes.realtype));
+            dataTypeCollection.Add(new CDataTypeCollection(RunArea, DataTypes.realtype, "RunArea"));
 
             writeVar.WriteData(dataTypeCollection);
             writeVar.Disconnect();
@@ -1341,6 +1469,24 @@ namespace SgS.ViewModel
                     sendercommand.Add(new CDataTypeCollection(false, DataTypes.booltype, "stop"));
                     sendercommand.Add(new CDataTypeCollection(false, DataTypes.booltype, "clean"));
                     sendercommand.Add(new CDataTypeCollection(false, DataTypes.booltype, "clean_error"));
+                    #region 发送液位监控数据
+                    WatchLiquidTube = WatchLiquidTube = XmlReadWriter.LoadFromFile<bool>(AppDomain.CurrentDomain.BaseDirectory + @"\Settings\WatchLiquidTube.xml");
+                    if (WatchLiquidTube.Count != 0)
+                    {
+                        NetVar wireData = new NetVar(_controlerIP, 99);
+                        List<CDataTypeCollection> senderdata;
+                        senderdata = new List<CDataTypeCollection>();
+                        for (int i = 0; i < 16; i++)
+                        {
+                            if (i >= 10)
+                                senderdata.Add(new CDataTypeCollection(WatchLiquidTube?[i - 10], DataTypes.booltype));
+                            else
+                                senderdata.Add(new CDataTypeCollection(false, DataTypes.booltype));
+                        }
+                        wireData.WriteData(senderdata);
+                        wireData.Disconnect();
+                    }
+                    #endregion
                     break;
                 case RunStatus.start:
                     sendercommand.Add(new CDataTypeCollection(false, DataTypes.booltype, "init"));

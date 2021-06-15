@@ -4281,16 +4281,16 @@
                                                                                             </ControlTemplate.Resources>
                                                                                             <Border Width="{TemplateBinding Width}" Background="Transparent">
                                                                                                 <Rectangle x:Name="rectangle"
-                                                                                                           Width="2"
+                                                                                                           Width="18"
                                                                                                            Height="{TemplateBinding Height}"
                                                                                                            HorizontalAlignment="Right"
                                                                                                            Fill="{TemplateBinding Background}"
-                                                                                                           RadiusX="1"
-                                                                                                           RadiusY="1"
+                                                                                                           RadiusX="14"
+                                                                                                           RadiusY="14"
                                                                                                            SnapsToDevicePixels="True">
                                                                                                     <Rectangle.RenderTransform>
                                                                                                         <TransformGroup>
-                                                                                                            <TranslateTransform X="-2" />
+                                                                                                            <TranslateTransform X="0" />
                                                                                                         </TransformGroup>
                                                                                                     </Rectangle.RenderTransform>
                                                                                                 </Rectangle>
@@ -4324,16 +4324,16 @@
                                                                                                     <BeginStoryboard>
                                                                                                         <Storyboard>
                                                                                                             <DoubleAnimationUsingKeyFrames Storyboard.TargetName="rectangle" Storyboard.TargetProperty="Width">
-                                                                                                                <EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="2" />
+                                                                                                                <EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="18" />
                                                                                                             </DoubleAnimationUsingKeyFrames>
                                                                                                             <DoubleAnimationUsingKeyFrames Storyboard.TargetName="rectangle" Storyboard.TargetProperty="(Rectangle.RadiusX)">
-                                                                                                                <EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="1" />
+                                                                                                                <EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="14" />
                                                                                                             </DoubleAnimationUsingKeyFrames>
                                                                                                             <DoubleAnimationUsingKeyFrames Storyboard.TargetName="rectangle" Storyboard.TargetProperty="(Rectangle.RadiusY)">
-                                                                                                                <EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="1" />
+                                                                                                                <EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="14" />
                                                                                                             </DoubleAnimationUsingKeyFrames>
                                                                                                             <DoubleAnimationUsingKeyFrames Storyboard.TargetName="rectangle" Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(TranslateTransform.X)">
-                                                                                                                <EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="-2" />
+                                                                                                                <EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="0" />
                                                                                                             </DoubleAnimationUsingKeyFrames>
                                                                                                         </Storyboard>
                                                                                                     </BeginStoryboard>
@@ -6525,16 +6525,16 @@
                                                                                                             </ControlTemplate.Resources>
                                                                                                             <Border Width="{TemplateBinding Width}" Background="Transparent">
                                                                                                                 <Rectangle x:Name="rectangle"
-                                                                                                                           Width="2"
+                                                                                                                           Width="18"
                                                                                                                            Height="{TemplateBinding Height}"
                                                                                                                            HorizontalAlignment="Right"
                                                                                                                            Fill="{TemplateBinding Background}"
-                                                                                                                           RadiusX="1"
-                                                                                                                           RadiusY="1"
+                                                                                                                           RadiusX="14"
+                                                                                                                           RadiusY="14"
                                                                                                                            SnapsToDevicePixels="True">
                                                                                                                     <Rectangle.RenderTransform>
                                                                                                                         <TransformGroup>
-                                                                                                                            <TranslateTransform X="-2" />
+                                                                                                                            <TranslateTransform X="0" />
                                                                                                                         </TransformGroup>
                                                                                                                     </Rectangle.RenderTransform>
                                                                                                                 </Rectangle>
@@ -6568,16 +6568,16 @@
                                                                                                                     <BeginStoryboard>
                                                                                                                         <Storyboard>
                                                                                                                             <DoubleAnimationUsingKeyFrames Storyboard.TargetName="rectangle" Storyboard.TargetProperty="Width">
-                                                                                                                                <EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="2" />
+                                                                                                                                <EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="18" />
                                                                                                                             </DoubleAnimationUsingKeyFrames>
                                                                                                                             <DoubleAnimationUsingKeyFrames Storyboard.TargetName="rectangle" Storyboard.TargetProperty="(Rectangle.RadiusX)">
-                                                                                                                                <EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="1" />
+                                                                                                                                <EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="14" />
                                                                                                                             </DoubleAnimationUsingKeyFrames>
                                                                                                                             <DoubleAnimationUsingKeyFrames Storyboard.TargetName="rectangle" Storyboard.TargetProperty="(Rectangle.RadiusY)">
-                                                                                                                                <EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="1" />
+                                                                                                                                <EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="14" />
                                                                                                                             </DoubleAnimationUsingKeyFrames>
                                                                                                                             <DoubleAnimationUsingKeyFrames Storyboard.TargetName="rectangle" Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(TranslateTransform.X)">
-                                                                                                                                <EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="-2" />
+                                                                                                                                <EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="0" />
                                                                                                                             </DoubleAnimationUsingKeyFrames>
                                                                                                                         </Storyboard>
                                                                                                                     </BeginStoryboard>

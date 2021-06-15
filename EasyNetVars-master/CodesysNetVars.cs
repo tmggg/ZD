@@ -49,7 +49,7 @@ namespace EasyNetVars
 		public void connect()
         {
             udpClient = new UdpClient(port);
-            udpClient.Client.ReceiveTimeout = 5000;
+            udpClient.Client.ReceiveTimeout = 15000;
             udpClient.Client.ReceiveBufferSize = 81920;
             iPEndPoint = new IPEndPoint(IPAddress.Parse(ipAddress), port);
 
@@ -517,7 +517,7 @@ namespace EasyNetVars
             for (int i = 0; i < dataType.Count; i++)
             {
                 if (dataType[i].VariableName != null)
-                    cDataSection = cDataSection + '\u000A' + '\u0009' + dataType[i].VariableName;
+                    cDataSection = cDataSection + '\u000A' + '\u0009' + dataType[i].VariableName.ToString() + i;
                 else
                     cDataSection = cDataSection + '\u000A' + '\u0009' + "variable" + i.ToString();
                 switch (dataType[i].DataTypes)

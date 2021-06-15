@@ -758,7 +758,7 @@
                           Command="{Binding MinCommand}"
                           CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
                           Style="{StaticResource RepeatButtonDanger}"
-                          Visibility="Collapsed" />
+                          Visibility="Visible" />
 
             <RepeatButton x:Name="MaxButton"
                           Width="30"
@@ -791,7 +791,7 @@
                           Command="{Binding CloseCommand}"
                           CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
                           Style="{StaticResource RepeatButtonDanger}"
-                          Visibility="Collapsed" />
+                          Visibility="Visible" />
 
             <!--<Border Grid.Row="1"
                     BorderThickness="0 2 0 0"

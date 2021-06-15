@@ -6,11 +6,12 @@
              xmlns:cv="clr-namespace:SgS.Coverter"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:hc="https://handyorg.github.io/handycontrol"
+             xmlns:hccontrols="clr-namespace:HandyControl.Controls;assembly=HandyControl"
              xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
              xmlns:interactivity="https://handyorg.github.io/handycontrol"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              x:Name="EngineerViewWindow"
-             d:DesignHeight="1450"
+             d:DesignHeight="2450"
              d:DesignWidth="900"
              Background="Transparent"
              DataContext="{Binding EngineerViewModel, Source={StaticResource Locator}}"
@@ -25,7 +26,132 @@
             <Setter Property="VerticalAlignment" Value="Center" />
             <Setter Property="HorizontalAlignment" Value="Center" />
         </Style>
-
+        <Style x:Key="ToggleButtonStyleSgs" TargetType="{x:Type ToggleButton}">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="Foreground" Value="White" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="Margin" Value="2,0,2,0" />
+            <Style.BasedOn>
+                <Style TargetType="{x:Type ToggleButton}">
+                    <Setter Property="interactivity:BorderElement.CornerRadius" Value="4" />
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="{x:Type ToggleButton}">
+                                <interactivity:SimplePanel>
+                                    <Border Background="{TemplateBinding Background}" CornerRadius="{Binding (interactivity:BorderElement.CornerRadius), RelativeSource={RelativeSource TemplatedParent}}" />
+                                    <Border BorderBrush="{TemplateBinding BorderBrush}"
+                                            BorderThickness="{TemplateBinding BorderThickness}"
+                                            CornerRadius="{Binding (interactivity:BorderElement.CornerRadius), RelativeSource={RelativeSource TemplatedParent}}">
+                                        <StackPanel Margin="{TemplateBinding Padding}"
+                                                    HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                                    VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                                    Orientation="Horizontal">
+                                            <Path x:Name="PathMain"
+                                                  Width="{TemplateBinding interactivity:IconElement.Width}"
+                                                  Height="{TemplateBinding interactivity:IconElement.Height}"
+                                                  Data="{TemplateBinding interactivity:IconElement.Geometry}"
+                                                  Fill="{TemplateBinding Foreground}"
+                                                  SnapsToDevicePixels="True"
+                                                  Stretch="Uniform" />
+                                            <ContentPresenter x:Name="ContentPresenterMain"
+                                                              Margin="6,0,0,0"
+                                                              VerticalAlignment="Center"
+                                                              Content="{TemplateBinding Content}"
+                                                              ContentStringFormat="{TemplateBinding ContentStringFormat}"
+                                                              ContentTemplate="{TemplateBinding ContentTemplate}"
+                                                              RecognizesAccessKey="True"
+                                                              SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                                        </StackPanel>
+                                    </Border>
+                                    <Border x:Name="BorderChecked"
+                                            Margin="-1"
+                                            Background="{StaticResource SuccessBrush}"
+                                            BorderBrush="{DynamicResource DarkMaskBrush}"
+                                            BorderThickness="1"
+                                            CornerRadius="{Binding (interactivity:BorderElement.CornerRadius), RelativeSource={RelativeSource TemplatedParent}}"
+                                            Visibility="Collapsed" />
+                                </interactivity:SimplePanel>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsChecked" Value="True">
+                                        <!--<Setter TargetName="BorderChecked" Property="Visibility" Value="Visible" />-->
+                                        <Setter Property="Background" Value="{StaticResource SuccessBrush}" />
+                                    </Trigger>
+                                    <Trigger Property="Content" Value="{x:Null}">
+                                        <Setter TargetName="ContentPresenterMain" Property="Visibility" Value="Collapsed" />
+                                    </Trigger>
+                                    <Trigger Property="interactivity:IconElement.Geometry" Value="{x:Null}">
+                                        <Setter TargetName="PathMain" Property="Visibility" Value="Collapsed" />
+                                        <Setter TargetName="ContentPresenterMain" Property="Margin" Value="0" />
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                    <Style.BasedOn>
+                        <Style TargetType="{x:Type ButtonBase}">
+                            <Setter Property="Height" Value="30" />
+                            <Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}" />
+                            <Setter Property="Padding" Value="10,6" />
+                            <Setter Property="Foreground" Value="{DynamicResource TextIconBrush}" />
+                            <Setter Property="BorderThickness" Value="0" />
+                            <Setter Property="HorizontalAlignment" Value="Center" />
+                            <Setter Property="VerticalAlignment" Value="Center" />
+                            <Setter Property="HorizontalContentAlignment" Value="Center" />
+                            <Setter Property="VerticalContentAlignment" Value="Center" />
+                            <Style.BasedOn>
+                                <Style TargetType="{x:Type Control}">
+                                    <Setter Property="Foreground" Value="{DynamicResource PrimaryTextBrush}" />
+                                    <Setter Property="FontSize" Value="12" />
+                                    <Setter Property="FocusVisualStyle">
+                                        <Setter.Value>
+                                            <Style>
+                                                <Setter Property="Control.Template">
+                                                    <Setter.Value>
+                                                        <ControlTemplate>
+                                                            <Rectangle RadiusX="4" RadiusY="4">
+                                                                <Rectangle.Style>
+                                                                    <Style TargetType="{x:Type Rectangle}">
+                                                                        <Setter Property="Margin" Value="-2" />
+                                                                        <Setter Property="Opacity" Value="0.6" />
+                                                                        <Setter Property="SnapsToDevicePixels" Value="True" />
+                                                                        <Setter Property="Stroke" Value="{DynamicResource SecondaryBorderBrush}" />
+                                                                        <Setter Property="StrokeThickness" Value="2" />
+                                                                        <Setter Property="StrokeDashArray" Value="1 1" />
+                                                                    </Style>
+                                                                </Rectangle.Style>
+                                                            </Rectangle>
+                                                        </ControlTemplate>
+                                                    </Setter.Value>
+                                                </Setter>
+                                            </Style>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                            </Style.BasedOn>
+                        </Style>
+                    </Style.BasedOn>
+                    <Style.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Opacity" Value="0.9" />
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter Property="Opacity" Value="0.6" />
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="Opacity" Value="0.4" />
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </Style.BasedOn>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="{DynamicResource SuccessBrush}" />
+                </Trigger>
+                <Trigger Property="IsPressed" Value="True">
+                    <Setter Property="Background" Value="{DynamicResource SuccessBrush}" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
     </UserControl.Resources>
 
     <UserControl.Triggers>
@@ -4968,7 +5094,7 @@
                                                     </Style>
                                                 </DataGridTextColumn.CellStyle>
                                             </DataGridTextColumn>-->
-                                            <DataGridTextColumn Width="*"
+                                            <!--<DataGridTextColumn Width="*"
                                                                 Binding="{Binding Note}"
                                                                 Header="备注">
                                                 <DataGridTextColumn.CellStyle>
@@ -4990,7 +5116,7 @@
                                                         </Style.Triggers>
                                                     </Style>
                                                 </DataGridTextColumn.CellStyle>
-                                            </DataGridTextColumn>
+                                            </DataGridTextColumn>-->
                                         </DataGrid.Columns>
                                         <DataGrid.RowStyle>
                                             <Style BasedOn="{StaticResource DataGridRowStyle}" TargetType="{x:Type DataGridRow}">
@@ -5111,15 +5237,120 @@
                                                TextAlignment="Center" />
 
                                 </StackPanel>
+                                <StackPanel Margin="5,10,0,0" Orientation="Horizontal">
+                                    <TextBlock Grid.Row="3"
+                                               HorizontalAlignment="Center"
+                                               VerticalAlignment="Center"
+                                               FontSize="14"
+                                               FontWeight="Bold"
+                                               Foreground="White"
+                                               Text="A泵满管补偿： "
+                                               TextAlignment="Center" />
+                                    <interactivity:NumericUpDown Grid.Row="7"
+                                                                 Grid.Column="1"
+                                                                 Width="100"
+                                                                 DecimalPlaces="1"
+                                                                 Increment="0.1"
+                                                                 Maximum="5"
+                                                                 Minimum="-5"
+                                                                 Tag="A泵满管补偿"
+                                                                 Value="{Binding FullA, Mode=TwoWay}">
+                                        <i:Interaction.Behaviors>
+                                            <b:NumericUpDownDoubleClickBehavior />
+                                        </i:Interaction.Behaviors>
+                                    </interactivity:NumericUpDown>
+                                    <TextBlock Grid.Row="3"
+                                               Margin="5,0,0,0"
+                                               HorizontalAlignment="Center"
+                                               VerticalAlignment="Center"
+                                               FontSize="14"
+                                               FontWeight="Bold"
+                                               Foreground="White"
+                                               Text="毫升"
+                                               TextAlignment="Center" />
 
+                                </StackPanel>
+                                <StackPanel Margin="5,10,0,0" Orientation="Horizontal">
+                                    <TextBlock Grid.Row="3"
+                                               HorizontalAlignment="Center"
+                                               VerticalAlignment="Center"
+                                               FontSize="14"
+                                               FontWeight="Bold"
+                                               Foreground="White"
+                                               Text="B泵满管补偿： "
+                                               TextAlignment="Center" />
+                                    <interactivity:NumericUpDown Grid.Row="7"
+                                                                 Grid.Column="1"
+                                                                 Width="100"
+                                                                 DecimalPlaces="1"
+                                                                 Increment="0.1"
+                                                                 Maximum="5"
+                                                                 Minimum="-5"
+                                                                 Tag="B泵满管补偿"
+                                                                 Value="{Binding FullB, Mode=TwoWay}">
+                                        <i:Interaction.Behaviors>
+                                            <b:NumericUpDownDoubleClickBehavior />
+                                        </i:Interaction.Behaviors>
+                                    </interactivity:NumericUpDown>
+                                    <TextBlock Grid.Row="3"
+                                               Margin="5,0,0,0"
+                                               HorizontalAlignment="Center"
+                                               VerticalAlignment="Center"
+                                               FontSize="14"
+                                               FontWeight="Bold"
+                                               Foreground="White"
+                                               Text="毫升"
+                                               TextAlignment="Center" />
+
+                                </StackPanel>
+                                <StackPanel Margin="0,10,0,0">
+                                    <TextBlock HorizontalAlignment="Center"
+                                               FontSize="18"
+                                               FontWeight="Bold"
+                                               Text="溶剂监控通道设置" />
+                                    <StackPanel Margin="0,10,0,0" Orientation="Horizontal">
+                                        <ToggleButton x:Name="Tun1"
+                                                      Command="{Binding WatchChangedCommand}"
+                                                      CommandParameter="{Binding RelativeSource={RelativeSource Self}}"
+                                                      Content="通道1"
+                                                      IsChecked="{Binding WatchLiquidTube[0]}"
+                                                      Style="{DynamicResource ToggleButtonStyleSgs}" />
+                                        <ToggleButton Command="{Binding WatchChangedCommand}"
+                                                      CommandParameter="{Binding RelativeSource={RelativeSource Self}}"
+                                                      Content="通道2"
+                                                      IsChecked="{Binding WatchLiquidTube[1]}"
+                                                      Style="{DynamicResource ToggleButtonStyleSgs}" />
+                                        <ToggleButton Command="{Binding WatchChangedCommand}"
+                                                      CommandParameter="{Binding RelativeSource={RelativeSource Self}}"
+                                                      Content="通道3"
+                                                      IsChecked="{Binding WatchLiquidTube[2]}"
+                                                      Style="{DynamicResource ToggleButtonStyleSgs}" />
+                                        <ToggleButton Command="{Binding WatchChangedCommand}"
+                                                      CommandParameter="{Binding RelativeSource={RelativeSource Self}}"
+                                                      Content="通道4"
+                                                      IsChecked="{Binding WatchLiquidTube[3]}"
+                                                      Style="{DynamicResource ToggleButtonStyleSgs}" />
+                                        <ToggleButton Command="{Binding WatchChangedCommand}"
+                                                      CommandParameter="{Binding RelativeSource={RelativeSource Self}}"
+                                                      Content="通道5"
+                                                      IsChecked="{Binding WatchLiquidTube[4]}"
+                                                      Style="{DynamicResource ToggleButtonStyleSgs}" />
+                                        <ToggleButton Command="{Binding WatchChangedCommand}"
+                                                      CommandParameter="{Binding RelativeSource={RelativeSource Self}}"
+                                                      Content="通道6"
+                                                      IsChecked="{Binding WatchLiquidTube[5]}"
+                                                      Style="{DynamicResource ToggleButtonStyleSgs}" />
+                                    </StackPanel>
+                                </StackPanel>
                             </WrapPanel>
                         </Border>
 
 
 
 
-                        <Grid Height="600">
+                        <Grid Height="900">
                             <Grid.RowDefinitions>
+                                <RowDefinition />
                                 <RowDefinition />
                                 <RowDefinition />
                             </Grid.RowDefinitions>
@@ -5134,14 +5365,14 @@
                                                FontSize="20"
                                                FontWeight="Bold"
                                                Foreground="White"
-                                               Text="液面追随标定 A泵" />
+                                               Text="加液泵标定 A泵" />
 
                                     <StackPanel Margin="0,0,0,5" Orientation="Horizontal">
                                         <TextBlock Style="{StaticResource MiddleTextBlock}" Text="范围 1: " />
                                         <interactivity:NumericUpDown DecimalPlaces="1"
                                                                      Increment="0.1"
                                                                      IsReadOnly="False"
-                                                                     Maximum="2"
+                                                                     Maximum="25"
                                                                      Minimum="0"
                                                                      Tag="范围1最小值"
                                                                      Value="{Binding CompensateData1[0].Min}">
@@ -5154,7 +5385,7 @@
                                         <interactivity:NumericUpDown x:Name="A11Max"
                                                                      DecimalPlaces="1"
                                                                      Increment="0.1"
-                                                                     Maximum="2"
+                                                                     Maximum="25"
                                                                      Minimum="0"
                                                                      Tag="范围1最大值"
                                                                      Value="{Binding CompensateData1[0].Max}">
@@ -5211,7 +5442,7 @@
                                         <interactivity:NumericUpDown DecimalPlaces="1"
                                                                      Increment="0.1"
                                                                      IsReadOnly="False"
-                                                                     Maximum="2"
+                                                                     Maximum="25"
                                                                      Minimum="0"
                                                                      Tag="范围2最小值"
                                                                      Value="{Binding CompensateData1[1].Min}">
@@ -5224,7 +5455,7 @@
                                         <interactivity:NumericUpDown x:Name="A12Max"
                                                                      DecimalPlaces="1"
                                                                      Increment="0.1"
-                                                                     Maximum="2"
+                                                                     Maximum="25"
                                                                      Minimum="0"
                                                                      Tag="范围2最大值"
                                                                      Value="{Binding CompensateData1[1].Max}">
@@ -5281,7 +5512,7 @@
                                         <interactivity:NumericUpDown DecimalPlaces="1"
                                                                      Increment="0.1"
                                                                      IsReadOnly="False"
-                                                                     Maximum="2"
+                                                                     Maximum="25"
                                                                      Minimum="0"
                                                                      Tag="范围3最小值"
                                                                      Value="{Binding CompensateData1[2].Min}">
@@ -5294,7 +5525,7 @@
                                         <interactivity:NumericUpDown x:Name="A13Max"
                                                                      DecimalPlaces="1"
                                                                      Increment="0.1"
-                                                                     Maximum="2"
+                                                                     Maximum="25"
                                                                      Minimum="0"
                                                                      Tag="范围3最大值"
                                                                      Value="{Binding CompensateData1[2].Max}">
@@ -5351,7 +5582,7 @@
                                         <interactivity:NumericUpDown DecimalPlaces="1"
                                                                      Increment="0.1"
                                                                      IsReadOnly="False"
-                                                                     Maximum="2"
+                                                                     Maximum="25"
                                                                      Minimum="0"
                                                                      Tag="范围4最小值"
                                                                      Value="{Binding CompensateData1[3].Min}">
@@ -5364,7 +5595,7 @@
                                         <interactivity:NumericUpDown x:Name="A14Max"
                                                                      DecimalPlaces="1"
                                                                      Increment="0.1"
-                                                                     Maximum="2"
+                                                                     Maximum="25"
                                                                      Minimum="0"
                                                                      Tag="范围4最大值"
                                                                      Value="{Binding CompensateData1[3].Max}">
@@ -5421,7 +5652,7 @@
                                         <interactivity:NumericUpDown DecimalPlaces="1"
                                                                      Increment="0.1"
                                                                      IsReadOnly="False"
-                                                                     Maximum="2"
+                                                                     Maximum="25"
                                                                      Minimum="0"
                                                                      Tag="范围5最小值"
                                                                      Value="{Binding CompensateData1[4].Min}">
@@ -5434,7 +5665,7 @@
                                         <interactivity:NumericUpDown x:Name="A15Max"
                                                                      DecimalPlaces="1"
                                                                      Increment="0.1"
-                                                                     Maximum="2"
+                                                                     Maximum="25"
                                                                      Minimum="0"
                                                                      Tag="范围5最大值"
                                                                      Value="{Binding CompensateData1[4].Max}">
@@ -5500,14 +5731,14 @@
                                                FontSize="20"
                                                FontWeight="Bold"
                                                Foreground="White"
-                                               Text="液面追随标定 B泵" />
+                                               Text="加液泵标定 B泵" />
 
                                     <StackPanel Margin="0,0,0,5" Orientation="Horizontal">
                                         <TextBlock Style="{StaticResource MiddleTextBlock}" Text="范围 1: " />
                                         <interactivity:NumericUpDown DecimalPlaces="1"
                                                                      Increment="0.1"
                                                                      IsReadOnly="False"
-                                                                     Maximum="2"
+                                                                     Maximum="25"
                                                                      Minimum="0"
                                                                      Tag="范围1最小值"
                                                                      Value="{Binding CompensateData2[0].Min}">
@@ -5520,7 +5751,7 @@
                                         <interactivity:NumericUpDown x:Name="A21Max"
                                                                      DecimalPlaces="1"
                                                                      Increment="0.1"
-                                                                     Maximum="2"
+                                                                     Maximum="25"
                                                                      Minimum="0"
                                                                      Tag="范围1最大值"
                                                                      Value="{Binding CompensateData2[0].Max}">
@@ -5577,7 +5808,7 @@
                                         <interactivity:NumericUpDown DecimalPlaces="1"
                                                                      Increment="0.1"
                                                                      IsReadOnly="False"
-                                                                     Maximum="2"
+                                                                     Maximum="25"
                                                                      Minimum="0"
                                                                      Tag="范围2最小值"
                                                                      Value="{Binding CompensateData2[1].Min}">
@@ -5590,7 +5821,7 @@
                                         <interactivity:NumericUpDown x:Name="A22Max"
                                                                      DecimalPlaces="1"
                                                                      Increment="0.1"
-                                                                     Maximum="2"
+                                                                     Maximum="25"
                                                                      Minimum="0"
                                                                      Tag="范围2最大值"
                                                                      Value="{Binding CompensateData2[1].Max}">
@@ -5647,7 +5878,7 @@
                                         <interactivity:NumericUpDown DecimalPlaces="1"
                                                                      Increment="0.1"
                                                                      IsReadOnly="False"
-                                                                     Maximum="2"
+                                                                     Maximum="25"
                                                                      Minimum="0"
                                                                      Tag="范围3最小值"
                                                                      Value="{Binding CompensateData2[2].Min}">
@@ -5660,7 +5891,7 @@
                                         <interactivity:NumericUpDown x:Name="A23Max"
                                                                      DecimalPlaces="1"
                                                                      Increment="0.1"
-                                                                     Maximum="2"
+                                                                     Maximum="25"
                                                                      Minimum="0"
                                                                      Tag="范围3最大值"
                                                                      Value="{Binding CompensateData2[2].Max}">
@@ -5717,7 +5948,7 @@
                                         <interactivity:NumericUpDown DecimalPlaces="1"
                                                                      Increment="0.1"
                                                                      IsReadOnly="False"
-                                                                     Maximum="2"
+                                                                     Maximum="25"
                                                                      Minimum="0"
                                                                      Tag="范围4最小值"
                                                                      Value="{Binding CompensateData2[3].Min}">
@@ -5730,7 +5961,7 @@
                                         <interactivity:NumericUpDown x:Name="A24Max"
                                                                      DecimalPlaces="1"
                                                                      Increment="0.1"
-                                                                     Maximum="2"
+                                                                     Maximum="25"
                                                                      Minimum="0"
                                                                      Tag="范围4最大值"
                                                                      Value="{Binding CompensateData2[3].Max}">
@@ -5787,7 +6018,7 @@
                                         <interactivity:NumericUpDown DecimalPlaces="1"
                                                                      Increment="0.1"
                                                                      IsReadOnly="False"
-                                                                     Maximum="2"
+                                                                     Maximum="25"
                                                                      Minimum="0"
                                                                      Tag="范围5最小值"
                                                                      Value="{Binding CompensateData2[4].Min}">
@@ -5800,7 +6031,7 @@
                                         <interactivity:NumericUpDown x:Name="A25Max"
                                                                      DecimalPlaces="1"
                                                                      Increment="0.1"
-                                                                     Maximum="2"
+                                                                     Maximum="25"
                                                                      Minimum="0"
                                                                      Tag="范围5最大值"
                                                                      Value="{Binding CompensateData2[4].Max}">
@@ -5855,9 +6086,391 @@
 
 
                                 </StackPanel>
-
                             </Border>
+
+                            <Border Grid.Row="3"
+                                    Margin="5"
+                                    BorderBrush="{StaticResource GridLineBrush}"
+                                    BorderThickness="2">
+                                <StackPanel HorizontalAlignment="Center"
+                                            VerticalAlignment="Center"
+                                            Orientation="Vertical">
+                                    <TextBlock Margin="0,0,0,25"
+                                               HorizontalAlignment="Center"
+                                               FontSize="20"
+                                               FontWeight="Bold"
+                                               Foreground="White"
+                                               Text="加标泵标定 C泵" />
+
+                                    <StackPanel Margin="0,0,0,5" Orientation="Horizontal">
+                                        <TextBlock Style="{StaticResource MiddleTextBlock}" Text="范围 1: " />
+                                        <interactivity:NumericUpDown Width="85"
+                                                                     DecimalPlaces="1"
+                                                                     Increment="0.1"
+                                                                     IsReadOnly="False"
+                                                                     Maximum="1000"
+                                                                     Minimum="0"
+                                                                     Tag="范围1最小值"
+                                                                     Value="{Binding CompensateData3[0].Min}">
+                                            <i:Interaction.Behaviors>
+                                                <b:NumericUpDownDoubleClickBehavior />
+                                            </i:Interaction.Behaviors>
+                                        </interactivity:NumericUpDown>
+                                        <TextBlock Style="{StaticResource MiddleTextBlock}" Text="ml" />
+                                        <TextBlock Style="{StaticResource MiddleTextBlock}" Text="~" />
+                                        <interactivity:NumericUpDown x:Name="A31Max"
+                                                                     Width="85"
+                                                                     DecimalPlaces="1"
+                                                                     Increment="0.1"
+                                                                     Maximum="1000"
+                                                                     Minimum="0"
+                                                                     Tag="范围1最大值"
+                                                                     Value="{Binding CompensateData3[0].Max}">
+                                            <i:Interaction.Behaviors>
+                                                <b:NumericUpDownDoubleClickBehavior />
+                                            </i:Interaction.Behaviors>
+                                        </interactivity:NumericUpDown>
+                                        <TextBlock Style="{StaticResource MiddleTextBlock}" Text="ml" />
+                                        <TextBlock Margin="5,0,0,0"
+                                                   Style="{StaticResource MiddleTextBlock}"
+                                                   Text="补偿算法: " />
+                                        <interactivity:ComboBox x:Name="A31Method"
+                                                                Margin="0,0,10,0"
+                                                                SelectedIndex="{Binding CompensateData3[0].SelectMethod}">
+                                            <TextBlock FontSize="14" Text="常数" />
+                                            <TextBlock FontSize="14" Text="一元一次方程" />
+                                            <TextBlock FontSize="14" Text="一元二次方程" />
+                                        </interactivity:ComboBox>
+                                        <TextBox Width="80" Text="{Binding CompensateData3[0].A}">
+                                            <i:Interaction.Behaviors>
+                                                <b:TextBoxDoubleClickBehavior />
+                                            </i:Interaction.Behaviors>
+                                        </TextBox>
+                                        <TextBlock Margin="3,0,0,0"
+                                                   Style="{StaticResource MiddleTextBlock}"
+                                                   Text="x²"
+                                                   Visibility="{Binding SelectedIndex, Converter={x:Static cv:Int2Visibility.Instance}, ElementName=A31Method}" />
+                                        <TextBlock Margin="3,0,0,0"
+                                                   Style="{StaticResource MiddleTextBlock}"
+                                                   Text="+"
+                                                   Visibility="{Binding SelectedIndex, Converter={x:Static cv:Int2Visibility.Instance}, ElementName=A31Method}" />
+                                        <TextBox Width="80"
+                                                 Text="{Binding CompensateData3[0].B}"
+                                                 Visibility="{Binding SelectedIndex, Converter={x:Static cv:Int2Visibility.Instance}, ElementName=A31Method}">
+                                            <i:Interaction.Behaviors>
+                                                <b:TextBoxDoubleClickBehavior />
+                                            </i:Interaction.Behaviors>
+                                        </TextBox>
+                                        <TextBlock Margin="3,0,0,0"
+                                                   Style="{StaticResource MiddleTextBlock}"
+                                                   Text="x+"
+                                                   Visibility="{Binding SelectedIndex, Converter={x:Static cv:Int2Visibility_b.Instance}, ElementName=A31Method}" />
+                                        <TextBox Width="80"
+                                                 Text="{Binding CompensateData3[0].C}"
+                                                 Visibility="{Binding SelectedIndex, Converter={x:Static cv:Int2Visibility_b.Instance}, ElementName=A31Method}">
+                                            <i:Interaction.Behaviors>
+                                                <b:TextBoxDoubleClickBehavior />
+                                            </i:Interaction.Behaviors>
+                                        </TextBox>
+                                    </StackPanel>
+
+                                    <StackPanel Margin="0,0,0,5" Orientation="Horizontal">
+                                        <TextBlock Style="{StaticResource MiddleTextBlock}" Text="范围 2: " />
+                                        <interactivity:NumericUpDown Width="85"
+                                                                     DecimalPlaces="1"
+                                                                     Increment="0.1"
+                                                                     IsReadOnly="False"
+                                                                     Maximum="1000"
+                                                                     Minimum="0"
+                                                                     Tag="范围2最小值"
+                                                                     Value="{Binding CompensateData3[1].Min}">
+                                            <i:Interaction.Behaviors>
+                                                <b:NumericUpDownDoubleClickBehavior />
+                                            </i:Interaction.Behaviors>
+                                        </interactivity:NumericUpDown>
+                                        <TextBlock Style="{StaticResource MiddleTextBlock}" Text="ml" />
+                                        <TextBlock Style="{StaticResource MiddleTextBlock}" Text="~" />
+                                        <interactivity:NumericUpDown x:Name="A32Max"
+                                                                     Width="85"
+                                                                     DecimalPlaces="1"
+                                                                     Increment="0.1"
+                                                                     Maximum="1000"
+                                                                     Minimum="0"
+                                                                     Tag="范围2最大值"
+                                                                     Value="{Binding CompensateData3[1].Max}">
+                                            <i:Interaction.Behaviors>
+                                                <b:NumericUpDownDoubleClickBehavior />
+                                            </i:Interaction.Behaviors>
+                                        </interactivity:NumericUpDown>
+                                        <TextBlock Style="{StaticResource MiddleTextBlock}" Text="ml" />
+                                        <TextBlock Margin="5,0,0,0"
+                                                   Style="{StaticResource MiddleTextBlock}"
+                                                   Text="补偿算法: " />
+                                        <interactivity:ComboBox x:Name="A32Method"
+                                                                Margin="0,0,10,0"
+                                                                SelectedIndex="{Binding CompensateData3[1].SelectMethod}">
+                                            <TextBlock FontSize="14" Text="常数" />
+                                            <TextBlock FontSize="14" Text="一元一次方程" />
+                                            <TextBlock FontSize="14" Text="一元二次方程" />
+                                        </interactivity:ComboBox>
+                                        <TextBox Width="80" Text="{Binding CompensateData3[1].A}">
+                                            <i:Interaction.Behaviors>
+                                                <b:TextBoxDoubleClickBehavior />
+                                            </i:Interaction.Behaviors>
+                                        </TextBox>
+                                        <TextBlock Margin="3,0,0,0"
+                                                   Style="{StaticResource MiddleTextBlock}"
+                                                   Text="x²"
+                                                   Visibility="{Binding SelectedIndex, Converter={x:Static cv:Int2Visibility.Instance}, ElementName=A32Method}" />
+                                        <TextBlock Margin="3,0,0,0"
+                                                   Style="{StaticResource MiddleTextBlock}"
+                                                   Text="+"
+                                                   Visibility="{Binding SelectedIndex, Converter={x:Static cv:Int2Visibility.Instance}, ElementName=A32Method}" />
+                                        <TextBox Width="80"
+                                                 Text="{Binding CompensateData3[1].B}"
+                                                 Visibility="{Binding SelectedIndex, Converter={x:Static cv:Int2Visibility.Instance}, ElementName=A32Method}">
+                                            <i:Interaction.Behaviors>
+                                                <b:TextBoxDoubleClickBehavior />
+                                            </i:Interaction.Behaviors>
+                                        </TextBox>
+                                        <TextBlock Margin="3,0,0,0"
+                                                   Style="{StaticResource MiddleTextBlock}"
+                                                   Text="x+"
+                                                   Visibility="{Binding SelectedIndex, Converter={x:Static cv:Int2Visibility_b.Instance}, ElementName=A32Method}" />
+                                        <TextBox Width="80"
+                                                 Text="{Binding CompensateData3[1].C}"
+                                                 Visibility="{Binding SelectedIndex, Converter={x:Static cv:Int2Visibility_b.Instance}, ElementName=A32Method}">
+                                            <i:Interaction.Behaviors>
+                                                <b:TextBoxDoubleClickBehavior />
+                                            </i:Interaction.Behaviors>
+                                        </TextBox>
+                                    </StackPanel>
+
+                                    <StackPanel Margin="0,0,0,5" Orientation="Horizontal">
+                                        <TextBlock Style="{StaticResource MiddleTextBlock}" Text="范围 3: " />
+                                        <interactivity:NumericUpDown Width="85"
+                                                                     DecimalPlaces="1"
+                                                                     Increment="0.1"
+                                                                     IsReadOnly="False"
+                                                                     Maximum="1000"
+                                                                     Minimum="0"
+                                                                     Tag="范围3最小值"
+                                                                     Value="{Binding CompensateData3[2].Min}">
+                                            <i:Interaction.Behaviors>
+                                                <b:NumericUpDownDoubleClickBehavior />
+                                            </i:Interaction.Behaviors>
+                                        </interactivity:NumericUpDown>
+                                        <TextBlock Style="{StaticResource MiddleTextBlock}" Text="ml" />
+                                        <TextBlock Style="{StaticResource MiddleTextBlock}" Text="~" />
+                                        <interactivity:NumericUpDown x:Name="A33Max"
+                                                                     Width="85"
+                                                                     DecimalPlaces="1"
+                                                                     Increment="0.1"
+                                                                     Maximum="1000"
+                                                                     Minimum="0"
+                                                                     Tag="范围3最大值"
+                                                                     Value="{Binding CompensateData3[2].Max}">
+                                            <i:Interaction.Behaviors>
+                                                <b:NumericUpDownDoubleClickBehavior />
+                                            </i:Interaction.Behaviors>
+                                        </interactivity:NumericUpDown>
+                                        <TextBlock Style="{StaticResource MiddleTextBlock}" Text="ml" />
+                                        <TextBlock Margin="5,0,0,0"
+                                                   Style="{StaticResource MiddleTextBlock}"
+                                                   Text="补偿算法: " />
+                                        <interactivity:ComboBox x:Name="A33Method"
+                                                                Margin="0,0,10,0"
+                                                                SelectedIndex="{Binding CompensateData3[2].SelectMethod}">
+                                            <TextBlock FontSize="14" Text="常数" />
+                                            <TextBlock FontSize="14" Text="一元一次方程" />
+                                            <TextBlock FontSize="14" Text="一元二次方程" />
+                                        </interactivity:ComboBox>
+                                        <TextBox Width="80" Text="{Binding CompensateData3[2].A}">
+                                            <i:Interaction.Behaviors>
+                                                <b:TextBoxDoubleClickBehavior />
+                                            </i:Interaction.Behaviors>
+                                        </TextBox>
+                                        <TextBlock Margin="3,0,0,0"
+                                                   Style="{StaticResource MiddleTextBlock}"
+                                                   Text="x²"
+                                                   Visibility="{Binding SelectedIndex, Converter={x:Static cv:Int2Visibility.Instance}, ElementName=A33Method}" />
+                                        <TextBlock Margin="3,0,0,0"
+                                                   Style="{StaticResource MiddleTextBlock}"
+                                                   Text="+"
+                                                   Visibility="{Binding SelectedIndex, Converter={x:Static cv:Int2Visibility.Instance}, ElementName=A33Method}" />
+                                        <TextBox Width="80"
+                                                 Text="{Binding CompensateData3[2].B}"
+                                                 Visibility="{Binding SelectedIndex, Converter={x:Static cv:Int2Visibility.Instance}, ElementName=A33Method}">
+                                            <i:Interaction.Behaviors>
+                                                <b:TextBoxDoubleClickBehavior />
+                                            </i:Interaction.Behaviors>
+                                        </TextBox>
+                                        <TextBlock Margin="3,0,0,0"
+                                                   Style="{StaticResource MiddleTextBlock}"
+                                                   Text="x+"
+                                                   Visibility="{Binding SelectedIndex, Converter={x:Static cv:Int2Visibility_b.Instance}, ElementName=A33Method}" />
+                                        <TextBox Width="80"
+                                                 Text="{Binding CompensateData3[2].C}"
+                                                 Visibility="{Binding SelectedIndex, Converter={x:Static cv:Int2Visibility_b.Instance}, ElementName=A33Method}">
+                                            <i:Interaction.Behaviors>
+                                                <b:TextBoxDoubleClickBehavior />
+                                            </i:Interaction.Behaviors>
+                                        </TextBox>
+                                    </StackPanel>
+
+                                    <StackPanel Margin="0,0,0,5" Orientation="Horizontal">
+                                        <TextBlock Style="{StaticResource MiddleTextBlock}" Text="范围 4: " />
+                                        <interactivity:NumericUpDown Width="85"
+                                                                     DecimalPlaces="1"
+                                                                     Increment="0.1"
+                                                                     IsReadOnly="False"
+                                                                     Maximum="1000"
+                                                                     Minimum="0"
+                                                                     Tag="范围4最小值"
+                                                                     Value="{Binding CompensateData3[3].Min}">
+                                            <i:Interaction.Behaviors>
+                                                <b:NumericUpDownDoubleClickBehavior />
+                                            </i:Interaction.Behaviors>
+                                        </interactivity:NumericUpDown>
+                                        <TextBlock Style="{StaticResource MiddleTextBlock}" Text="ml" />
+                                        <TextBlock Style="{StaticResource MiddleTextBlock}" Text="~" />
+                                        <interactivity:NumericUpDown x:Name="A34Max"
+                                                                     Width="85"
+                                                                     DecimalPlaces="1"
+                                                                     Increment="0.1"
+                                                                     Maximum="1000"
+                                                                     Minimum="0"
+                                                                     Tag="范围4最大值"
+                                                                     Value="{Binding CompensateData3[3].Max}">
+                                            <i:Interaction.Behaviors>
+                                                <b:NumericUpDownDoubleClickBehavior />
+                                            </i:Interaction.Behaviors>
+                                        </interactivity:NumericUpDown>
+                                        <TextBlock Style="{StaticResource MiddleTextBlock}" Text="ml" />
+                                        <TextBlock Margin="5,0,0,0"
+                                                   Style="{StaticResource MiddleTextBlock}"
+                                                   Text="补偿算法: " />
+                                        <interactivity:ComboBox x:Name="A34Method"
+                                                                Margin="0,0,10,0"
+                                                                SelectedIndex="{Binding CompensateData3[3].SelectMethod}">
+                                            <TextBlock FontSize="14" Text="常数" />
+                                            <TextBlock FontSize="14" Text="一元一次方程" />
+                                            <TextBlock FontSize="14" Text="一元二次方程" />
+                                        </interactivity:ComboBox>
+                                        <TextBox Width="80" Text="{Binding CompensateData3[3].A}">
+                                            <i:Interaction.Behaviors>
+                                                <b:TextBoxDoubleClickBehavior />
+                                            </i:Interaction.Behaviors>
+                                        </TextBox>
+                                        <TextBlock Margin="3,0,0,0"
+                                                   Style="{StaticResource MiddleTextBlock}"
+                                                   Text="x²"
+                                                   Visibility="{Binding SelectedIndex, Converter={x:Static cv:Int2Visibility.Instance}, ElementName=A34Method}" />
+                                        <TextBlock Margin="3,0,0,0"
+                                                   Style="{StaticResource MiddleTextBlock}"
+                                                   Text="+"
+                                                   Visibility="{Binding SelectedIndex, Converter={x:Static cv:Int2Visibility.Instance}, ElementName=A34Method}" />
+                                        <TextBox Width="80"
+                                                 Text="{Binding CompensateData3[3].B}"
+                                                 Visibility="{Binding SelectedIndex, Converter={x:Static cv:Int2Visibility.Instance}, ElementName=A34Method}">
+                                            <i:Interaction.Behaviors>
+                                                <b:TextBoxDoubleClickBehavior />
+                                            </i:Interaction.Behaviors>
+                                        </TextBox>
+                                        <TextBlock Margin="3,0,0,0"
+                                                   Style="{StaticResource MiddleTextBlock}"
+                                                   Text="x+"
+                                                   Visibility="{Binding SelectedIndex, Converter={x:Static cv:Int2Visibility_b.Instance}, ElementName=A34Method}" />
+                                        <TextBox Width="80"
+                                                 Text="{Binding CompensateData3[3].C}"
+                                                 Visibility="{Binding SelectedIndex, Converter={x:Static cv:Int2Visibility_b.Instance}, ElementName=A34Method}">
+                                            <i:Interaction.Behaviors>
+                                                <b:TextBoxDoubleClickBehavior />
+                                            </i:Interaction.Behaviors>
+                                        </TextBox>
+                                    </StackPanel>
+
+                                    <StackPanel Margin="0,0,0,5" Orientation="Horizontal">
+                                        <TextBlock Style="{StaticResource MiddleTextBlock}" Text="范围 5: " />
+                                        <interactivity:NumericUpDown Width="85"
+                                                                     DecimalPlaces="1"
+                                                                     Increment="0.1"
+                                                                     IsReadOnly="False"
+                                                                     Maximum="1000"
+                                                                     Minimum="0"
+                                                                     Tag="范围5最小值"
+                                                                     Value="{Binding CompensateData3[4].Min}">
+                                            <i:Interaction.Behaviors>
+                                                <b:NumericUpDownDoubleClickBehavior />
+                                            </i:Interaction.Behaviors>
+                                        </interactivity:NumericUpDown>
+                                        <TextBlock Style="{StaticResource MiddleTextBlock}" Text="ml" />
+                                        <TextBlock Style="{StaticResource MiddleTextBlock}" Text="~" />
+                                        <interactivity:NumericUpDown x:Name="A35Max"
+                                                                     Width="85"
+                                                                     DecimalPlaces="1"
+                                                                     Increment="0.1"
+                                                                     Maximum="1000"
+                                                                     Minimum="0"
+                                                                     Tag="范围5最大值"
+                                                                     Value="{Binding CompensateData3[4].Max}">
+                                            <i:Interaction.Behaviors>
+                                                <b:NumericUpDownDoubleClickBehavior />
+                                            </i:Interaction.Behaviors>
+                                        </interactivity:NumericUpDown>
+                                        <TextBlock Style="{StaticResource MiddleTextBlock}" Text="ml" />
+                                        <TextBlock Margin="5,0,0,0"
+                                                   Style="{StaticResource MiddleTextBlock}"
+                                                   Text="补偿算法: " />
+                                        <interactivity:ComboBox x:Name="A35Method"
+                                                                Margin="0,0,10,0"
+                                                                SelectedIndex="{Binding CompensateData3[4].SelectMethod}">
+                                            <TextBlock FontSize="14" Text="常数" />
+                                            <TextBlock FontSize="14" Text="一元一次方程" />
+                                            <TextBlock FontSize="14" Text="一元二次方程" />
+                                        </interactivity:ComboBox>
+                                        <TextBox Width="80" Text="{Binding CompensateData3[4].A}">
+                                            <i:Interaction.Behaviors>
+                                                <b:TextBoxDoubleClickBehavior />
+                                            </i:Interaction.Behaviors>
+                                        </TextBox>
+                                        <TextBlock Margin="3,0,0,0"
+                                                   Style="{StaticResource MiddleTextBlock}"
+                                                   Text="x²"
+                                                   Visibility="{Binding SelectedIndex, Converter={x:Static cv:Int2Visibility.Instance}, ElementName=A35Method}" />
+                                        <TextBlock Margin="3,0,0,0"
+                                                   Style="{StaticResource MiddleTextBlock}"
+                                                   Text="+"
+                                                   Visibility="{Binding SelectedIndex, Converter={x:Static cv:Int2Visibility.Instance}, ElementName=A35Method}" />
+                                        <TextBox Width="80"
+                                                 Text="{Binding CompensateData3[4].B}"
+                                                 Visibility="{Binding SelectedIndex, Converter={x:Static cv:Int2Visibility.Instance}, ElementName=A35Method}">
+                                            <i:Interaction.Behaviors>
+                                                <b:TextBoxDoubleClickBehavior />
+                                            </i:Interaction.Behaviors>
+                                        </TextBox>
+                                        <TextBlock Margin="3,0,0,0"
+                                                   Style="{StaticResource MiddleTextBlock}"
+                                                   Text="x+"
+                                                   Visibility="{Binding SelectedIndex, Converter={x:Static cv:Int2Visibility_b.Instance}, ElementName=A35Method}" />
+                                        <TextBox Width="80"
+                                                 Text="{Binding CompensateData3[4].C}"
+                                                 Visibility="{Binding SelectedIndex, Converter={x:Static cv:Int2Visibility_b.Instance}, ElementName=A35Method}">
+                                            <i:Interaction.Behaviors>
+                                                <b:TextBoxDoubleClickBehavior />
+                                            </i:Interaction.Behaviors>
+                                        </TextBox>
+                                    </StackPanel>
+
+
+
+                                </StackPanel>
+                            </Border>
+
+
                         </Grid>
+
+
 
                     </StackPanel>
                 </ScrollViewer>

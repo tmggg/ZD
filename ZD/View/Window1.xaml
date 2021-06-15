@@ -32,9 +32,58 @@
         </Grid>
         <Grid x:Name="test" Width="400">
             <Rectangle Fill="Green" />
-            <Button Command="{Binding TesetCommand}"
+            <!--<Button Command="{Binding TesetCommand}"
                     CommandParameter="{Binding ElementName=test}"
-                    Content="Cliked me!" />
+                    Content="Cliked me!" />-->
+            <RadioButton Width="100"
+                         Height="50"
+                         HorizontalContentAlignment="Center"
+                         VerticalContentAlignment="Center"
+                         Content="123">
+                <RadioButton.Style>
+                    <Style TargetType="RadioButton">
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="RadioButton">
+                                    <Grid>
+                                        <Border Name="bg"
+                                                Background="{TemplateBinding Background}"
+                                                BorderBrush="{TemplateBinding BorderBrush}"
+                                                BorderThickness="{TemplateBinding BorderThickness}">
+                                            <TextBlock HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                                       VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                                       Text="{TemplateBinding Content}" />
+                                        </Border>
+                                    </Grid>
+                                    <ControlTemplate.Triggers>
+                                        <Trigger Property="IsChecked" Value="True">
+                                            <Setter Property="Background" Value="Yellow" />
+                                            <Setter Property="BorderThickness" Value="1" />
+                                            <Setter Property="BorderBrush" Value="Red" />
+                                        </Trigger>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="Background" Value="Red" />
+                                            <Setter Property="BorderThickness" Value="1" />
+                                            <Setter Property="BorderBrush" Value="Yellow" />
+                                        </Trigger>
+                                        <Trigger Property="IsChecked" Value="False">
+                                            <Setter Property="Background" Value="WhiteSmoke" />
+                                            <Setter Property="BorderThickness" Value="0" />
+                                        </Trigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </RadioButton.Style>
+            </RadioButton>
+            <RadioButton Width="100"
+                         Height="50"
+                         Margin="0,200,0,0"
+                         HorizontalContentAlignment="Center"
+                         VerticalContentAlignment="Center"
+                         Content="123" />
+
 
         </Grid>
     </Grid>

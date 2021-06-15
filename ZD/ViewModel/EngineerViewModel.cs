@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Media.Animation;
 using EasyNetVars;
@@ -170,7 +171,7 @@ namespace SgS.ViewModel
         public int BigCleanValue
         {
             get { return _bigcleanValue; }
-            set 
+            set
             {
                 _bigcleanValue = value;
                 RaisePropertyChanged(() => BigCleanValue);
@@ -188,6 +189,39 @@ namespace SgS.ViewModel
             }
         }
 
+        private double _fullA;
+        public double FullA
+        {
+            get { return _fullA; }
+            set
+            {
+                _fullA = value;
+                RaisePropertyChanged(() => FullA);
+            }
+        }
+
+        private double _fullB;
+        public double FullB
+        {
+            get { return _fullB; }
+            set
+            {
+                _fullB = value;
+                RaisePropertyChanged(() => FullB);
+            }
+        }
+
+        public ObservableCollection<PositionData> PositionDatas { get; set; }
+
+        public ObservableCollection<CompensateData> CompensateData1 { get; set; }
+
+        public ObservableCollection<CompensateData> CompensateData2 { get; set; }
+
+        public ObservableCollection<CompensateData> CompensateData3 { get; set; }
+
+        public ObservableCollection<LiquidTypes> LiquidTypes { get; set; }
+
+        public ObservableCollection<bool> WatchLiquidTube { get; set; }
 
         #endregion
 
@@ -204,13 +238,6 @@ namespace SgS.ViewModel
 
         public RelayCommand<MouseButtonEventArgs> MontorCommandUp { get; set; }
 
-        public ObservableCollection<PositionData> PositionDatas { get; set; }
-
-        public ObservableCollection<CompensateData> CompensateData1 { get; set; }
-
-        public ObservableCollection<CompensateData> CompensateData2 { get; set; }
-
-        public ObservableCollection<LiquidTypes> LiquidTypes { get; set; }
 
         public RelayCommand<Grid> TesetCommand { get; set; } = new RelayCommand<Grid>((e) =>
         {
@@ -253,6 +280,7 @@ namespace SgS.ViewModel
 
         public RelayCommand<object[]> ShowKeyPadCommand { get; private set; }
 
+        public RelayCommand<ToggleButton> WatchChangedCommand { get; private set; }
 
         #endregion
 
@@ -264,45 +292,48 @@ namespace SgS.ViewModel
             DragCommand = new RelayCommand<Window>(DragWindow);
             MontorCommandDown = new RelayCommand<MouseButtonEventArgs>(RunMotorDown);
             MontorCommandUp = new RelayCommand<MouseButtonEventArgs>(RunMotorUp);
+            WatchChangedCommand = new RelayCommand<ToggleButton>(WatchChanged);
             AddLiquidItemCommand = new RelayCommand(AddLiquidCommand);
             CancelCommand = new RelayCommand<Grid>(CancelAction);
             ShowKeyPadCommand = new RelayCommand<object[]>(ShowKeyPad);
             CleanCommand = new RelayCommand(() => { SendCommand2Plc(8, true); });
-
             PositionDatas = new ObservableCollection<PositionData>();
             Test = Visibility.Visible;
             CompensateData1 = new ObservableCollection<CompensateData>();
             CompensateData2 = new ObservableCollection<CompensateData>();
+            CompensateData3 = new ObservableCollection<CompensateData>();
             LiquidTypes = new ObservableCollection<LiquidTypes>();
+            WatchLiquidTube = new ObservableCollection<bool>();
             PositionDatas = XmlReadWriter.LoadFromFile<PositionData>(AppDomain.CurrentDomain.BaseDirectory + @"\Settings\PositionData.xml");
             CompensateData1 = XmlReadWriter.LoadFromFile<CompensateData>(AppDomain.CurrentDomain.BaseDirectory + @"\Settings\Pump_A.xml");
             CompensateData2 = XmlReadWriter.LoadFromFile<CompensateData>(AppDomain.CurrentDomain.BaseDirectory + @"\Settings\Pump_B.xml");
+            CompensateData3 = XmlReadWriter.LoadFromFile<CompensateData>(AppDomain.CurrentDomain.BaseDirectory + @"\Settings\Pump_C.xml");
             LiquidTypes = XmlReadWriter.LoadFromFile<LiquidTypes>(AppDomain.CurrentDomain.BaseDirectory + @"\Settings\LiquidTypes.xml");
-
-            _controlerIP = MainViewModel._config.AppSettings.Settings["IPaddress"].Value == null ? "127.0.0.1" : MainViewModel._config.AppSettings
-                .Settings["IPaddress"].Value;
-
+            WatchLiquidTube = XmlReadWriter.LoadFromFile<bool>(AppDomain.CurrentDomain.BaseDirectory + @"\Settings\WatchLiquidTube.xml");
             if (PositionDatas.Count < 1)
             {
                 PositionDatas.Clear();
                 //for (int i = 1; i < 5; i++)
                 //{
-                PositionDatas.Add(new PositionData() { Name = $"A区粗针开始位置", Note = "测试", Px = 0, Py = 0, Px2 = 0, Py2 = 0 });
-                PositionDatas.Add(new PositionData() { Name = $"A区粗针结束位置", Note = "测试", Px = 0, Py = 0, Px2 = 0, Py2 = 0 });
                 PositionDatas.Add(new PositionData() { Name = $"A区细针开始位置", Note = "测试", Px = 0, Py = 0, Px2 = 0, Py2 = 0 });
                 PositionDatas.Add(new PositionData() { Name = $"A区细针结束位置", Note = "测试", Px = 0, Py = 0, Px2 = 0, Py2 = 0 });
+                PositionDatas.Add(new PositionData() { Name = $"A区粗针开始位置", Note = "测试", Px = 0, Py = 0, Px2 = 0, Py2 = 0 });
+                PositionDatas.Add(new PositionData() { Name = $"A区粗针结束位置", Note = "测试", Px = 0, Py = 0, Px2 = 0, Py2 = 0 });
 
-                PositionDatas.Add(new PositionData() { Name = $"B区粗针开始位置", Note = "测试", Px = 0, Py = 0, Px2 = 0, Py2 = 0 });
-                PositionDatas.Add(new PositionData() { Name = $"B区粗针结束位置", Note = "测试", Px = 0, Py = 0, Px2 = 0, Py2 = 0 });
                 PositionDatas.Add(new PositionData() { Name = $"B区细针开始位置", Note = "测试", Px = 0, Py = 0, Px2 = 0, Py2 = 0 });
                 PositionDatas.Add(new PositionData() { Name = $"B区细针结束位置", Note = "测试", Px = 0, Py = 0, Px2 = 0, Py2 = 0 });
+                PositionDatas.Add(new PositionData() { Name = $"B区粗针开始位置", Note = "测试", Px = 0, Py = 0, Px2 = 0, Py2 = 0 });
+                PositionDatas.Add(new PositionData() { Name = $"B区粗针结束位置", Note = "测试", Px = 0, Py = 0, Px2 = 0, Py2 = 0 });
 
                 //}
                 XmlReadWriter.SaveToFile(PositionDatas, AppDomain.CurrentDomain.BaseDirectory + @"\Settings\PositionData.xml");
             }
 
-            if (CompensateData1.Count == 0 || CompensateData2.Count == 0)
+            if (CompensateData1.Count == 0 || CompensateData2.Count == 0 || CompensateData3.Count == 0)
             {
+                CompensateData1.Clear();
+                CompensateData2.Clear();
+                CompensateData3.Clear();
                 for (int i = 0; i < 1; i++)
                 {
                     CompensateData1.Add(new CompensateData() { Min = 0, Max = 0.1, A = 0, B = 0, C = 0, SelectMethod = 0 });
@@ -315,9 +346,15 @@ namespace SgS.ViewModel
                     CompensateData2.Add(new CompensateData() { Min = 0.2, Max = 0.3, A = 0, B = 0, C = 0, SelectMethod = 0 });
                     CompensateData2.Add(new CompensateData() { Min = 0.3, Max = 0.4, A = 0, B = 0, C = 0, SelectMethod = 0 });
                     CompensateData2.Add(new CompensateData() { Min = 0.4, Max = 1, A = 0, B = 0, C = 0, SelectMethod = 0 });
+                    CompensateData3.Add(new CompensateData() { Min = 0, Max = 0.1, A = 0, B = 0, C = 0, SelectMethod = 0 });
+                    CompensateData3.Add(new CompensateData() { Min = 0.1, Max = 0.2, A = 0, B = 0, C = 0, SelectMethod = 0 });
+                    CompensateData3.Add(new CompensateData() { Min = 0.2, Max = 0.3, A = 0, B = 0, C = 0, SelectMethod = 0 });
+                    CompensateData3.Add(new CompensateData() { Min = 0.3, Max = 0.4, A = 0, B = 0, C = 0, SelectMethod = 0 });
+                    CompensateData3.Add(new CompensateData() { Min = 0.4, Max = 1, A = 0, B = 0, C = 0, SelectMethod = 0 });
                 }
                 XmlReadWriter.SaveToFile(CompensateData1, AppDomain.CurrentDomain.BaseDirectory + @"\Settings\Pump_A.xml");
                 XmlReadWriter.SaveToFile(CompensateData2, AppDomain.CurrentDomain.BaseDirectory + @"\Settings\Pump_B.xml");
+                XmlReadWriter.SaveToFile(CompensateData3, AppDomain.CurrentDomain.BaseDirectory + @"\Settings\Pump_C.xml");
             }
 
             if (LiquidTypes.Count == 0)
@@ -327,12 +364,84 @@ namespace SgS.ViewModel
                 LiquidTypes.Add(new LiquidTypes() { LiquidName = "乙腈", Z1Value = 0, Z2Value = 0 });
                 LiquidTypes.Add(new LiquidTypes() { LiquidName = "叔丁基甲醚", Z1Value = 0, Z2Value = 0 });
             }
+
+            if (WatchLiquidTube.Count == 0)
+            {
+                WatchLiquidTube.Add(false);
+                WatchLiquidTube.Add(false);
+                WatchLiquidTube.Add(false);
+                WatchLiquidTube.Add(false);
+                WatchLiquidTube.Add(false);
+                WatchLiquidTube.Add(false);
+                XmlReadWriter.SaveToFile(WatchLiquidTube, AppDomain.CurrentDomain.BaseDirectory + @"\Settings\WatchLiquidTube.xml");
+            }
+
+            _controlerIP = MainViewModel._config.AppSettings.Settings["IPaddress"].Value == null ? "127.0.0.1" : MainViewModel._config.AppSettings.Settings["IPaddress"].Value;
             Z1_Sensitivity = MainViewModel._config.AppSettings.Settings["Z1_Sensitivity"].Value == null ? -5000 : int.Parse(MainViewModel._config.AppSettings.Settings["Z1_Sensitivity"].Value);
             Z2_Sensitivity = MainViewModel._config.AppSettings.Settings["Z2_Sensitivity"].Value == null ? -5000 : int.Parse(MainViewModel._config.AppSettings.Settings["Z2_Sensitivity"].Value);
             Z1_Down = MainViewModel._config.AppSettings.Settings["Z1_Down"].Value == null ? -95000 : int.Parse(MainViewModel._config.AppSettings.Settings["Z1_Down"].Value);
             Z2_Down = MainViewModel._config.AppSettings.Settings["Z2_Down"].Value == null ? -95000 : int.Parse(MainViewModel._config.AppSettings.Settings["Z2_Down"].Value);
             BigCleanValue = MainViewModel._config.AppSettings.Settings["BigClean"].Value == null ? 10 : int.Parse(MainViewModel._config.AppSettings.Settings["BigClean"].Value);
             LittleCleanValue = MainViewModel._config.AppSettings.Settings["LittleClean"].Value == null ? 200 : int.Parse(MainViewModel._config.AppSettings.Settings["LittleClean"].Value);
+            FullA = MainViewModel._config.AppSettings.Settings["FullA"].Value == null ? 0 : double.Parse(MainViewModel._config.AppSettings.Settings["FullA"].Value);
+            FullB = MainViewModel._config.AppSettings.Settings["FullB"].Value == null ? 0 : double.Parse(MainViewModel._config.AppSettings.Settings["FullB"].Value);
+        }
+
+        private void WatchChanged(ToggleButton obj)
+        {
+            if (obj.IsChecked == null) return;
+            if ((bool)obj.IsChecked)
+            {
+                switch (obj.Content as string)
+                {
+                    case "通道1":
+                        SendCommand2Plc(10, true);
+                        break;
+                    case "通道2":
+                        SendCommand2Plc(11, true);
+                        break;
+                    case "通道3":
+                        SendCommand2Plc(12, true);
+                        break;
+                    case "通道4":
+                        SendCommand2Plc(13, true);
+                        break;
+                    case "通道5":
+                        SendCommand2Plc(14, true);
+                        break;
+                    case "通道6":
+                        SendCommand2Plc(15, true);
+                        break;
+                    default:
+                        break;
+                }
+            }
+            else
+            {
+                switch (obj.Content as string)
+                {
+                    case "通道1":
+                        SendCommand2Plc(10, false);
+                        break;
+                    case "通道2":
+                        SendCommand2Plc(11, false);
+                        break;
+                    case "通道3":
+                        SendCommand2Plc(12, false);
+                        break;
+                    case "通道4":
+                        SendCommand2Plc(13, false);
+                        break;
+                    case "通道5":
+                        SendCommand2Plc(14, false);
+                        break;
+                    case "通道6":
+                        SendCommand2Plc(15, false);
+                        break;
+                    default:
+                        break;
+                }
+            }
         }
 
         /// <summary>
@@ -471,7 +580,7 @@ namespace SgS.ViewModel
             NetVar sender = new NetVar(_controlerIP, 99);
             List<CDataTypeCollection> sendercommand;
             sendercommand = new List<CDataTypeCollection>();
-            for (int i = 0; i < 10; i++)
+            for (int i = 0; i < 16; i++)
             {
                 if (commandPos == i)
                     sendercommand.Add(new CDataTypeCollection(value, DataTypes.booltype));
@@ -541,13 +650,17 @@ namespace SgS.ViewModel
                 XmlReadWriter.SaveToFile(PositionDatas, AppDomain.CurrentDomain.BaseDirectory + @"\Settings\PositionData.xml");
                 XmlReadWriter.SaveToFile(CompensateData1, AppDomain.CurrentDomain.BaseDirectory + @"\Settings\Pump_A.xml");
                 XmlReadWriter.SaveToFile(CompensateData2, AppDomain.CurrentDomain.BaseDirectory + @"\Settings\Pump_B.xml");
+                XmlReadWriter.SaveToFile(CompensateData3, AppDomain.CurrentDomain.BaseDirectory + @"\Settings\Pump_C.xml");
                 XmlReadWriter.SaveToFile(LiquidTypes, AppDomain.CurrentDomain.BaseDirectory + @"\Settings\LiquidTypes.xml");
+                XmlReadWriter.SaveToFile(WatchLiquidTube,AppDomain.CurrentDomain.BaseDirectory + @"\Settings\WatchLiquidTube.xml");
                 MainViewModel._config.AppSettings.Settings["Z1_Sensitivity"].Value = Z1_Sensitivity.ToString();
                 MainViewModel._config.AppSettings.Settings["Z2_Sensitivity"].Value = Z2_Sensitivity.ToString();
                 MainViewModel._config.AppSettings.Settings["Z1_Down"].Value = Z1_Down.ToString();
                 MainViewModel._config.AppSettings.Settings["Z2_Down"].Value = Z2_Down.ToString();
                 MainViewModel._config.AppSettings.Settings["BigClean"].Value = BigCleanValue.ToString();
                 MainViewModel._config.AppSettings.Settings["LittleClean"].Value = LittleCleanValue.ToString();
+                MainViewModel._config.AppSettings.Settings["FullA"].Value = FullA.ToString();
+                MainViewModel._config.AppSettings.Settings["FullB"].Value = FullB.ToString();
                 MainViewModel._config.Save();
                 MainViewModel._clientRead.EPosStatusCallBack -= _clientRead_EPosStatusCallBack;
                 MessengerInstance.Send<ObservableCollection<LiquidTypes>, MainViewModel>(LiquidTypes);
