@@ -509,10 +509,11 @@
                                              DisplayMemberPath="FileName"
                                              Foreground="White"
                                              ItemsSource="{Binding LogList}"
+                                             SelectedValuePath="FilePath"
                                              Style="{StaticResource ComboBoxModifiy}" />
                                 <Button Margin="3"
                                         Command="{Binding LoadLogCommand}"
-                                        CommandParameter="{Binding ElementName=LogfileCombobox, Path=SelectedItem}"
+                                        CommandParameter="{Binding ElementName=LogfileCombobox, Path=SelectedValue}"
                                         Content="载入"
                                         Style="{StaticResource ButtonPrimary}" />
                                 <Button Margin="3"

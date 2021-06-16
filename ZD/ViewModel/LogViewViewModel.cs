@@ -40,7 +40,7 @@ namespace SgS.ViewModel
 
         public RelayCommand RefreshCommand { get; private set; }
 
-        public RelayCommand<LogFile> LoadLogCommand { get; private set; }
+        public RelayCommand<string> LoadLogCommand { get; private set; }
 
         public RelayCommand RealTimeLogCommand { get; private set; }
 
@@ -83,7 +83,7 @@ namespace SgS.ViewModel
 
             CloseCommand = new RelayCommand<Window>(CloseWindow);
             DragCommand = new RelayCommand<Window>(DragWindow);
-            LoadLogCommand = new RelayCommand<LogFile>(LoadLog);
+            LoadLogCommand = new RelayCommand<string>(LoadLog);
             RealTimeLogCommand = new RelayCommand(RealTimeLog);
             //RefreshCommand = new RelayCommand(RefreshLog);
             //MessengerInstance.Send(new NotificationMessage("I'm Done !"));
@@ -102,7 +102,7 @@ namespace SgS.ViewModel
             }
         }
 
-        private void LoadLog(LogFile obj)
+        private void LoadLog(string obj)
         {
             stop = true;
             string line;
@@ -112,7 +112,7 @@ namespace SgS.ViewModel
             Thread thread = new Thread(
                 () =>
                 {
-                using (System.IO.StreamReader sr = new System.IO.StreamReader(obj.FilePath, Encoding.Default))
+                using (System.IO.StreamReader sr = new System.IO.StreamReader(obj, Encoding.Default))
                 {
                     List<string> data = new List<string>();
                     // 从文件读取并显示行，直到文件的末尾

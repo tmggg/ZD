@@ -810,7 +810,7 @@
                     <TextBlock VerticalAlignment="Center"
                                FontSize="16"
                                FontWeight="Bold"
-                               Foreground="White"
+                               Foreground="Red"
                                Text="执行区域：" />
                     <hc:ComboBox x:Name="RunArea"
                                  hc:BorderElement.CornerRadius="5"
@@ -2144,7 +2144,7 @@
                            ShowOverflowButton="False"
                            ShowScrollButton="True"
                            Style="{DynamicResource ExtendTabControl}"
-                           TabItemWidth="72">
+                           TabItemWidth="92">
                 <!--<hc:TabControl.ItemTemplate>
                     <DataTemplate>
                         <StackPanel Orientation="Horizontal">

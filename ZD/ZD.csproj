@@ -253,6 +253,8 @@
     <Resource Include="Logo\Logo.png" />
     <Resource Include="Logo\Raykol.ico" />
     <Resource Include="Logo\Raykol.png" />
+    <Resource Include="Logo\Logo_Zd.png" />
+    <Resource Include="Logo\Logo_Zd_White.png" />
     <Content Include="Music\Done.wav">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

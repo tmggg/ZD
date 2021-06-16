@@ -19,6 +19,7 @@ namespace SgS.Model
         private readonly List<bool> _status;
         private readonly Dictionary<string, int> _posData;
         private readonly int _sleepTime;
+        private  bool _isConnected;
         public Thread ThreadReceive;
         public bool stop;
 
@@ -66,6 +67,10 @@ namespace SgS.Model
         /// <param name="device_error_id">设备错误ID号</param>
         public delegate void DeviceErrorCallBack(int device_error_id);
         public event DeviceErrorCallBack EDeviceErrorCallBack;
+
+        public delegate void DeviceConnectedCallBack(bool isConnected);
+        public event DeviceConnectedCallBack EDeviceConnected;
+
         public NetVar(string ipaddress, int port, int id, int readtotal = 42, int sleeptime = 100)
         {
             _reTubeStatus = new List<int>();
@@ -141,6 +146,11 @@ namespace SgS.Model
                     _reTubeStatus.Clear();
                     _posData.Clear();
                     ArrayList dataTable = _client.ReadValues();
+                    if(!_isConnected)
+                    {
+                        _isConnected = true;
+                        EDeviceConnected?.Invoke(_isConnected);
+                    }
                     if (dataTable.Count == 1)
                     {
                         //Console.WriteLine($"数据错误：返回变量数量不匹配，返回数目：{dataTable[0]}");
@@ -215,6 +225,7 @@ namespace SgS.Model
                             LogHelper.instance().Error("UDP客户端错误：{0}", "UDP客户端错误!", socketError);
                             return;
                         case (int)SocketError.TimedOut:
+                            _isConnected = false;
                             ShowGrowlwarningMessage("UDP客户端连接超时!");
                             LogHelper.instance().Error("UDP客户端错误：{0}", "UDP客户端连接超时!");
                             break;

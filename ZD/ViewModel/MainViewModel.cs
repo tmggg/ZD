@@ -28,7 +28,9 @@ namespace SgS.ViewModel
 
     public enum RunStatus
     {
+        connecting,
         init,
+        ready,
         start,
         pause,
         stop,
@@ -221,14 +223,25 @@ namespace SgS.ViewModel
                 {
                     switch (value)
                     {
+                        case RunStatus.connecting:
+                            BorderAttach.SetFlashing(Status_Light, false);
+                            Status_Light.Background = new SolidColorBrush(Colors.WhiteSmoke);
+                            BorderAttach.SetFlashing(Status_Light, true);
+                            _lightStatus = value;
+                            break;
                         case RunStatus.init:
                             BorderAttach.SetFlashing(Status_Light, false);
                             Status_Light.Background = new SolidColorBrush(Color.FromRgb(0, 255, 0));
                             BorderAttach.SetFlashing(Status_Light, true);
                             _lightStatus = value;
                             break;
-                        case RunStatus.start:
+                        case RunStatus.ready:
                             Status_Light.Background = new SolidColorBrush(Color.FromRgb(0, 255, 0));
+                            BorderAttach.SetFlashing(Status_Light, false);
+                            _lightStatus = value;
+                            break;
+                        case RunStatus.start:
+                            Status_Light.Background = new SolidColorBrush(Color.FromRgb(0, 0, 255));
                             BorderAttach.SetFlashing(Status_Light, false);
                             _lightStatus = value;
                             break;
@@ -328,6 +341,8 @@ namespace SgS.ViewModel
 
         public RelayCommand<object[]> ShowKeyPadCommand { get; private set; }
 
+        public RelayCommand<Border> GetLightCommand { get; private set; }
+
         public RelayCommand<Window> MinCommand { get; private set; } = new RelayCommand<Window>((w) => { w.WindowState = WindowState.Minimized; });
         public RelayCommand<Window> MaxCommand { get; private set; } = new RelayCommand<Window>((w) => { w.WindowState = w.WindowState == WindowState.Normal ? WindowState.Maximized : WindowState.Normal; });
 
@@ -357,11 +372,12 @@ namespace SgS.ViewModel
             UpValueCommand = new RelayCommand<NumericUpDown>(UpValue);
             DownValueCommand = new RelayCommand<NumericUpDown>(DownValue);
             ShowKeyPadCommand = new RelayCommand<object[]>(ShowKeyPad);
+            GetLightCommand = new RelayCommand<Border>(GetLight);
             testCommand = new RelayCommand(() => { System.Windows.MessageBox.Show("¼ì²âµ½±à¼­"); });
-            ReSetEnable = true;
-            StartEnable = true;
+            ReSetEnable = false;
+            StartEnable = false;
             PauseEnable = false;
-            StopEnable = true;
+            StopEnable = false;
             CleanEnable = false;
             SettingEnable = true;
             HelperEnable = true;
@@ -464,6 +480,7 @@ namespace SgS.ViewModel
             //_clientRead.EInitStepCallBack += _clientRead_EInitStepCallBack;
             _clientRead.ERunStatusCallBack += _clientRead_ERunStatusCallBack;
             _clientRead.EDeviceErrorCallBack += _clientRead_EDeviceErrorCallBack;
+            _clientRead.EDeviceConnected += _clientRead_EDeviceConnected;
             //_clientRead.ThreadReceive.Start();
             //_clientRead.EInitStepCallBack += _clientRead_EInitStepCallBack;
             //_clientRead.EDataReceiveCallBack += _clientRead_EDataReceiveCallBack;
@@ -505,6 +522,29 @@ namespace SgS.ViewModel
                 TodayCount = 0;
                 //throw;
             }
+        }
+
+        private void _clientRead_EDeviceConnected(bool isConnected)
+        {
+            if (Status_Light != null && isConnected == true)
+            {
+                LightStatus = RunStatus.ready;
+                ReSetEnable = true;
+                StopEnable = true;
+                SettingEnable = true;
+            }
+            else
+            {
+                ReSetEnable = false;
+                StopEnable = false;
+                SettingEnable = false;
+            }
+        }
+
+        private void GetLight(Border obj)
+        {
+            Status_Light = obj;
+            LightStatus = RunStatus.connecting;
         }
 
         /// <summary>
@@ -789,7 +829,7 @@ namespace SgS.ViewModel
             switch (obj[1].ToString())
             {
                 case "¸´Î»":
-                    Status_Light = ((DeviceMain)obj[0]).StatusLight;
+                    //Status_Light = ((DeviceMain)obj[0]).StatusLight;
                     LightStatus = RunStatus.init;
                     SendCommand2Plc(RunStatus.init);
                     _config.AppSettings.Settings["Z1_Sensitivity"].Value = ((LiquidTypes)obj[2])?.Z1Value.ToString();
