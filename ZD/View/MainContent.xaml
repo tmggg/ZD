@@ -1054,7 +1054,7 @@
                 </Style>
             </Grid.Resources>
 
-            <!--<StackPanel Margin="5" Visibility="{Binding IsBusy,Converter={x:Static cv:Bool2Visibiliy.instance}}" Grid.ColumnSpan="2" Orientation="Vertical" Grid.RowSpan="2" Background="{StaticResource Bg}" ZIndex="1">
+            <StackPanel Margin="5" Visibility="{Binding IsBusy,Converter={x:Static cv:Bool2Visibiliy.instance}}" Grid.ColumnSpan="2" Orientation="Vertical" Grid.RowSpan="2" Background="{StaticResource Bg}" ZIndex="1">
                     <hc:LoadingCircle DotDiameter="10" Width="100" Height="100" Foreground="White" Margin="0 100 0 20">
                     </hc:LoadingCircle>
                 <TextBlock Text="{Binding BusyContent}"
@@ -1063,7 +1063,7 @@
                            Foreground="White"
                            HorizontalAlignment="Center"
                            FontSize="20" />
-            </StackPanel>-->
+            </StackPanel>
 
             <Grid Grid.Column="1" Margin="5">
 

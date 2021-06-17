@@ -71,7 +71,7 @@ namespace SgS.Model
         public delegate void DeviceConnectedCallBack(bool isConnected);
         public event DeviceConnectedCallBack EDeviceConnected;
 
-        public NetVar(string ipaddress, int port, int id, int readtotal = 42, int sleeptime = 100)
+        public NetVar(string ipaddress, int port, int id, int readtotal = 36, int sleeptime = 100)
         {
             _reTubeStatus = new List<int>();
             _status = new List<bool>();
@@ -99,16 +99,16 @@ namespace SgS.Model
                 _client.dataTypeCollection.Add(new CDataTypeCollection(DataTypes.bytetype));
                 i++;
             }
-            _client.dataTypeCollection.Add(new CDataTypeCollection(DataTypes.inttype));
-            _client.dataTypeCollection.Add(new CDataTypeCollection(DataTypes.booltype));
-            _client.dataTypeCollection.Add(new CDataTypeCollection(DataTypes.booltype));
-            _client.dataTypeCollection.Add(new CDataTypeCollection(DataTypes.inttype));
-            _client.dataTypeCollection.Add(new CDataTypeCollection(DataTypes.booltype));
-            _client.dataTypeCollection.Add(new CDataTypeCollection(DataTypes.booltype));
-            _client.dataTypeCollection.Add(new CDataTypeCollection(DataTypes.booltype));
-            _client.dataTypeCollection.Add(new CDataTypeCollection(DataTypes.booltype));
-            _client.dataTypeCollection.Add(new CDataTypeCollection(DataTypes.booltype));
-            _client.dataTypeCollection.Add(new CDataTypeCollection(DataTypes.booltype));
+            _client.dataTypeCollection.Add(new CDataTypeCollection(DataTypes.inttype));//动作ID
+            _client.dataTypeCollection.Add(new CDataTypeCollection(DataTypes.booltype));//Busy信号
+            _client.dataTypeCollection.Add(new CDataTypeCollection(DataTypes.booltype));//设备错误信号
+            _client.dataTypeCollection.Add(new CDataTypeCollection(DataTypes.inttype));//设备错误ID
+            _client.dataTypeCollection.Add(new CDataTypeCollection(DataTypes.booltype));//初始化状态
+            _client.dataTypeCollection.Add(new CDataTypeCollection(DataTypes.booltype));//工作完成状态
+            _client.dataTypeCollection.Add(new CDataTypeCollection(DataTypes.booltype));//洗针状态
+            _client.dataTypeCollection.Add(new CDataTypeCollection(DataTypes.booltype));//暂停状态
+            _client.dataTypeCollection.Add(new CDataTypeCollection(DataTypes.booltype));//急停状态
+            _client.dataTypeCollection.Add(new CDataTypeCollection(DataTypes.booltype));//排空状态
             _client.dataTypeCollection.Add(new CDataTypeCollection(DataTypes.dinttype));//X位置
             _client.dataTypeCollection.Add(new CDataTypeCollection(DataTypes.dinttype));//Y位置
             _client.dataTypeCollection.Add(new CDataTypeCollection(DataTypes.dinttype));//Z1位置
@@ -146,11 +146,8 @@ namespace SgS.Model
                     _reTubeStatus.Clear();
                     _posData.Clear();
                     ArrayList dataTable = _client.ReadValues();
-                    if(!_isConnected)
-                    {
-                        _isConnected = true;
-                        EDeviceConnected?.Invoke(_isConnected);
-                    }
+                    _isConnected = true;
+                    EDeviceConnected?.Invoke(_isConnected);
                     if (dataTable.Count == 1)
                     {
                         //Console.WriteLine($"数据错误：返回变量数量不匹配，返回数目：{dataTable[0]}");
@@ -160,32 +157,32 @@ namespace SgS.Model
                     }
                     foreach (var item in dataTable)
                     {
-                        if(loop < 42)
+                        if(loop < 36)
                             _reTubeStatus.Add(int.Parse(item.ToString()));//试管状态
-                        if (loop == 42)
+                        if (loop == 36)
                             _step_id = int.Parse(item.ToString());//进行的动作ID
-                        if (loop == 43)
+                        if (loop == 37)
                             _status.Add(bool.Parse(item.ToString()));//BUSY信号 0,
-                        if (loop == 44)
+                        if (loop == 38)
                             _status.Add(bool.Parse(item.ToString()));//设备ERROR信号 1,
-                        if(loop == 45)
+                        if(loop == 39)
                         {
                             _error_Id = int.Parse(item.ToString());//设备错误ID
                             EDeviceErrorCallBack?.Invoke(_error_Id);
                         }
-                        if (loop > 45 && loop < 52)
+                        if (loop > 39 && loop < 46)
                             _status.Add(bool.Parse(item.ToString()));// 2 初始化状态,3 工作完成状态,4 洗针状态,5 暂停状态,6 急停状态,7 排空状态
-                        if (loop > 51 && loop <= 53)
+                        if (loop > 45 && loop <= 47)
                         {
-                            _posData.Add(string.Format("{0}",(char)('x'+ loop - 52)), int.Parse(item.ToString()));
+                            _posData.Add(string.Format("{0}",(char)('x'+ loop - 46)), int.Parse(item.ToString()));
                         }
-                        if(loop > 53 && loop <= 55)
+                        if(loop > 47 && loop <= 49)
                         {
-                            _posData.Add(string.Format("z{0}", loop - 53), int.Parse(item.ToString()));
+                            _posData.Add(string.Format("z{0}", loop - 47), int.Parse(item.ToString()));
                         }
-                        if (loop > 55 && loop <= 57)
+                        if (loop > 49 && loop <= 51)
                         {
-                            _posData.Add(string.Format("z{0}sensor", loop - 55), int.Parse(item.ToString()));
+                            _posData.Add(string.Format("z{0}sensor", loop - 49), int.Parse(item.ToString()));
                         }
                         loop++;
                     }

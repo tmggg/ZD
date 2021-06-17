@@ -253,7 +253,7 @@ namespace SgS.ViewModel
                             break;
                         case RunStatus.stop:
                             BorderAttach.SetFlashing(Status_Light, false);
-                            Status_Light.Background = new SolidColorBrush(Colors.Gray);
+                            Status_Light.Background = new SolidColorBrush(Color.FromRgb(0, 255, 0));
                             _lightStatus = value;
                             break;
                         case RunStatus.clean:
@@ -528,16 +528,23 @@ namespace SgS.ViewModel
         {
             if (Status_Light != null && isConnected == true)
             {
-                LightStatus = RunStatus.ready;
-                ReSetEnable = true;
-                StopEnable = true;
-                SettingEnable = true;
+                App.Current.Dispatcher.Invoke(() =>
+                {
+                    LightStatus = RunStatus.ready;
+                    ReSetEnable = true;
+                    StopEnable = true;
+                    SettingEnable = true;
+                    _clientRead.EDeviceConnected -= _clientRead_EDeviceConnected;
+                });
             }
             else
             {
-                ReSetEnable = false;
-                StopEnable = false;
-                SettingEnable = false;
+                App.Current.Dispatcher.Invoke(() =>
+                {
+                    ReSetEnable = false;
+                    StopEnable = false;
+                    SettingEnable = false;
+                });
             }
         }
 
