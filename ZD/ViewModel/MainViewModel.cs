@@ -33,7 +33,6 @@ namespace SgS.ViewModel
         ready,
         start,
         pause,
-        stop,
         clean,
         clean_error,
         estop
@@ -58,6 +57,7 @@ namespace SgS.ViewModel
         private System.Media.SoundPlayer musicPlayer = new System.Media.SoundPlayer();
         private readonly int[,] tubeTags;
         private Dictionary<int, int[]> zoneSelPoint;
+        private Stack<RunStatus> _lastStatus = new Stack<RunStatus>();
 
         #region Attribute
 
@@ -134,15 +134,15 @@ namespace SgS.ViewModel
             }
         }
 
-        private bool _helperEnable;
+        private bool _mainEnable;
 
-        public bool HelperEnable
+        public bool MainEnable
         {
-            get { return _helperEnable; }
+            get { return _mainEnable; }
             set
             {
-                _helperEnable = value;
-                RaisePropertyChanged(() => HelperEnable);
+                _mainEnable = value;
+                RaisePropertyChanged(() => MainEnable);
             }
         }
 
@@ -177,8 +177,12 @@ namespace SgS.ViewModel
             get { return _busyContent; }
             set
             {
-                _busyContent = value;
-                RaisePropertyChanged(() => BusyContent);
+                if (_busyContent != value)
+                {
+                    _busyContent = value;
+                    RaisePropertyChanged(() => BusyContent);
+
+                }
             }
         }
 
@@ -251,12 +255,15 @@ namespace SgS.ViewModel
                             BorderAttach.SetFlashing(Status_Light, true);
                             _lightStatus = value;
                             break;
-                        case RunStatus.stop:
+                        //case RunStatus.stop:
+                        //    BorderAttach.SetFlashing(Status_Light, false);
+                        //    Status_Light.Background = new SolidColorBrush(Color.FromRgb(0, 255, 0));
+                        //    _lightStatus = value;
+                        //    break;
+                        case RunStatus.clean:
                             BorderAttach.SetFlashing(Status_Light, false);
                             Status_Light.Background = new SolidColorBrush(Color.FromRgb(0, 255, 0));
-                            _lightStatus = value;
-                            break;
-                        case RunStatus.clean:
+                            BorderAttach.SetFlashing(Status_Light, true);
                             _lightStatus = value;
                             break;
                         case RunStatus.clean_error:
@@ -306,8 +313,6 @@ namespace SgS.ViewModel
             }
         }
 
-
-
         #endregion
 
         #region Command
@@ -353,6 +358,7 @@ namespace SgS.ViewModel
             MessengerInstance.Register<NotificationMessage>(this, NotifyMe);
             MessengerInstance.Register<LogViewViewModel>(this, DoSomeThing);
             MessengerInstance.Register<ObservableCollection<LiquidTypes>>(this, UpdateLiquidType);
+            MessengerInstance.Register<bool>(this, "OffMainTab", OffMainTab);
             TabItems = new ObservableCollection<TabItem>();
             AllData = new ObservableCollection<Data>();
             MethodItems = new ObservableCollection<Data>();
@@ -380,27 +386,28 @@ namespace SgS.ViewModel
             StopEnable = false;
             CleanEnable = false;
             SettingEnable = true;
-            HelperEnable = true;
+            MainEnable = true;
             IsBusy = false;
             EStop = false;
             _starttag = 0;
             _endtag = 0;
-            _isRuning = RunStatus.stop;
-            BusyContent = "正在操作，请等待。。。。";
+            _isRuning = RunStatus.ready;
+            //BusyContent = "正在操作，请等待。。。。";
+            _busyContent = "准备就绪，等待启动。。。。";
             string subPath = AppDomain.CurrentDomain.BaseDirectory + @"Logs";
             if (false == System.IO.Directory.Exists(subPath))
             {
                 System.IO.Directory.CreateDirectory(subPath);
             }
-            if (!System.IO.File.Exists(AppDomain.CurrentDomain.BaseDirectory + @"Logs\SGS-count-" +
+            if (!System.IO.File.Exists(AppDomain.CurrentDomain.BaseDirectory + @"Logs\ZD-count-" +
                                                   DateTime.Now.ToString("yyyy-MM-dd") + ".log"))
             {
-                System.IO.File.Create(AppDomain.CurrentDomain.BaseDirectory + @"Logs\SGS-count-" +
+                System.IO.File.Create(AppDomain.CurrentDomain.BaseDirectory + @"Logs\ZD-count-" +
                                                           DateTime.Now.ToString("yyyy-MM-dd") + ".log").Close();
-                countpath = AppDomain.CurrentDomain.BaseDirectory + @"Logs\SGS-count-" +
+                countpath = AppDomain.CurrentDomain.BaseDirectory + @"Logs\ZD-count-" +
                                                           DateTime.Now.ToString("yyyy-MM-dd") + ".log";
             }
-            countpath = AppDomain.CurrentDomain.BaseDirectory + @"Logs\SGS-count-" +
+            countpath = AppDomain.CurrentDomain.BaseDirectory + @"Logs\ZD-count-" +
                                           DateTime.Now.ToString("yyyy-MM-dd") + ".log";
             if (!IsInDesignMode)
             {
@@ -423,12 +430,12 @@ namespace SgS.ViewModel
             _tabItemCount = MethodItems.Count;
 
             tubeTags = new int[6, 6];
-            int[] seeds = new int[] { 0, 1, 12, 13, 24, 25 };
+            int[] seeds = new int[] { 0, 6, 12, 18, 24, 30 };
             for (int i = 0; i < 6; i++)
             {
                 for (int k = 0; k < 6; k++)
                 {
-                    tubeTags[k, i] = 2 * i + seeds[k];
+                    tubeTags[k, i] = i + seeds[k];
                 }
             }
 
@@ -481,6 +488,7 @@ namespace SgS.ViewModel
             _clientRead.ERunStatusCallBack += _clientRead_ERunStatusCallBack;
             _clientRead.EDeviceErrorCallBack += _clientRead_EDeviceErrorCallBack;
             _clientRead.EDeviceConnected += _clientRead_EDeviceConnected;
+            //_clientRead.ESolventErrorCallBack += _clientRead_ESolventErrorCallBack;
             //_clientRead.ThreadReceive.Start();
             //_clientRead.EInitStepCallBack += _clientRead_EInitStepCallBack;
             //_clientRead.EDataReceiveCallBack += _clientRead_EDataReceiveCallBack;
@@ -503,8 +511,8 @@ namespace SgS.ViewModel
                 //    continue;
                 //}
                 //CloseHandle(vHandle);
-                using (System.IO.StreamReader sr = new System.IO.StreamReader(AppDomain.CurrentDomain.BaseDirectory + @"Logs\SGS-count-" +
-                    DateTime.Now.ToString("yyyy-MM-dd") + ".log", System.Text.Encoding.UTF8))
+                List<string> temp = new List<string>();
+                using (System.IO.StreamReader sr = new System.IO.StreamReader(countpath, System.Text.Encoding.UTF8))
                 {
                     // 从文件读取并显示行，直到文件的末尾
                     while ((line = sr.ReadLine()) != null)
@@ -513,8 +521,19 @@ namespace SgS.ViewModel
                         {
                             TodayCount += int.Parse(line.Split('：').GetValue(4).ToString());
                         }
+                        if (line.Contains("今日完成的样品数量------"))
+                            continue;
+                        temp.Add(line);
                     }
                 }
+                System.IO.FileStream fs = new System.IO.FileStream(countpath, System.IO.FileMode.Create);
+                StreamWriter sw = new StreamWriter(fs);
+                foreach (var data in temp)
+                {
+                    sw.WriteLine(data);
+                }
+                sw.Close();
+                fs.Close();
             }
             catch (Exception e)
             {
@@ -522,6 +541,16 @@ namespace SgS.ViewModel
                 TodayCount = 0;
                 //throw;
             }
+        }
+
+        private void _clientRead_ESolventErrorCallBack(List<bool> SolventErrorList)
+        {
+
+        }
+
+        private void OffMainTab(bool off)
+        {
+            MainEnable = false;
         }
 
         private void _clientRead_EDeviceConnected(bool isConnected)
@@ -535,6 +564,8 @@ namespace SgS.ViewModel
                     StopEnable = true;
                     SettingEnable = true;
                     _clientRead.EDeviceConnected -= _clientRead_EDeviceConnected;
+                    _clientRead.EInitStepCallBack += _clientRead_EInitStepCallBack;
+                    _clientRead.ERuningStepCallBack += _clientRead_ERuningStepCallBack;
                 });
             }
             else
@@ -578,7 +609,7 @@ namespace SgS.ViewModel
         {
             if (obj.Name == "N3" || obj.Name == "N4")
             {
-                obj.Value -= 100;
+                obj.Value -= 10;
                 return;
             }
             obj.Value -= 0.1;
@@ -592,7 +623,7 @@ namespace SgS.ViewModel
         {
             if (obj.Name == "N3" || obj.Name == "N4")
             {
-                obj.Value += 100;
+                obj.Value += 10;
                 return;
             }
             obj.Value += 0.1;
@@ -604,6 +635,7 @@ namespace SgS.ViewModel
         /// <param name="obj">方法内容</param>
         private void SelectAll(object[] obj)
         {
+            if (_isRuning != RunStatus.ready || obj[0] == null) return;
             //throw new NotImplementedException();
             if (obj[0] == null)
                 return;
@@ -653,7 +685,7 @@ namespace SgS.ViewModel
         /// <param name="obj">方法内容</param>
         private void SetRow(object[] obj)
         {
-            if (_isRuning != RunStatus.stop) return;
+            if (_isRuning != RunStatus.ready || obj[1] == null) return;
             bool iscancel = false;
             int start = 0;
             switch (obj[0].ToString())
@@ -662,24 +694,24 @@ namespace SgS.ViewModel
                     start = 0;
                     break;
                 case "B":
-                    start = 1;
+                    start = 6;
                     break;
                 case "C":
                     start = 12;
                     break;
                 case "D":
-                    start = 13;
+                    start = 18;
                     break;
                 case "E":
                     start = 24;
                     break;
                 case "F":
-                    start = 25;
+                    start = 30;
                     break;
                 default:
                     return;
             }
-            for (int i = start; i <= start + 11; i += 2)
+            for (int i = start; i <= start + 5; i++)
             {
                 if (AllData[i].Name == ((Data)obj[1]).Name)
                 {
@@ -726,8 +758,7 @@ namespace SgS.ViewModel
         private void SetColums(object[] obj)
         {
             bool iscancel = false;
-            if (_isRuning != RunStatus.stop) return;
-
+            if (_isRuning != RunStatus.ready || obj[1] == null) return;
             int selectColIndex = 0;
             switch (obj[0].ToString())
             {
@@ -837,17 +868,14 @@ namespace SgS.ViewModel
             {
                 case "复位":
                     //Status_Light = ((DeviceMain)obj[0]).StatusLight;
-                    LightStatus = RunStatus.init;
+                    //LightStatus = RunStatus.init;
                     SendCommand2Plc(RunStatus.init);
-                    _config.AppSettings.Settings["Z1_Sensitivity"].Value = ((LiquidTypes)obj[2])?.Z1Value.ToString();
-                    _config.AppSettings.Settings["Z2_Sensitivity"].Value = ((LiquidTypes)obj[2])?.Z2Value.ToString();
-                    SendData();
-                    _clientRead.EInitStepCallBack += _clientRead_EInitStepCallBack;
+                    //_config.AppSettings.Settings["Z1_Sensitivity"].Value = ((LiquidTypes)obj[2])?.Z1Value.ToString();
+                    //_config.AppSettings.Settings["Z2_Sensitivity"].Value = ((LiquidTypes)obj[2])?.Z2Value.ToString();
+                    //SendData();
                     //_clientRead.ERunStatusCallBack += _clientRead_ERunStatusCallBack;
                     //_clientRead.EDeviceErrorCallBack += _clientRead_EDeviceErrorCallBack;
-                    _clientRead.ERuningStepCallBack += _clientRead_ERuningStepCallBack;
-                    IsBusy = true;
-                    _isRuning = RunStatus.init;
+                    //_isRuning = RunStatus.init;
                     StartEnable = false;
                     PauseEnable = false;
                     StopEnable = true;
@@ -885,6 +913,18 @@ namespace SgS.ViewModel
                         //_isRuning = RunStatus.start;
                         return;
                     }
+                    if (RunArea == 1)
+                        foreach (var item in AllData)
+                        {
+                            if(item.Value > 15)
+                            {
+                                if (MessageBoxResult.Yes == System.Windows.MessageBox.Show("检测到运行区域为B区，且加液体积大于运行区域试管规定体积15ml，是否继续执行？", "运行确认", MessageBoxButton.YesNo, MessageBoxImage.Question))
+                                    break;
+                                else
+                                    return;
+                            }
+                        }
+
                     LightStatus = RunStatus.start;
                     StartEnable = false;
                     PauseEnable = true;
@@ -948,7 +988,7 @@ namespace SgS.ViewModel
                     //_clientRead.ERunStatusCallBack -= _clientRead_ERunStatusCallBack;
                     _clientRead.EDataReceiveCallBack -= _clientRead_EDataReceiveCallBack;
                     //_clientRead.EDeviceErrorCallBack -= _clientRead_EDeviceErrorCallBack;
-                    _clientRead.EInitStepCallBack -= _clientRead_EInitStepCallBack;
+                    //_clientRead.EInitStepCallBack -= _clientRead_EInitStepCallBack;
                     /*
                      if (_clientRead.ThreadReceive.IsAlive)
                     {
@@ -993,7 +1033,7 @@ namespace SgS.ViewModel
                     //    _clientRead.EDataReceiveCallBack -= _clientRead_EDataReceiveCallBack;
                     //    _clientRead.stop = true;
                     //}));
-                    SendCommand2Plc(RunStatus.stop);
+                    SendCommand2Plc(RunStatus.ready);
                     LightStatus = RunStatus.estop;
                     Growl.ErrorGlobal("设备进入急停状态！");
                     LogHelper.instance().Error("上位机动作：设备进入急停状态，请重新初始化设备！");
@@ -1471,7 +1511,7 @@ namespace SgS.ViewModel
                 new CDataTypeCollection(_config.AppSettings.Settings["FullB"].Value ==
                 null ? 0 : double.Parse(MainViewModel._config.AppSettings.Settings["FullB"].Value), DataTypes.realtype, "FullB"));
 
-            dataTypeCollection.Add(new CDataTypeCollection(RunArea, DataTypes.realtype, "RunArea"));
+            dataTypeCollection.Add(new CDataTypeCollection(RunArea + 1, DataTypes.realtype, "RunArea"));
 
             writeVar.WriteData(dataTypeCollection);
             writeVar.Disconnect();
@@ -1551,7 +1591,7 @@ namespace SgS.ViewModel
                     sendercommand.Add(new CDataTypeCollection(false, DataTypes.booltype, "clean"));
                     sendercommand.Add(new CDataTypeCollection(false, DataTypes.booltype, "clean_error"));
                     break;
-                case RunStatus.stop:
+                case RunStatus.ready:
                     sendercommand.Add(new CDataTypeCollection(false, DataTypes.booltype, "init"));
                     sendercommand.Add(new CDataTypeCollection(false, DataTypes.booltype, "start"));
                     sendercommand.Add(new CDataTypeCollection(false, DataTypes.booltype, "pause"));
@@ -1646,7 +1686,9 @@ namespace SgS.ViewModel
         {
             //throw new NotImplementedException();
             if (_allStatus.InitStatus.ContainsKey(init_step_id))
+            {
                 BusyContent = _allStatus.InitStatus[init_step_id];
+            }
         }
 
         /// <summary>
@@ -1700,8 +1742,8 @@ namespace SgS.ViewModel
                     CleanEnable = false;
                     SettingEnable = false;
                     //HelperEnable = true;
-                    LightStatus = RunStatus.stop;
-                    _isRuning = RunStatus.stop;
+                    LightStatus = RunStatus.ready;
+                    _isRuning = RunStatus.ready;
                     IsBusy = false;
                     //SendCommand2Plc(RunStatus.stop);
                     Growl.ErrorGlobal("设备急停按钮已弹出，请重新初始化设备！");
@@ -1710,18 +1752,20 @@ namespace SgS.ViewModel
                     //_clientRead.ERunStatusCallBack -= _clientRead_ERunStatusCallBack;
                     _clientRead.EDataReceiveCallBack -= _clientRead_EDataReceiveCallBack;
                     //_clientRead.EDeviceErrorCallBack -= _clientRead_EDeviceErrorCallBack;
-                    _clientRead.EInitStepCallBack -= _clientRead_EInitStepCallBack;
+                    //_clientRead.EInitStepCallBack -= _clientRead_EInitStepCallBack;
                     EStop = false;
                     musicPlayer.Stop();
                 });
             }
             //设备暂停
-            if (runStatus[5] == true && _isRuning == RunStatus.start)//从运行状态暂停
+            if (runStatus[5] == true && (_isRuning == RunStatus.start | _isRuning == RunStatus.clean))//从运行状态暂停
             {
                 Application.Current.Dispatcher.Invoke(() =>
                 {
+                    _lastStatus.Push(_isRuning);
                     _isRuning = RunStatus.pause;
                     LightStatus = RunStatus.pause;
+                    _lastStatus.Push(_isRuning);
                     StartEnable = true;
                     PauseEnable = false;
                     //StopEnable = true;
@@ -1738,8 +1782,9 @@ namespace SgS.ViewModel
             {
                 Application.Current.Dispatcher.Invoke(() =>
                 {
-                    _isRuning = RunStatus.start;
-                    LightStatus = RunStatus.start;//StartEnable = true;
+                    _lastStatus.Pop();
+                    _isRuning = _lastStatus.Pop();
+                    LightStatus = _isRuning;
                     StartEnable = false;
                     PauseEnable = true;
                     //StopEnable = true;
@@ -1756,7 +1801,7 @@ namespace SgS.ViewModel
             {
                 Application.Current.Dispatcher.Invoke(() =>
                 {
-                    LightStatus = RunStatus.stop;
+                    LightStatus = RunStatus.ready;
                     StartEnable = true;
                     PauseEnable = false;
                     //StopEnable = true;
@@ -1765,9 +1810,9 @@ namespace SgS.ViewModel
                     SettingEnable = true;
                     //HelperEnable = true;
                     IsBusy = false;
-                    _clientRead.EInitStepCallBack -= _clientRead_EInitStepCallBack;
+                    //_clientRead.EInitStepCallBack -= _clientRead_EInitStepCallBack;
                     _clientRead.ERuningStepCallBack -= _clientRead_ERuningStepCallBack;
-                    _isRuning = RunStatus.stop;
+                    _isRuning = RunStatus.ready;
                     LogHelper.instance().Info("设备动作：设备初始化操作执行完成！");
                     Growl.InfoGlobal("设备复位成功！");
                 });
@@ -1778,7 +1823,7 @@ namespace SgS.ViewModel
             {
                 Application.Current.Dispatcher.Invoke(() =>
                 {
-                    LightStatus = RunStatus.stop;
+                    LightStatus = RunStatus.ready;
                     _clientRead.ERuningStepCallBack -= _clientRead_ERuningStepCallBack;
                     _clientRead.EDataReceiveCallBack -= _clientRead_EDataReceiveCallBack;
                     StartEnable = true;
@@ -1789,7 +1834,7 @@ namespace SgS.ViewModel
                     SettingEnable = true;
                     //HelperEnable = true;
                     IsBusy = false;
-                    _isRuning = RunStatus.stop;
+                    _isRuning = RunStatus.ready;
                     LogHelper.instance().Info("设备动作：设备所有动作执行完成，准备接收下一次执行参数！");
                     Growl.InfoGlobal("设备所有操作已完成！");
                     if (File.Exists(AppDomain.CurrentDomain.BaseDirectory + @"Music\Done.wav"))
@@ -1807,7 +1852,7 @@ namespace SgS.ViewModel
                     }
                     CountLog(countpath, $"本次完成的样品数量：{count}");
                     CountLog(countpath, "本次动作结束！");
-                    string checkpath = AppDomain.CurrentDomain.BaseDirectory + @"Logs\SGS-count-" +
+                    string checkpath = AppDomain.CurrentDomain.BaseDirectory + @"Logs\ZD-count-" +
                     DateTime.Now.ToString("yyyy-MM-dd") + ".log";
                     if (countpath != checkpath)
                     {
@@ -1843,7 +1888,7 @@ namespace SgS.ViewModel
             {
                 Application.Current.Dispatcher.Invoke(() =>
                 {
-                    LightStatus = RunStatus.stop;
+                    LightStatus = RunStatus.ready;
                     StartEnable = true;
                     PauseEnable = false;
                     //StopEnable = true;
@@ -1853,7 +1898,7 @@ namespace SgS.ViewModel
                     //HelperEnable = true;
                     IsBusy = false;
                     //_clientRead.ERunStatusCallBack -= _clientRead_ERunStatusCallBack;
-                    _isRuning = RunStatus.stop;
+                    _isRuning = RunStatus.ready;
                     LogHelper.instance().Info("设备动作：设备排空操作执行完成！");
                     if (File.Exists(AppDomain.CurrentDomain.BaseDirectory + @"Music\Done.wav"))
                     {
@@ -1864,6 +1909,13 @@ namespace SgS.ViewModel
                     }
                     Growl.InfoGlobal("设备排空成功！");
                 });
+            }
+            //洗针操作完成
+            if (runStatus[0] == true && runStatus[4] == true)
+            {
+                LogHelper.instance().Info("设备动作：全部洗针操作执行完成！");
+                Growl.InfoGlobal("全部洗针成功！");
+                MainEnable = true;
             }
 
         }
@@ -1920,7 +1972,7 @@ namespace SgS.ViewModel
         private void DeployMethod(object[] parm)
         {
             bool iscancel = false;
-            if (_isRuning != RunStatus.stop) return;
+            if (_isRuning != RunStatus.ready) return;
 
             if (!_select)
             {
@@ -2099,13 +2151,13 @@ AllData[i].Color = new SolidColorBrush(Color.FromRgb(3, 195, 175));
         /// <param name="e"></param>
         private void WindowClosing(CancelEventArgs e)
         {
-            if (_isRuning != RunStatus.stop && _isRuning != RunStatus.estop)
+            if (_isRuning != RunStatus.ready && _isRuning != RunStatus.estop)
             {
                 Growl.ErrorGlobal("设备处于工作状态不能关闭软件！");
                 e.Cancel = true;
                 return;
             }
-            CountLog(countpath, $"今日完成的样品数量------{TodayCount}");
+            CountLog(countpath, $"关闭软件统计,今日完成的样品数量------{TodayCount}");
             MessengerInstance.Send<bool, LogViewViewModel>(true);
             if (_starttag != _endtag)
             {
@@ -2208,8 +2260,9 @@ AllData[i].Color = new SolidColorBrush(Color.FromRgb(3, 195, 175));
                                 musicPlayer.Stop();
                                 return;
                             }
-                            _isRuning = RunStatus.start;
-                            LightStatus = RunStatus.start;
+                            _lastStatus.Pop();
+                            _isRuning = _lastStatus.Pop();
+                            LightStatus = _isRuning;
                             StartEnable = false;
                             PauseEnable = true;
                             ReSetEnable = false;
@@ -2221,8 +2274,7 @@ AllData[i].Color = new SolidColorBrush(Color.FromRgb(3, 195, 175));
                         });
                         return;
                     }
-                    else
-                    if (ErrorID > 0 && ErrorID <= 3)
+                    else if (ErrorID >= 15)
                     {
                         Application.Current.Dispatcher.Invoke(() =>
                         {
@@ -2234,13 +2286,13 @@ AllData[i].Color = new SolidColorBrush(Color.FromRgb(3, 195, 175));
                             SettingEnable = false;
                             //HelperEnable = true;
                             LightStatus = RunStatus.estop;
-                            _isRuning = RunStatus.stop;
+                            _isRuning = RunStatus.ready;
                             _clientRead.ERuningStepCallBack -= _clientRead_ERuningStepCallBack;
                             //_clientRead.ERunStatusCallBack -= _clientRead_ERunStatusCallBack;
                             _clientRead.EDataReceiveCallBack -= _clientRead_EDataReceiveCallBack;
                             //_clientRead.EDeviceErrorCallBack -= _clientRead_EDeviceErrorCallBack;
-                            _clientRead.EInitStepCallBack -= _clientRead_EInitStepCallBack;
-                            SendCommand2Plc(RunStatus.stop);
+                            //_clientRead.EInitStepCallBack -= _clientRead_EInitStepCallBack;
+                            SendCommand2Plc(RunStatus.ready);
                             if (_allStatus.ErrorStatus.ContainsKey(ErrorID))
                             {
                                 Growl.ErrorGlobal(_allStatus.ErrorStatus[ErrorID]);
@@ -2258,11 +2310,26 @@ AllData[i].Color = new SolidColorBrush(Color.FromRgb(3, 195, 175));
                     {
                         Application.Current.Dispatcher.Invoke(() =>
                       {
-                          _isRuning = RunStatus.clean_error;
+                          if (_lastStatus.Count > 0)
+                          {
+                              if (_lastStatus.Peek() != RunStatus.clean_error)
+                              {
+                                  _lastStatus.Push(_isRuning);
+                                  _isRuning = RunStatus.clean_error;
+                                  LightStatus = RunStatus.clean_error;
+                                  _lastStatus.Push(_isRuning);
+                              }
+                          }
+                          else
+                          {
+                              _lastStatus.Push(_isRuning);
+                              _isRuning = RunStatus.clean_error;
+                              LightStatus = RunStatus.clean_error;
+                              _lastStatus.Push(_isRuning);
+                          }
                           //BorderAttach.SetFlashing(Status_Light, false);
                           //Status_Light.Background = new SolidColorBrush(Colors.Red);
                           //BorderAttach.SetFlashing(Status_Light, true);
-                          LightStatus = RunStatus.clean_error;
                           StartEnable = true;
                           PauseEnable = false;
                           ReSetEnable = false;
@@ -2284,6 +2351,35 @@ AllData[i].Color = new SolidColorBrush(Color.FromRgb(3, 195, 175));
                         });
                     }
                     break;
+                case "BusyContent":
+                    if ((_isRuning == RunStatus.ready || _isRuning == RunStatus.estop) && _busyContent != "准备就绪，等待启动。。。。")
+                    {
+                        Application.Current.Dispatcher.Invoke(() =>
+                        {
+                            //Growl.InfoGlobal(_allStatus.SeparationStatus[RunId]);
+                            //_config.AppSettings.Settings["Z1_Sensitivity"].Value = ((LiquidTypes)obj[2])?.Z1Value.ToString();
+                            //_config.AppSettings.Settings["Z2_Sensitivity"].Value = ((LiquidTypes)obj[2])?.Z2Value.ToString();
+                            //SendData();
+                            //_clientRead.ERunStatusCallBack += _clientRead_ERunStatusCallBack;
+                            //_clientRead.EDeviceErrorCallBack += _clientRead_EDeviceErrorCallBack;
+                            //_isRuning = RunStatus.init;
+                            StartEnable = false;
+                            PauseEnable = false;
+                            StopEnable = true;
+                            ReSetEnable = false;
+                            CleanEnable = false;
+                            SettingEnable = false;
+                            IsBusy = true;
+                            _isRuning = RunStatus.init;
+                            LightStatus = RunStatus.init;
+                            //HelperEnable = true;
+                            if (_clientRead.ThreadReceive.IsAlive != true)
+                                _clientRead.ThreadReceive.Start();
+                            LogHelper.instance().Info("上位机动作：设备进入初始化状态！");
+                        });
+
+                    }
+                    break;
                 default:
                     break;
             }
@@ -2299,15 +2395,15 @@ AllData[i].Color = new SolidColorBrush(Color.FromRgb(3, 195, 175));
         {
             try
             {
-                string path = AppDomain.CurrentDomain.BaseDirectory + @"Logs\SGS-count-" +
-                              DateTime.Now.ToString("yyyy-MM-dd") + ".log";//文件的路径，保证文件存在。
-                if (!File.Exists(path))
-                {
-                    File.Create(path).Close();
-                }
+                //string path = AppDomain.CurrentDomain.BaseDirectory + @"Logs\ZD-count-" +
+                //              DateTime.Now.ToString("yyyy-MM-dd") + ".log";//文件的路径，保证文件存在。
+                //if (!File.Exists(path))
+                //{
+                //    File.Create(path).Close();
+                //}
                 string w2f = System.DateTime.Now.ToString("yyyy-MM-dd HH：mm：ss ：");
                 w2f += logstr;
-                System.IO.FileStream fs = new System.IO.FileStream(path, System.IO.FileMode.Append);
+                System.IO.FileStream fs = new System.IO.FileStream(countpath, System.IO.FileMode.Append);
                 StreamWriter sw = new StreamWriter(fs);
                 sw.WriteLine(w2f);
                 sw.Close();

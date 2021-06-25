@@ -72,7 +72,11 @@ namespace SgS.Model
             ErrorStatus.Add(11, "5号溶剂瓶液面太低");
             ErrorStatus.Add(12, "排废瓶液面过高");
             ErrorStatus.Add(16, "有电机没有走到指定位置");
-
+            ErrorStatus.Add(17, "第一个设备板ECAT联系不上");
+            ErrorStatus.Add(18, "第二个设备板ECAT联系不上"); 
+            ErrorStatus.Add(19, "第三个设备板ECAT联系不上"); 
+            ErrorStatus.Add(20, "第四个设备板ECAT联系不上"); 
+            ErrorStatus.Add(21, "第五个设备板ECAT联系不上");
         }
 
         public static AllStatus GetAllStatus()

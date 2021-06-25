@@ -34,38 +34,43 @@ using System.Windows.Interactivity;
 
 namespace SgS.Behavior
 {
-    public class TextBoxDoubleClickBehavior:Behavior<TextBox>
+    public class TextBoxDoubleClickBehavior : Behavior<TextBox>
     {
         protected override void OnAttached()
         {
-            AssociatedObject.TouchDown += AssociatedObject_TouchDown; ;
+            AssociatedObject.TouchUp += AssociatedObject_TouchUp; ;
             base.OnAttached();
         }
 
-        private void AssociatedObject_TouchDown(object sender, System.Windows.Input.TouchEventArgs e)
+        private void AssociatedObject_TouchUp(object sender, System.Windows.Input.TouchEventArgs e)
         {
             if (sender is TextBox)
             {
-                KeyPad.Keypad keypad = new KeyPad.Keypad(null, ((TextBox)sender).Tag?.ToString());
+                double result = double.NaN;
+                double.TryParse(((TextBox)sender).Text, out result);
+                KeyPad.Keypad keypad = new KeyPad.Keypad(null, ((TextBox)sender).Tag?.ToString(), 0, 0, result);
                 keypad.ShowDialog();
-                ((TextBox)sender).Text = keypad.Result;
+                if (double.TryParse(keypad.Result, out result))
+                    ((TextBox)sender).Text = result.ToString();
             }
         }
 
         protected override void OnDetaching()
         {
-            AssociatedObject.TouchDown -= AssociatedObject_TouchDown;
+            AssociatedObject.TouchDown -= AssociatedObject_TouchUp;
             base.OnDetaching();
         }
 
 
         private void AssociatedObject_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            if(sender is TextBox)
+            if (sender is TextBox)
             {
                 KeyPad.Keypad keypad = new KeyPad.Keypad(null, ((TextBox)sender).Tag?.ToString());
                 keypad.ShowDialog();
-                ((TextBox)sender).Text = keypad.Result;
+                double result = double.NaN;
+                if (double.TryParse(keypad.Result, out result))
+                    ((TextBox)sender).Text = keypad.Result;
             }
         }
 

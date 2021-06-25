@@ -40,11 +40,11 @@ namespace SgS.Behavior
     {
         protected override void OnAttached()
         {
-            AssociatedObject.TouchDown += AssociatedObject_TouchDown; ;
+            AssociatedObject.TouchUp += AssociatedObject_TouchUp; ;
             base.OnAttached();
         }
 
-        private void AssociatedObject_TouchDown(object sender, System.Windows.Input.TouchEventArgs e)
+        private void AssociatedObject_TouchUp(object sender, System.Windows.Input.TouchEventArgs e)
         {
             KeyPad.Keypad keypad = new KeyPad.Keypad(null, ((NumericUpDown)sender).Tag.ToString(), ((NumericUpDown)sender).Minimum, ((NumericUpDown)sender).Maximum, ((NumericUpDown)sender).Value);
             keypad.ShowDialog();
@@ -55,7 +55,7 @@ namespace SgS.Behavior
 
         protected override void OnDetaching()
         {
-            AssociatedObject.TouchDown -= AssociatedObject_TouchDown;
+            AssociatedObject.TouchUp -= AssociatedObject_TouchUp;
             base.OnDetaching();
         }
         

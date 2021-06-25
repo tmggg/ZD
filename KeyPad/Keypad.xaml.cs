@@ -134,7 +134,34 @@ namespace KeyPad
                         if (Result.Contains("."))
                             return;
                     }
-                    if(Result.Length == 1 && Result.EndsWith("0"))
+                    if (button.CommandParameter.ToString() == "DECIMAL"  && Result.Length == 1 || button.CommandParameter.ToString() == "DECIMAL" && Result.Contains("-"))
+                    {
+                        if (Result.EndsWith("-"))
+                            return;
+                        Result = Result + ".";
+                        return;
+                    }
+                    if (Result.Length > 0 && button.CommandParameter.ToString() == "SUB")
+                    {
+                        if (!Result.Contains("-"))
+                        {
+                            if (Result.Length == 1 && Result == "0")
+                            {
+                                Result = "-";
+                                break;
+                            }
+                            Result = "-" + Result;
+                        }
+                        else
+                        {
+                            Result = Result.Remove(Result.IndexOf("-"), 1);
+                            Result = Result == "" ? "0" : Result;
+                        }
+                        return;
+                    }
+                    if (Result.Length == 2 && Result.Contains("-0"))
+                        return;
+                    if (Result.Length == 1 && Result.EndsWith("0"))
                     {
                         Result = "";
                     }
@@ -154,9 +181,8 @@ namespace KeyPad
             }
         }
 
-        #endregion
 
-        
-       
+
+        #endregion
     }
 }

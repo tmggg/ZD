@@ -296,7 +296,7 @@ namespace SgS.ViewModel
             AddLiquidItemCommand = new RelayCommand(AddLiquidCommand);
             CancelCommand = new RelayCommand<Grid>(CancelAction);
             ShowKeyPadCommand = new RelayCommand<object[]>(ShowKeyPad);
-            CleanCommand = new RelayCommand(() => { SendCommand2Plc(8, true); });
+            CleanCommand = new RelayCommand(() => { SendCommand2Plc(8, true); MessengerInstance.Send<bool>(true, "OffMainTab"); });
             PositionDatas = new ObservableCollection<PositionData>();
             Test = Visibility.Visible;
             CompensateData1 = new ObservableCollection<CompensateData>();
@@ -562,7 +562,7 @@ namespace SgS.ViewModel
                         SendCommand2Plc(7, true);
                         break;
                     case "流动泵点动":
-                        SendCommand2Plc(9, false);
+                        SendCommand2Plc(9, true);
                         break;
                     default:
                         break;
@@ -652,7 +652,19 @@ namespace SgS.ViewModel
                 XmlReadWriter.SaveToFile(CompensateData2, AppDomain.CurrentDomain.BaseDirectory + @"\Settings\Pump_B.xml");
                 XmlReadWriter.SaveToFile(CompensateData3, AppDomain.CurrentDomain.BaseDirectory + @"\Settings\Pump_C.xml");
                 XmlReadWriter.SaveToFile(LiquidTypes, AppDomain.CurrentDomain.BaseDirectory + @"\Settings\LiquidTypes.xml");
-                XmlReadWriter.SaveToFile(WatchLiquidTube,AppDomain.CurrentDomain.BaseDirectory + @"\Settings\WatchLiquidTube.xml");
+                XmlReadWriter.SaveToFile(WatchLiquidTube, AppDomain.CurrentDomain.BaseDirectory + @"\Settings\WatchLiquidTube.xml");
+                NetVar wireData = new NetVar(_controlerIP, 99);
+                List<CDataTypeCollection> senderdata;
+                senderdata = new List<CDataTypeCollection>();
+                for (int i = 0; i < 16; i++)
+                {
+                    if (i >= 10)
+                        senderdata.Add(new CDataTypeCollection(WatchLiquidTube?[i - 10], DataTypes.booltype));
+                    else
+                        senderdata.Add(new CDataTypeCollection(false, DataTypes.booltype));
+                }
+                wireData.WriteData(senderdata);
+                wireData.Disconnect();
                 MainViewModel._config.AppSettings.Settings["Z1_Sensitivity"].Value = Z1_Sensitivity.ToString();
                 MainViewModel._config.AppSettings.Settings["Z2_Sensitivity"].Value = Z2_Sensitivity.ToString();
                 MainViewModel._config.AppSettings.Settings["Z1_Down"].Value = Z1_Down.ToString();

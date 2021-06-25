@@ -232,6 +232,7 @@
                                               Grid.Row="1"
                                               Grid.Column="0"
                                               Grid.ColumnSpan="2"
+                                              Height="{TemplateBinding Height}"
                                               Padding="{TemplateBinding Padding}"
                                               HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
                                               VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
@@ -4188,8 +4189,8 @@
                                             <Setter Property="Background" Value="Transparent" />
                                             <Setter Property="Focusable" Value="False" />
                                             <Setter Property="BorderThickness" Value="0" />
-                                            <Setter Property="Width" Value="18" />
-                                            <Setter Property="MinWidth" Value="8" />
+                                            <Setter Property="Width" Value="38" />
+                                            <Setter Property="MinWidth" Value="18" />
                                             <Setter Property="Template">
                                                 <Setter.Value>
                                                     <ControlTemplate TargetType="{x:Type ScrollBar}">
@@ -4281,12 +4282,12 @@
                                                                                             </ControlTemplate.Resources>
                                                                                             <Border Width="{TemplateBinding Width}" Background="Transparent">
                                                                                                 <Rectangle x:Name="rectangle"
-                                                                                                           Width="18"
+                                                                                                           Width="38"
                                                                                                            Height="{TemplateBinding Height}"
                                                                                                            HorizontalAlignment="Right"
                                                                                                            Fill="{TemplateBinding Background}"
-                                                                                                           RadiusX="14"
-                                                                                                           RadiusY="14"
+                                                                                                           RadiusX="34"
+                                                                                                           RadiusY="34"
                                                                                                            SnapsToDevicePixels="True">
                                                                                                     <Rectangle.RenderTransform>
                                                                                                         <TransformGroup>
@@ -4306,13 +4307,13 @@
                                                                                                     <BeginStoryboard>
                                                                                                         <Storyboard>
                                                                                                             <DoubleAnimationUsingKeyFrames Storyboard.TargetName="rectangle" Storyboard.TargetProperty="Width">
-                                                                                                                <EasingDoubleKeyFrame KeyTime="0:0:0.1" Value="18" />
+                                                                                                                <EasingDoubleKeyFrame KeyTime="0:0:0.1" Value="38" />
                                                                                                             </DoubleAnimationUsingKeyFrames>
                                                                                                             <DoubleAnimationUsingKeyFrames Storyboard.TargetName="rectangle" Storyboard.TargetProperty="(Rectangle.RadiusX)">
-                                                                                                                <EasingDoubleKeyFrame KeyTime="0:0:0.1" Value="14" />
+                                                                                                                <EasingDoubleKeyFrame KeyTime="0:0:0.1" Value="34" />
                                                                                                             </DoubleAnimationUsingKeyFrames>
                                                                                                             <DoubleAnimationUsingKeyFrames Storyboard.TargetName="rectangle" Storyboard.TargetProperty="(Rectangle.RadiusY)">
-                                                                                                                <EasingDoubleKeyFrame KeyTime="0:0:0.1" Value="14" />
+                                                                                                                <EasingDoubleKeyFrame KeyTime="0:0:0.1" Value="34" />
                                                                                                             </DoubleAnimationUsingKeyFrames>
                                                                                                             <DoubleAnimationUsingKeyFrames Storyboard.TargetName="rectangle" Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(TranslateTransform.X)">
                                                                                                                 <EasingDoubleKeyFrame KeyTime="0:0:0.1" Value="0" />
@@ -4324,13 +4325,13 @@
                                                                                                     <BeginStoryboard>
                                                                                                         <Storyboard>
                                                                                                             <DoubleAnimationUsingKeyFrames Storyboard.TargetName="rectangle" Storyboard.TargetProperty="Width">
-                                                                                                                <EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="18" />
+                                                                                                                <EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="38" />
                                                                                                             </DoubleAnimationUsingKeyFrames>
                                                                                                             <DoubleAnimationUsingKeyFrames Storyboard.TargetName="rectangle" Storyboard.TargetProperty="(Rectangle.RadiusX)">
-                                                                                                                <EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="14" />
+                                                                                                                <EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="34" />
                                                                                                             </DoubleAnimationUsingKeyFrames>
                                                                                                             <DoubleAnimationUsingKeyFrames Storyboard.TargetName="rectangle" Storyboard.TargetProperty="(Rectangle.RadiusY)">
-                                                                                                                <EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="14" />
+                                                                                                                <EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="34" />
                                                                                                             </DoubleAnimationUsingKeyFrames>
                                                                                                             <DoubleAnimationUsingKeyFrames Storyboard.TargetName="rectangle" Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(TranslateTransform.X)">
                                                                                                                 <EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="0" />
@@ -4895,10 +4896,10 @@
                                         <BeginStoryboard>
                                             <Storyboard>
                                                 <DoubleAnimationUsingKeyFrames Storyboard.TargetName="PART_VerticalScrollBar" Storyboard.TargetProperty="Opacity">
-                                                    <EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="0" />
+                                                    <EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="0.2" />
                                                 </DoubleAnimationUsingKeyFrames>
                                                 <DoubleAnimationUsingKeyFrames Storyboard.TargetName="PART_HorizontalScrollBar" Storyboard.TargetProperty="Opacity">
-                                                    <EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="0" />
+                                                    <EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="0.2" />
                                                 </DoubleAnimationUsingKeyFrames>
                                             </Storyboard>
                                         </BeginStoryboard>

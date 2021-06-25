@@ -18,6 +18,8 @@ namespace SgS.Model
         private  int _error_Id;
         private readonly List<bool> _status;
         private readonly Dictionary<string, int> _posData;
+        private readonly List<bool> _solventErrorList;
+
         private readonly int _sleepTime;
         private  bool _isConnected;
         public Thread ThreadReceive;
@@ -61,6 +63,9 @@ namespace SgS.Model
         public delegate void RuningStepCallBack(int run_step_id);
         public event RuningStepCallBack ERuningStepCallBack;
 
+        public delegate void SolventErrorCallBack(List<bool> SolventErrorList);
+        public event SolventErrorCallBack ESolventErrorCallBack;
+
         /// <summary>
         /// 设备错误ID号
         /// </summary>
@@ -85,6 +90,7 @@ namespace SgS.Model
             //    { "clean_status",false},
             //};
             _posData = new Dictionary<string, int>();
+            _solventErrorList = new List<bool>();
             _sleepTime = sleeptime;
             stop = false;
             _client = new NetVars
@@ -115,6 +121,12 @@ namespace SgS.Model
             _client.dataTypeCollection.Add(new CDataTypeCollection(DataTypes.dinttype));//Z2位置
             _client.dataTypeCollection.Add(new CDataTypeCollection(DataTypes.udinttype));//Z1传感器数据
             _client.dataTypeCollection.Add(new CDataTypeCollection(DataTypes.udinttype));//Z2传感器数据
+            _client.dataTypeCollection.Add(new CDataTypeCollection(DataTypes.booltype));//溶剂通道1报警
+            _client.dataTypeCollection.Add(new CDataTypeCollection(DataTypes.booltype));//溶剂通道2报警
+            _client.dataTypeCollection.Add(new CDataTypeCollection(DataTypes.booltype));//溶剂通道3报警
+            _client.dataTypeCollection.Add(new CDataTypeCollection(DataTypes.booltype));//溶剂通道4报警
+            _client.dataTypeCollection.Add(new CDataTypeCollection(DataTypes.booltype));//溶剂通道5报警
+            _client.dataTypeCollection.Add(new CDataTypeCollection(DataTypes.booltype));//溶剂通道6报警
             ThreadReceive = new Thread(ReadData) { IsBackground = true };
         }
 
@@ -184,9 +196,14 @@ namespace SgS.Model
                         {
                             _posData.Add(string.Format("z{0}sensor", loop - 49), int.Parse(item.ToString()));
                         }
+                        if(loop > 51 && loop <= 57)
+                        {
+                            _solventErrorList.Add(bool.Parse(item.ToString()));
+                        }
                         loop++;
                     }
                     EDataReceiveCallBack?.Invoke(_reTubeStatus);
+                    //ESolventErrorCallBack?.Invoke(_solventErrorList);
                     ERunStatusCallBack?.Invoke(_status);
                     if (_step_id < 20)
                         EInitStepCallBack?.Invoke(_step_id);

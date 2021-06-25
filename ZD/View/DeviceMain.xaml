@@ -517,6 +517,7 @@
             <hc:EventToCommand Command="{Binding GetLightCommand}" CommandParameter="{Binding ElementName=StatusLight}" />
         </hc:EventTrigger>
     </hc:Interaction.Triggers>
+
     <Border Padding="10" Background="{StaticResource Bg}">
 
         <hc:Interaction.Triggers>
@@ -905,7 +906,9 @@
                            SelectedIndex="0"
                            Style="{DynamicResource TabControlStyleModify}"
                            TabStripPlacement="Top">
-                <hc:TabItem Width="100" Height="50">
+                <hc:TabItem Width="100"
+                            Height="50"
+                            IsEnabled="{Binding MainEnable}">
                     <hc:TabItem.Header>
                         <StackPanel Orientation="Horizontal">
                             <Path Width="28"
@@ -968,4 +971,5 @@
 
         </Grid>
     </Border>
+
 </Window>

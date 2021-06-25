@@ -800,24 +800,29 @@
             <StackPanel Grid.Column="1"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Center"
-                        Orientation="Vertical">
+                        Orientation="Horizontal">
                 <TextBlock HorizontalAlignment="Center"
+                           VerticalAlignment="Center"
                            FontSize="24"
                            FontWeight="Bold"
                            Foreground="White"
                            Text="运行控制" />
-                <StackPanel Margin="0,5,0,0" Orientation="Horizontal">
-                    <TextBlock VerticalAlignment="Center"
+                <StackPanel Margin="15,0,0,0" Orientation="Horizontal">
+                    <!--<TextBlock VerticalAlignment="Center"
                                FontSize="16"
                                FontWeight="Bold"
                                Foreground="Red"
-                               Text="执行区域：" />
+                               Text="执行区域：" />-->
                     <hc:ComboBox x:Name="RunArea"
+                                 Width="150"
+                                 Height="56"
                                  hc:BorderElement.CornerRadius="5"
+                                 BorderBrush="Red"
+                                 FontSize="26"
                                  SelectedIndex="{Binding RunArea}"
                                  Style="{StaticResource ComboBoxModifiy}">
-                        <TextBlock Foreground="White" Text="A区" />
-                        <TextBlock Foreground="White" Text="B区" />
+                        <TextBlock Foreground="Red" Text="左侧A区" />
+                        <TextBlock Foreground="Red" Text="右侧B区" />
                     </hc:ComboBox>
                 </StackPanel>
                 <StackPanel Margin="0,5,0,0"
@@ -1054,15 +1059,24 @@
                 </Style>
             </Grid.Resources>
 
-            <StackPanel Margin="5" Visibility="{Binding IsBusy,Converter={x:Static cv:Bool2Visibiliy.instance}}" Grid.ColumnSpan="2" Orientation="Vertical" Grid.RowSpan="2" Background="{StaticResource Bg}" ZIndex="1">
-                    <hc:LoadingCircle DotDiameter="10" Width="100" Height="100" Foreground="White" Margin="0 100 0 20">
-                    </hc:LoadingCircle>
-                <TextBlock Text="{Binding BusyContent}"
-                           Width="auto"
+            <StackPanel Grid.RowSpan="2"
+                        Grid.ColumnSpan="2"
+                        Margin="5"
+                        Background="{StaticResource Bg}"
+                        Orientation="Vertical"
+                        Visibility="{Binding IsBusy, Converter={x:Static cv:Bool2Visibiliy.instance}}"
+                        ZIndex="1">
+                <hc:LoadingCircle Width="100"
+                                  Height="100"
+                                  Margin="0,100,0,20"
+                                  DotDiameter="10"
+                                  Foreground="White" />
+                <TextBlock Width="auto"
+                           HorizontalAlignment="Center"
+                           FontSize="20"
                            FontWeight="Bold"
                            Foreground="White"
-                           HorizontalAlignment="Center"
-                           FontSize="20" />
+                           Text="{Binding BusyContent}" />
             </StackPanel>
 
             <Grid Grid.Column="1" Margin="5">
@@ -1416,10 +1430,10 @@
                 </Border>
                 <Border Grid.Row="2"
                         Grid.Column="1"
-                        Background="{Binding AllData[1].Color}"
+                        Background="{Binding AllData[6].Color}"
                         Style="{StaticResource TubeStyle}"
-                        Tag="1">
-                    <TextBlock Text="{Binding AllData[1].Name}" />
+                        Tag="6">
+                    <TextBlock Text="{Binding AllData[6].Name}" />
                     <hc:Interaction.Triggers>
                         <hc:RoutedEventTrigger RoutedEvent="Mouse.MouseDown">
                             <hc:EventToCommand Command="{Binding DeployMethodCommand}" PassEventArgsToCommand="True">
@@ -1456,10 +1470,10 @@
                 </Border>
                 <Border Grid.Row="4"
                         Grid.Column="1"
-                        Background="{Binding AllData[13].Color}"
+                        Background="{Binding AllData[18].Color}"
                         Style="{StaticResource TubeStyle}"
-                        Tag="13">
-                    <TextBlock Text="{Binding AllData[13].Name}" />
+                        Tag="18">
+                    <TextBlock Text="{Binding AllData[18].Name}" />
                     <hc:Interaction.Triggers>
                         <hc:RoutedEventTrigger RoutedEvent="Mouse.MouseDown">
                             <hc:EventToCommand Command="{Binding DeployMethodCommand}" PassEventArgsToCommand="True">
@@ -1496,10 +1510,10 @@
                 </Border>
                 <Border Grid.Row="6"
                         Grid.Column="1"
-                        Background="{Binding AllData[25].Color}"
+                        Background="{Binding AllData[30].Color}"
                         Style="{StaticResource TubeStyle}"
-                        Tag="25">
-                    <TextBlock Text="{Binding AllData[25].Name}" />
+                        Tag="30">
+                    <TextBlock Text="{Binding AllData[30].Name}" />
                     <hc:Interaction.Triggers>
                         <hc:RoutedEventTrigger RoutedEvent="Mouse.MouseDown">
                             <hc:EventToCommand Command="{Binding DeployMethodCommand}" PassEventArgsToCommand="True">
@@ -1519,10 +1533,10 @@
 
                 <Border Grid.Row="1"
                         Grid.Column="2"
-                        Background="{Binding AllData[2].Color}"
+                        Background="{Binding AllData[1].Color}"
                         Style="{StaticResource TubeStyle}"
-                        Tag="2">
-                    <TextBlock Text="{Binding AllData[2].Name}" />
+                        Tag="1">
+                    <TextBlock Text="{Binding AllData[1].Name}" />
                     <hc:Interaction.Triggers>
                         <hc:RoutedEventTrigger RoutedEvent="Mouse.MouseDown">
                             <hc:EventToCommand Command="{Binding DeployMethodCommand}" PassEventArgsToCommand="True">
@@ -1539,252 +1553,6 @@
                 </Border>
                 <Border Grid.Row="2"
                         Grid.Column="2"
-                        Background="{Binding AllData[3].Color}"
-                        Style="{StaticResource TubeStyle}"
-                        Tag="3">
-                    <TextBlock Text="{Binding AllData[3].Name}" />
-                    <hc:Interaction.Triggers>
-                        <hc:RoutedEventTrigger RoutedEvent="Mouse.MouseDown">
-                            <hc:EventToCommand Command="{Binding DeployMethodCommand}" PassEventArgsToCommand="True">
-                                <hc:EventToCommand.CommandParameter>
-                                    <MultiBinding Converter="{StaticResource MultiConverter}">
-                                        <Binding ElementName="MethodData" Path="SelectedItem" />
-                                        <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=Border}" />
-                                        <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=Grid}" />
-                                    </MultiBinding>
-                                </hc:EventToCommand.CommandParameter>
-                            </hc:EventToCommand>
-                        </hc:RoutedEventTrigger>
-                    </hc:Interaction.Triggers>
-                </Border>
-                <Border Grid.Row="3"
-                        Grid.Column="2"
-                        Background="{Binding AllData[14].Color}"
-                        Style="{StaticResource TubeStyle}"
-                        Tag="14">
-                    <TextBlock Text="{Binding AllData[14].Name}" />
-                    <hc:Interaction.Triggers>
-                        <hc:RoutedEventTrigger RoutedEvent="Mouse.MouseDown">
-                            <hc:EventToCommand Command="{Binding DeployMethodCommand}" PassEventArgsToCommand="True">
-                                <hc:EventToCommand.CommandParameter>
-                                    <MultiBinding Converter="{StaticResource MultiConverter}">
-                                        <Binding ElementName="MethodData" Path="SelectedItem" />
-                                        <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=Border}" />
-                                        <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=Grid}" />
-                                    </MultiBinding>
-                                </hc:EventToCommand.CommandParameter>
-                            </hc:EventToCommand>
-                        </hc:RoutedEventTrigger>
-                    </hc:Interaction.Triggers>
-                </Border>
-                <Border Grid.Row="4"
-                        Grid.Column="2"
-                        Background="{Binding AllData[15].Color}"
-                        Style="{StaticResource TubeStyle}"
-                        Tag="15">
-                    <TextBlock Text="{Binding AllData[15].Name}" />
-                    <hc:Interaction.Triggers>
-                        <hc:RoutedEventTrigger RoutedEvent="Mouse.MouseDown">
-                            <hc:EventToCommand Command="{Binding DeployMethodCommand}" PassEventArgsToCommand="True">
-                                <hc:EventToCommand.CommandParameter>
-                                    <MultiBinding Converter="{StaticResource MultiConverter}">
-                                        <Binding ElementName="MethodData" Path="SelectedItem" />
-                                        <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=Border}" />
-                                        <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=Grid}" />
-                                    </MultiBinding>
-                                </hc:EventToCommand.CommandParameter>
-                            </hc:EventToCommand>
-                        </hc:RoutedEventTrigger>
-                    </hc:Interaction.Triggers>
-                </Border>
-                <Border Grid.Row="5"
-                        Grid.Column="2"
-                        Background="{Binding AllData[26].Color}"
-                        Style="{StaticResource TubeStyle}"
-                        Tag="26">
-                    <TextBlock Text="{Binding AllData[26].Name}" />
-                    <hc:Interaction.Triggers>
-                        <hc:RoutedEventTrigger RoutedEvent="Mouse.MouseDown">
-                            <hc:EventToCommand Command="{Binding DeployMethodCommand}" PassEventArgsToCommand="True">
-                                <hc:EventToCommand.CommandParameter>
-                                    <MultiBinding Converter="{StaticResource MultiConverter}">
-                                        <Binding ElementName="MethodData" Path="SelectedItem" />
-                                        <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=Border}" />
-                                        <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=Grid}" />
-                                    </MultiBinding>
-                                </hc:EventToCommand.CommandParameter>
-                            </hc:EventToCommand>
-                        </hc:RoutedEventTrigger>
-                    </hc:Interaction.Triggers>
-                </Border>
-                <Border Grid.Row="6"
-                        Grid.Column="2"
-                        Background="{Binding AllData[27].Color}"
-                        Style="{StaticResource TubeStyle}"
-                        Tag="27">
-                    <TextBlock Text="{Binding AllData[27].Name}" />
-                    <hc:Interaction.Triggers>
-                        <hc:RoutedEventTrigger RoutedEvent="Mouse.MouseDown">
-                            <hc:EventToCommand Command="{Binding DeployMethodCommand}" PassEventArgsToCommand="True">
-                                <hc:EventToCommand.CommandParameter>
-                                    <MultiBinding Converter="{StaticResource MultiConverter}">
-                                        <Binding ElementName="MethodData" Path="SelectedItem" />
-                                        <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=Border}" />
-                                        <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=Grid}" />
-                                    </MultiBinding>
-                                </hc:EventToCommand.CommandParameter>
-                            </hc:EventToCommand>
-                        </hc:RoutedEventTrigger>
-                    </hc:Interaction.Triggers>
-                </Border>
-
-                <!--  C区  -->
-
-                <Border Grid.Row="1"
-                        Grid.Column="3"
-                        Background="{Binding AllData[4].Color}"
-                        Style="{StaticResource TubeStyle}"
-                        Tag="4">
-                    <TextBlock Text="{Binding AllData[4].Name}" />
-                    <hc:Interaction.Triggers>
-                        <hc:RoutedEventTrigger RoutedEvent="Mouse.MouseDown">
-                            <hc:EventToCommand Command="{Binding DeployMethodCommand}" PassEventArgsToCommand="True">
-                                <hc:EventToCommand.CommandParameter>
-                                    <MultiBinding Converter="{StaticResource MultiConverter}">
-                                        <Binding ElementName="MethodData" Path="SelectedItem" />
-                                        <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=Border}" />
-                                        <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=Grid}" />
-                                    </MultiBinding>
-                                </hc:EventToCommand.CommandParameter>
-                            </hc:EventToCommand>
-                        </hc:RoutedEventTrigger>
-                    </hc:Interaction.Triggers>
-                </Border>
-                <Border Grid.Row="2"
-                        Grid.Column="3"
-                        Background="{Binding AllData[5].Color}"
-                        Style="{StaticResource TubeStyle}"
-                        Tag="5">
-                    <TextBlock Text="{Binding AllData[5].Name}" />
-                    <hc:Interaction.Triggers>
-                        <hc:RoutedEventTrigger RoutedEvent="Mouse.MouseDown">
-                            <hc:EventToCommand Command="{Binding DeployMethodCommand}" PassEventArgsToCommand="True">
-                                <hc:EventToCommand.CommandParameter>
-                                    <MultiBinding Converter="{StaticResource MultiConverter}">
-                                        <Binding ElementName="MethodData" Path="SelectedItem" />
-                                        <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=Border}" />
-                                        <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=Grid}" />
-                                    </MultiBinding>
-                                </hc:EventToCommand.CommandParameter>
-                            </hc:EventToCommand>
-                        </hc:RoutedEventTrigger>
-                    </hc:Interaction.Triggers>
-                </Border>
-                <Border Grid.Row="3"
-                        Grid.Column="3"
-                        Background="{Binding AllData[16].Color}"
-                        Style="{StaticResource TubeStyle}"
-                        Tag="16">
-                    <TextBlock Text="{Binding AllData[16].Name}" />
-                    <hc:Interaction.Triggers>
-                        <hc:RoutedEventTrigger RoutedEvent="Mouse.MouseDown">
-                            <hc:EventToCommand Command="{Binding DeployMethodCommand}" PassEventArgsToCommand="True">
-                                <hc:EventToCommand.CommandParameter>
-                                    <MultiBinding Converter="{StaticResource MultiConverter}">
-                                        <Binding ElementName="MethodData" Path="SelectedItem" />
-                                        <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=Border}" />
-                                        <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=Grid}" />
-                                    </MultiBinding>
-                                </hc:EventToCommand.CommandParameter>
-                            </hc:EventToCommand>
-                        </hc:RoutedEventTrigger>
-                    </hc:Interaction.Triggers>
-                </Border>
-                <Border Grid.Row="4"
-                        Grid.Column="3"
-                        Background="{Binding AllData[17].Color}"
-                        Style="{StaticResource TubeStyle}"
-                        Tag="17">
-                    <TextBlock Text="{Binding AllData[17].Name}" />
-                    <hc:Interaction.Triggers>
-                        <hc:RoutedEventTrigger RoutedEvent="Mouse.MouseDown">
-                            <hc:EventToCommand Command="{Binding DeployMethodCommand}" PassEventArgsToCommand="True">
-                                <hc:EventToCommand.CommandParameter>
-                                    <MultiBinding Converter="{StaticResource MultiConverter}">
-                                        <Binding ElementName="MethodData" Path="SelectedItem" />
-                                        <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=Border}" />
-                                        <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=Grid}" />
-                                    </MultiBinding>
-                                </hc:EventToCommand.CommandParameter>
-                            </hc:EventToCommand>
-                        </hc:RoutedEventTrigger>
-                    </hc:Interaction.Triggers>
-                </Border>
-                <Border Grid.Row="5"
-                        Grid.Column="3"
-                        Background="{Binding AllData[28].Color}"
-                        Style="{StaticResource TubeStyle}"
-                        Tag="28">
-                    <TextBlock Text="{Binding AllData[28].Name}" />
-                    <hc:Interaction.Triggers>
-                        <hc:RoutedEventTrigger RoutedEvent="Mouse.MouseDown">
-                            <hc:EventToCommand Command="{Binding DeployMethodCommand}" PassEventArgsToCommand="True">
-                                <hc:EventToCommand.CommandParameter>
-                                    <MultiBinding Converter="{StaticResource MultiConverter}">
-                                        <Binding ElementName="MethodData" Path="SelectedItem" />
-                                        <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=Border}" />
-                                        <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=Grid}" />
-                                    </MultiBinding>
-                                </hc:EventToCommand.CommandParameter>
-                            </hc:EventToCommand>
-                        </hc:RoutedEventTrigger>
-                    </hc:Interaction.Triggers>
-                </Border>
-                <Border Grid.Row="6"
-                        Grid.Column="3"
-                        Background="{Binding AllData[29].Color}"
-                        Style="{StaticResource TubeStyle}"
-                        Tag="29">
-                    <TextBlock Text="{Binding AllData[29].Name}" />
-                    <hc:Interaction.Triggers>
-                        <hc:RoutedEventTrigger RoutedEvent="Mouse.MouseDown">
-                            <hc:EventToCommand Command="{Binding DeployMethodCommand}" PassEventArgsToCommand="True">
-                                <hc:EventToCommand.CommandParameter>
-                                    <MultiBinding Converter="{StaticResource MultiConverter}">
-                                        <Binding ElementName="MethodData" Path="SelectedItem" />
-                                        <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=Border}" />
-                                        <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=Grid}" />
-                                    </MultiBinding>
-                                </hc:EventToCommand.CommandParameter>
-                            </hc:EventToCommand>
-                        </hc:RoutedEventTrigger>
-                    </hc:Interaction.Triggers>
-                </Border>
-
-                <!--  D区  -->
-
-                <Border Grid.Row="1"
-                        Grid.Column="4"
-                        Background="{Binding AllData[6].Color}"
-                        Style="{StaticResource TubeStyle}"
-                        Tag="6">
-                    <TextBlock Text="{Binding AllData[6].Name}" />
-                    <hc:Interaction.Triggers>
-                        <hc:RoutedEventTrigger RoutedEvent="Mouse.MouseDown">
-                            <hc:EventToCommand Command="{Binding DeployMethodCommand}" PassEventArgsToCommand="True">
-                                <hc:EventToCommand.CommandParameter>
-                                    <MultiBinding Converter="{StaticResource MultiConverter}">
-                                        <Binding ElementName="MethodData" Path="SelectedItem" />
-                                        <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=Border}" />
-                                        <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=Grid}" />
-                                    </MultiBinding>
-                                </hc:EventToCommand.CommandParameter>
-                            </hc:EventToCommand>
-                        </hc:RoutedEventTrigger>
-                    </hc:Interaction.Triggers>
-                </Border>
-                <Border Grid.Row="2"
-                        Grid.Column="4"
                         Background="{Binding AllData[7].Color}"
                         Style="{StaticResource TubeStyle}"
                         Tag="7">
@@ -1804,11 +1572,11 @@
                     </hc:Interaction.Triggers>
                 </Border>
                 <Border Grid.Row="3"
-                        Grid.Column="4"
-                        Background="{Binding AllData[18].Color}"
+                        Grid.Column="2"
+                        Background="{Binding AllData[13].Color}"
                         Style="{StaticResource TubeStyle}"
-                        Tag="18">
-                    <TextBlock Text="{Binding AllData[18].Name}" />
+                        Tag="13">
+                    <TextBlock Text="{Binding AllData[13].Name}" />
                     <hc:Interaction.Triggers>
                         <hc:RoutedEventTrigger RoutedEvent="Mouse.MouseDown">
                             <hc:EventToCommand Command="{Binding DeployMethodCommand}" PassEventArgsToCommand="True">
@@ -1824,7 +1592,7 @@
                     </hc:Interaction.Triggers>
                 </Border>
                 <Border Grid.Row="4"
-                        Grid.Column="4"
+                        Grid.Column="2"
                         Background="{Binding AllData[19].Color}"
                         Style="{StaticResource TubeStyle}"
                         Tag="19">
@@ -1844,11 +1612,11 @@
                     </hc:Interaction.Triggers>
                 </Border>
                 <Border Grid.Row="5"
-                        Grid.Column="4"
-                        Background="{Binding AllData[30].Color}"
+                        Grid.Column="2"
+                        Background="{Binding AllData[25].Color}"
                         Style="{StaticResource TubeStyle}"
-                        Tag="30">
-                    <TextBlock Text="{Binding AllData[30].Name}" />
+                        Tag="25">
+                    <TextBlock Text="{Binding AllData[25].Name}" />
                     <hc:Interaction.Triggers>
                         <hc:RoutedEventTrigger RoutedEvent="Mouse.MouseDown">
                             <hc:EventToCommand Command="{Binding DeployMethodCommand}" PassEventArgsToCommand="True">
@@ -1864,7 +1632,7 @@
                     </hc:Interaction.Triggers>
                 </Border>
                 <Border Grid.Row="6"
-                        Grid.Column="4"
+                        Grid.Column="2"
                         Background="{Binding AllData[31].Color}"
                         Style="{StaticResource TubeStyle}"
                         Tag="31">
@@ -1884,10 +1652,30 @@
                     </hc:Interaction.Triggers>
                 </Border>
 
-                <!--  E区  -->
+                <!--  C区  -->
 
                 <Border Grid.Row="1"
-                        Grid.Column="5"
+                        Grid.Column="3"
+                        Background="{Binding AllData[2].Color}"
+                        Style="{StaticResource TubeStyle}"
+                        Tag="2">
+                    <TextBlock Text="{Binding AllData[2].Name}" />
+                    <hc:Interaction.Triggers>
+                        <hc:RoutedEventTrigger RoutedEvent="Mouse.MouseDown">
+                            <hc:EventToCommand Command="{Binding DeployMethodCommand}" PassEventArgsToCommand="True">
+                                <hc:EventToCommand.CommandParameter>
+                                    <MultiBinding Converter="{StaticResource MultiConverter}">
+                                        <Binding ElementName="MethodData" Path="SelectedItem" />
+                                        <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=Border}" />
+                                        <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=Grid}" />
+                                    </MultiBinding>
+                                </hc:EventToCommand.CommandParameter>
+                            </hc:EventToCommand>
+                        </hc:RoutedEventTrigger>
+                    </hc:Interaction.Triggers>
+                </Border>
+                <Border Grid.Row="2"
+                        Grid.Column="3"
                         Background="{Binding AllData[8].Color}"
                         Style="{StaticResource TubeStyle}"
                         Tag="8">
@@ -1906,8 +1694,111 @@
                         </hc:RoutedEventTrigger>
                     </hc:Interaction.Triggers>
                 </Border>
+                <Border Grid.Row="3"
+                        Grid.Column="3"
+                        Background="{Binding AllData[14].Color}"
+                        Style="{StaticResource TubeStyle}"
+                        Tag="14">
+                    <TextBlock Text="{Binding AllData[14].Name}" />
+                    <hc:Interaction.Triggers>
+                        <hc:RoutedEventTrigger RoutedEvent="Mouse.MouseDown">
+                            <hc:EventToCommand Command="{Binding DeployMethodCommand}" PassEventArgsToCommand="True">
+                                <hc:EventToCommand.CommandParameter>
+                                    <MultiBinding Converter="{StaticResource MultiConverter}">
+                                        <Binding ElementName="MethodData" Path="SelectedItem" />
+                                        <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=Border}" />
+                                        <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=Grid}" />
+                                    </MultiBinding>
+                                </hc:EventToCommand.CommandParameter>
+                            </hc:EventToCommand>
+                        </hc:RoutedEventTrigger>
+                    </hc:Interaction.Triggers>
+                </Border>
+                <Border Grid.Row="4"
+                        Grid.Column="3"
+                        Background="{Binding AllData[20].Color}"
+                        Style="{StaticResource TubeStyle}"
+                        Tag="20">
+                    <TextBlock Text="{Binding AllData[20].Name}" />
+                    <hc:Interaction.Triggers>
+                        <hc:RoutedEventTrigger RoutedEvent="Mouse.MouseDown">
+                            <hc:EventToCommand Command="{Binding DeployMethodCommand}" PassEventArgsToCommand="True">
+                                <hc:EventToCommand.CommandParameter>
+                                    <MultiBinding Converter="{StaticResource MultiConverter}">
+                                        <Binding ElementName="MethodData" Path="SelectedItem" />
+                                        <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=Border}" />
+                                        <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=Grid}" />
+                                    </MultiBinding>
+                                </hc:EventToCommand.CommandParameter>
+                            </hc:EventToCommand>
+                        </hc:RoutedEventTrigger>
+                    </hc:Interaction.Triggers>
+                </Border>
+                <Border Grid.Row="5"
+                        Grid.Column="3"
+                        Background="{Binding AllData[26].Color}"
+                        Style="{StaticResource TubeStyle}"
+                        Tag="26">
+                    <TextBlock Text="{Binding AllData[26].Name}" />
+                    <hc:Interaction.Triggers>
+                        <hc:RoutedEventTrigger RoutedEvent="Mouse.MouseDown">
+                            <hc:EventToCommand Command="{Binding DeployMethodCommand}" PassEventArgsToCommand="True">
+                                <hc:EventToCommand.CommandParameter>
+                                    <MultiBinding Converter="{StaticResource MultiConverter}">
+                                        <Binding ElementName="MethodData" Path="SelectedItem" />
+                                        <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=Border}" />
+                                        <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=Grid}" />
+                                    </MultiBinding>
+                                </hc:EventToCommand.CommandParameter>
+                            </hc:EventToCommand>
+                        </hc:RoutedEventTrigger>
+                    </hc:Interaction.Triggers>
+                </Border>
+                <Border Grid.Row="6"
+                        Grid.Column="3"
+                        Background="{Binding AllData[32].Color}"
+                        Style="{StaticResource TubeStyle}"
+                        Tag="32">
+                    <TextBlock Text="{Binding AllData[32].Name}" />
+                    <hc:Interaction.Triggers>
+                        <hc:RoutedEventTrigger RoutedEvent="Mouse.MouseDown">
+                            <hc:EventToCommand Command="{Binding DeployMethodCommand}" PassEventArgsToCommand="True">
+                                <hc:EventToCommand.CommandParameter>
+                                    <MultiBinding Converter="{StaticResource MultiConverter}">
+                                        <Binding ElementName="MethodData" Path="SelectedItem" />
+                                        <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=Border}" />
+                                        <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=Grid}" />
+                                    </MultiBinding>
+                                </hc:EventToCommand.CommandParameter>
+                            </hc:EventToCommand>
+                        </hc:RoutedEventTrigger>
+                    </hc:Interaction.Triggers>
+                </Border>
+
+                <!--  D区  -->
+
+                <Border Grid.Row="1"
+                        Grid.Column="4"
+                        Background="{Binding AllData[3].Color}"
+                        Style="{StaticResource TubeStyle}"
+                        Tag="3">
+                    <TextBlock Text="{Binding AllData[3].Name}" />
+                    <hc:Interaction.Triggers>
+                        <hc:RoutedEventTrigger RoutedEvent="Mouse.MouseDown">
+                            <hc:EventToCommand Command="{Binding DeployMethodCommand}" PassEventArgsToCommand="True">
+                                <hc:EventToCommand.CommandParameter>
+                                    <MultiBinding Converter="{StaticResource MultiConverter}">
+                                        <Binding ElementName="MethodData" Path="SelectedItem" />
+                                        <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=Border}" />
+                                        <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=Grid}" />
+                                    </MultiBinding>
+                                </hc:EventToCommand.CommandParameter>
+                            </hc:EventToCommand>
+                        </hc:RoutedEventTrigger>
+                    </hc:Interaction.Triggers>
+                </Border>
                 <Border Grid.Row="2"
-                        Grid.Column="5"
+                        Grid.Column="4"
                         Background="{Binding AllData[9].Color}"
                         Style="{StaticResource TubeStyle}"
                         Tag="9">
@@ -1927,11 +1818,11 @@
                     </hc:Interaction.Triggers>
                 </Border>
                 <Border Grid.Row="3"
-                        Grid.Column="5"
-                        Background="{Binding AllData[20].Color}"
+                        Grid.Column="4"
+                        Background="{Binding AllData[15].Color}"
                         Style="{StaticResource TubeStyle}"
-                        Tag="20">
-                    <TextBlock Text="{Binding AllData[20].Name}" />
+                        Tag="15">
+                    <TextBlock Text="{Binding AllData[15].Name}" />
                     <hc:Interaction.Triggers>
                         <hc:RoutedEventTrigger RoutedEvent="Mouse.MouseDown">
                             <hc:EventToCommand Command="{Binding DeployMethodCommand}" PassEventArgsToCommand="True">
@@ -1947,7 +1838,7 @@
                     </hc:Interaction.Triggers>
                 </Border>
                 <Border Grid.Row="4"
-                        Grid.Column="5"
+                        Grid.Column="4"
                         Background="{Binding AllData[21].Color}"
                         Style="{StaticResource TubeStyle}"
                         Tag="21">
@@ -1967,11 +1858,11 @@
                     </hc:Interaction.Triggers>
                 </Border>
                 <Border Grid.Row="5"
-                        Grid.Column="5"
-                        Background="{Binding AllData[32].Color}"
+                        Grid.Column="4"
+                        Background="{Binding AllData[27].Color}"
                         Style="{StaticResource TubeStyle}"
-                        Tag="32">
-                    <TextBlock Text="{Binding AllData[32].Name}" />
+                        Tag="27">
+                    <TextBlock Text="{Binding AllData[27].Name}" />
                     <hc:Interaction.Triggers>
                         <hc:RoutedEventTrigger RoutedEvent="Mouse.MouseDown">
                             <hc:EventToCommand Command="{Binding DeployMethodCommand}" PassEventArgsToCommand="True">
@@ -1987,7 +1878,7 @@
                     </hc:Interaction.Triggers>
                 </Border>
                 <Border Grid.Row="6"
-                        Grid.Column="5"
+                        Grid.Column="4"
                         Background="{Binding AllData[33].Color}"
                         Style="{StaticResource TubeStyle}"
                         Tag="33">
@@ -2007,14 +1898,137 @@
                     </hc:Interaction.Triggers>
                 </Border>
 
-                <!--  F区  -->
+                <!--  E区  -->
 
                 <Border Grid.Row="1"
-                        Grid.Column="6"
+                        Grid.Column="5"
+                        Background="{Binding AllData[4].Color}"
+                        Style="{StaticResource TubeStyle}"
+                        Tag="4">
+                    <TextBlock Text="{Binding AllData[4].Name}" />
+                    <hc:Interaction.Triggers>
+                        <hc:RoutedEventTrigger RoutedEvent="Mouse.MouseDown">
+                            <hc:EventToCommand Command="{Binding DeployMethodCommand}" PassEventArgsToCommand="True">
+                                <hc:EventToCommand.CommandParameter>
+                                    <MultiBinding Converter="{StaticResource MultiConverter}">
+                                        <Binding ElementName="MethodData" Path="SelectedItem" />
+                                        <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=Border}" />
+                                        <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=Grid}" />
+                                    </MultiBinding>
+                                </hc:EventToCommand.CommandParameter>
+                            </hc:EventToCommand>
+                        </hc:RoutedEventTrigger>
+                    </hc:Interaction.Triggers>
+                </Border>
+                <Border Grid.Row="2"
+                        Grid.Column="5"
                         Background="{Binding AllData[10].Color}"
                         Style="{StaticResource TubeStyle}"
                         Tag="10">
                     <TextBlock Text="{Binding AllData[10].Name}" />
+                    <hc:Interaction.Triggers>
+                        <hc:RoutedEventTrigger RoutedEvent="Mouse.MouseDown">
+                            <hc:EventToCommand Command="{Binding DeployMethodCommand}" PassEventArgsToCommand="True">
+                                <hc:EventToCommand.CommandParameter>
+                                    <MultiBinding Converter="{StaticResource MultiConverter}">
+                                        <Binding ElementName="MethodData" Path="SelectedItem" />
+                                        <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=Border}" />
+                                        <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=Grid}" />
+                                    </MultiBinding>
+                                </hc:EventToCommand.CommandParameter>
+                            </hc:EventToCommand>
+                        </hc:RoutedEventTrigger>
+                    </hc:Interaction.Triggers>
+                </Border>
+                <Border Grid.Row="3"
+                        Grid.Column="5"
+                        Background="{Binding AllData[16].Color}"
+                        Style="{StaticResource TubeStyle}"
+                        Tag="16">
+                    <TextBlock Text="{Binding AllData[16].Name}" />
+                    <hc:Interaction.Triggers>
+                        <hc:RoutedEventTrigger RoutedEvent="Mouse.MouseDown">
+                            <hc:EventToCommand Command="{Binding DeployMethodCommand}" PassEventArgsToCommand="True">
+                                <hc:EventToCommand.CommandParameter>
+                                    <MultiBinding Converter="{StaticResource MultiConverter}">
+                                        <Binding ElementName="MethodData" Path="SelectedItem" />
+                                        <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=Border}" />
+                                        <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=Grid}" />
+                                    </MultiBinding>
+                                </hc:EventToCommand.CommandParameter>
+                            </hc:EventToCommand>
+                        </hc:RoutedEventTrigger>
+                    </hc:Interaction.Triggers>
+                </Border>
+                <Border Grid.Row="4"
+                        Grid.Column="5"
+                        Background="{Binding AllData[22].Color}"
+                        Style="{StaticResource TubeStyle}"
+                        Tag="22">
+                    <TextBlock Text="{Binding AllData[22].Name}" />
+                    <hc:Interaction.Triggers>
+                        <hc:RoutedEventTrigger RoutedEvent="Mouse.MouseDown">
+                            <hc:EventToCommand Command="{Binding DeployMethodCommand}" PassEventArgsToCommand="True">
+                                <hc:EventToCommand.CommandParameter>
+                                    <MultiBinding Converter="{StaticResource MultiConverter}">
+                                        <Binding ElementName="MethodData" Path="SelectedItem" />
+                                        <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=Border}" />
+                                        <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=Grid}" />
+                                    </MultiBinding>
+                                </hc:EventToCommand.CommandParameter>
+                            </hc:EventToCommand>
+                        </hc:RoutedEventTrigger>
+                    </hc:Interaction.Triggers>
+                </Border>
+                <Border Grid.Row="5"
+                        Grid.Column="5"
+                        Background="{Binding AllData[28].Color}"
+                        Style="{StaticResource TubeStyle}"
+                        Tag="28">
+                    <TextBlock Text="{Binding AllData[28].Name}" />
+                    <hc:Interaction.Triggers>
+                        <hc:RoutedEventTrigger RoutedEvent="Mouse.MouseDown">
+                            <hc:EventToCommand Command="{Binding DeployMethodCommand}" PassEventArgsToCommand="True">
+                                <hc:EventToCommand.CommandParameter>
+                                    <MultiBinding Converter="{StaticResource MultiConverter}">
+                                        <Binding ElementName="MethodData" Path="SelectedItem" />
+                                        <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=Border}" />
+                                        <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=Grid}" />
+                                    </MultiBinding>
+                                </hc:EventToCommand.CommandParameter>
+                            </hc:EventToCommand>
+                        </hc:RoutedEventTrigger>
+                    </hc:Interaction.Triggers>
+                </Border>
+                <Border Grid.Row="6"
+                        Grid.Column="5"
+                        Background="{Binding AllData[34].Color}"
+                        Style="{StaticResource TubeStyle}"
+                        Tag="34">
+                    <TextBlock Text="{Binding AllData[34].Name}" />
+                    <hc:Interaction.Triggers>
+                        <hc:RoutedEventTrigger RoutedEvent="Mouse.MouseDown">
+                            <hc:EventToCommand Command="{Binding DeployMethodCommand}" PassEventArgsToCommand="True">
+                                <hc:EventToCommand.CommandParameter>
+                                    <MultiBinding Converter="{StaticResource MultiConverter}">
+                                        <Binding ElementName="MethodData" Path="SelectedItem" />
+                                        <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=Border}" />
+                                        <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=Grid}" />
+                                    </MultiBinding>
+                                </hc:EventToCommand.CommandParameter>
+                            </hc:EventToCommand>
+                        </hc:RoutedEventTrigger>
+                    </hc:Interaction.Triggers>
+                </Border>
+
+                <!--  F区  -->
+
+                <Border Grid.Row="1"
+                        Grid.Column="6"
+                        Background="{Binding AllData[5].Color}"
+                        Style="{StaticResource TubeStyle}"
+                        Tag="5">
+                    <TextBlock Text="{Binding AllData[5].Name}" />
                     <hc:Interaction.Triggers>
                         <hc:RoutedEventTrigger RoutedEvent="Mouse.MouseDown">
                             <hc:EventToCommand Command="{Binding DeployMethodCommand}" PassEventArgsToCommand="True">
@@ -2051,10 +2065,10 @@
                 </Border>
                 <Border Grid.Row="3"
                         Grid.Column="6"
-                        Background="{Binding AllData[22].Color}"
+                        Background="{Binding AllData[17].Color}"
                         Style="{StaticResource TubeStyle}"
-                        Tag="22">
-                    <TextBlock Text="{Binding AllData[22].Name}" />
+                        Tag="17">
+                    <TextBlock Text="{Binding AllData[17].Name}" />
                     <hc:Interaction.Triggers>
                         <hc:RoutedEventTrigger RoutedEvent="Mouse.MouseDown">
                             <hc:EventToCommand Command="{Binding DeployMethodCommand}" PassEventArgsToCommand="True">
@@ -2091,10 +2105,10 @@
                 </Border>
                 <Border Grid.Row="5"
                         Grid.Column="6"
-                        Background="{Binding AllData[34].Color}"
+                        Background="{Binding AllData[29].Color}"
                         Style="{StaticResource TubeStyle}"
-                        Tag="34">
-                    <TextBlock Text="{Binding AllData[34].Name}" />
+                        Tag="29">
+                    <TextBlock Text="{Binding AllData[29].Name}" />
                     <hc:Interaction.Triggers>
                         <hc:RoutedEventTrigger RoutedEvent="Mouse.MouseDown">
                             <hc:EventToCommand Command="{Binding DeployMethodCommand}" PassEventArgsToCommand="True">
@@ -2310,12 +2324,12 @@
                                                       Width="85"
                                                       DecimalPlaces="1"
                                                       Increment="1"
-                                                      Maximum="1000"
+                                                      Maximum="40"
                                                       Minimum="1"
                                                       Tag="加液体积"
                                                       Value="{Binding Value}">
                                         <hc:Interaction.Triggers>
-                                            <hc:EventTrigger EventName="TouchDown">
+                                            <hc:EventTrigger EventName="TouchUp">
                                                 <hc:EventToCommand Command="{Binding DataContext.ShowKeyPadCommand, RelativeSource={RelativeSource AncestorType=Window, Mode=FindAncestor}}">
                                                     <hc:EventToCommand.CommandParameter>
                                                         <MultiBinding Converter="{StaticResource MultiConverter}">
@@ -2365,12 +2379,12 @@
                                     <hc:NumericUpDown Name="N4"
                                                       Width="85"
                                                       DecimalPlaces="1"
-                                                      Maximum="1000"
+                                                      Maximum="100"
                                                       Minimum="0"
                                                       Tag="加标体积"
                                                       Value="{Binding TagValue}">
                                         <hc:Interaction.Triggers>
-                                            <hc:EventTrigger EventName="TouchDown">
+                                            <hc:EventTrigger EventName="TouchUp">
                                                 <hc:EventToCommand Command="{Binding DataContext.ShowKeyPadCommand, RelativeSource={RelativeSource AncestorType=Window, Mode=FindAncestor}}">
                                                     <hc:EventToCommand.CommandParameter>
                                                         <MultiBinding Converter="{StaticResource MultiConverter}">
